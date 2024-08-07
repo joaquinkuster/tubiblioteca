@@ -1,0 +1,91 @@
+/* Estilo TableView personalizado */
+.tabla-personalizada{
+    -fx-background-color: white;
+    -fx-font-size: 1.2em;
+    -fx-border-radius: 5;
+    -fx-border-color: -borde-claro;
+    -fx-border-width: 1;
+}
+.tabla-personalizada.tabla-chica{
+    -fx-font-size: 1.1em;
+}
+
+/* Columnas */
+.tabla-personalizada .table-column{
+    -fx-fill: black;
+    -fx-border-color: transparent;
+    -fx-alignment: center;
+}
+
+/* Filas */
+.tabla-personalizada .table-row-cell{
+    -fx-background-color: white;
+    -fx-cell-size: 50px;
+    -fx-border-color: -borde-claro;
+    -fx-border-width: 0 0 1 0;
+    -fx-transition: background-color 0.3s;
+}
+.tabla-personalizada .table-row-cell:selected,
+.tabla-personalizada .table-row-cell:hover:selected{
+    -fx-background-color: -primary;
+}
+.tabla-personalizada .table-row-cell:selected .table-cell{
+    -fx-text-fill: white;
+}
+.tabla-personalizada .table-row-cell:hover {
+    -fx-background-color: -gris-claro;
+}
+
+/* Encabezado */
+.tabla-personalizada .column-header{
+    -fx-background-color: white;
+    -fx-border-color: -borde-claro;
+    -fx-border-width: 0 0 3 0;
+}
+.tabla-personalizada .column-header .label {
+    -fx-font-weight: bold;
+    -fx-padding: 10 5;
+}
+
+/* Scroll bar */
+.tabla-personalizada > .virtual-flow > .scroll-bar:vertical,
+.tabla-personalizada > .virtual-flow > .scroll-bar:vertical > .track,
+.tabla-personalizada > .virtual-flow > .scroll-bar:vertical > .track-background,
+.tabla-personalizada > .virtual-flow > .scroll-bar:horizontal,
+.tabla-personalizada > .virtual-flow > .scroll-bar:horizontal > .track,
+.tabla-personalizada > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+.tabla-personalizada > .virtual-flow > .scroll-bar > .increment-button,
+.tabla-personalizada > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+.tabla-personalizada .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: -gris-suave;
+    -fx-opacity: 0.8;
+    -fx-transition: opacity 0.3s;
+}
+.tabla-personalizada .virtual-flow .scroll-bar:vertical .thumb:hover{
+    -fx-opacity: 1;
+}
+
+/* Menu de la tabla */
+.tabla-personalizada .column-header-background,
+.tabla-personalizada .nested-column-header,
+.tabla-personalizada .filler {
+    -fx-background-color: -gris-claro;
+}
+.tabla-personalizada > .column-header-background > .show-hide-columns-button{
+    -fx-background-color: white;
+}
+.tabla-personalizada > .column-header-background > .show-hide-columns-button .show-hide-column-image{
+    -fx-opacity: 0.5;
+    -fx-font-size: 15px;
+}
+.tabla-personalizada > .column-header-background > .show-hide-columns-button:hover .show-hide-column-image{
+    -fx-opacity: 1;
+}
+.tabla-personalizada > .column-header-background > .show-hide-columns-button:pressed .show-hide-column-image{
+    -fx-opacity: 0.7;
+}

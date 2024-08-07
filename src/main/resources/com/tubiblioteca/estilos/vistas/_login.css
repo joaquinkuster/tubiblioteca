@@ -1,0 +1,11 @@
+/* Login */
+/* Logo del Login */
+.login-logo{
+    -fx-background-color: -principal;
+    -fx-alignment: center;
+}
+.login-logo Text{
+    -fx-font-size: 2em;
+    -fx-fill: -fondo-gris;
+    -fx-font-weight: bold;
+}

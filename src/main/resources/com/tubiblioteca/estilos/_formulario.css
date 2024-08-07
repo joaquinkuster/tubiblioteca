@@ -1,0 +1,179 @@
+/* Label personalizada */
+.formulario-label{
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+}
+
+/* TextField personalizado */
+.text-field-personalizado, .password-field-personalizado{
+    -fx-font-size: 1.2em;
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+    -fx-transition: border-color 0.3s;
+}
+.text-field-personalizado:hover, .text-field-personalizado:focused, .password-field-personalizado:hover, .password-field-personalizado:focused{
+    -fx-border-color: -principal-oscuro-3;
+}
+
+/* Combo personalizado */
+.combo-personalizado{
+    -fx-font-size: 1.2em;
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 3 0;
+    -fx-padding: 0 5;
+    -fx-transition: border-color 0.3s;
+}
+.combo-personalizado > .arrow-button{
+    -fx-background-color: transparent;
+    -fx-transition: background-color 0.3s;
+}
+.combo-personalizado .text-input{
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-insets: 0;
+    -fx-effect: null;
+    -fx-background-color: white;
+    -fx-padding: 5;
+}
+.combo-personalizado .text-field .right-button{
+    -fx-background-color: transparent;
+}
+.combo-personalizado .arrow-button:hover{
+    -fx-background-color: -principal-oscuro-1;
+}
+.combo-personalizado .arrow-button:pressed {
+    -fx-background-color: -principal-oscuro-2;
+}
+.combo-personalizado:hover, .combo-personalizado:selected{
+    -fx-border-color: -principal-oscuro-3;
+}
+.combo-personalizado .list-view .list-cell:hover, .combo-personalizado .list-view .list-cell:selected {
+    -fx-background-color: -principal-oscuro-3;
+}
+
+/* DatePicker personalizado */
+.datepicker-personalizado{
+    -fx-font-size: 1.2em;
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 3 0;
+    -fx-padding: 0 5;
+    -fx-transition: border-color 0.3s;
+}
+.datepicker-personalizado .text-field{
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+.datepicker-personalizado .arrow-button{
+    -fx-background-color: transparent;
+    -fx-transition: background-color 0.3s;
+}
+.datepicker-personalizado .arrow-button:hover{
+    -fx-background-color: -principal-oscuro-1;
+}
+.datepicker-personalizado .arrow-button:pressed {
+    -fx-background-color: -principal-oscuro-2;
+}
+
+/* Calendario del DatePicker */
+.datepicker-personalizado .cell {
+  -fx-background-color: white;
+}
+.datepicker-personalizado .cell:hover, .datepicker-personalizado .cell:focused{
+    -fx-background-color: -gris-claro;
+    -fx-text-fill: black;
+}
+.datepicker-personalizado .selected, .datepicker-personalizado .selected:focused {
+    -fx-background-color: -principal-oscuro-3;
+    -fx-text-fill: white;
+}
+.datepicker-personalizado .month-year-pane {
+    -fx-background-color:  -principal;
+}
+.datepicker-personalizado .date-picker-popup .month-year-pane .label {
+	-fx-text-fill: white;
+}
+.datepicker-personalizado .date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+	-fx-background-color: -gris-claro;
+}
+.datepicker-personalizado .date-picker-popup .spinner .button:hover .left-arrow,
+.date-picker-popup .spinner .button:hover .right-arrow {
+	-fx-background-color: white;
+}
+.datepicker-personalizado .date-picker-popup .spinner .button:hover,
+.datepicker-personalizado .date-picker-popup .spinner .button:focused{
+	-fx-background-color: transparent;
+}
+
+/* TextArea */
+.text-area-personalizado{
+    -fx-font-size: 1.2em;
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-border-color: lightgray;
+    -fx-border-width: 2;
+    -fx-transition: border-color 0.3s;
+}
+.text-area-personalizado .content {
+    -fx-padding: 10 15;
+}
+.text-area-personalizado:hover, .text-area-personalizado:focused, .text-area-custom:pressed{
+    -fx-border-color: -principal-oscuro-3;
+}
+
+/* CheckBox */
+.check-box-personalizado{
+    -fx-font-size: 1.1em;
+    -fx-text-fill: black;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.check-box-personalizado .box{
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 5px;
+    -fx-transition: border-color 0.3s;
+    -fx-transition: background-color 0.3s;
+}
+.check-box-personalizado:selected .box .mark{
+    -fx-background-color: black;
+}
+.check-box-personalizado .box .mark{
+    -fx-background-color: transparent;
+}
+.check-box-personalizado .box:hover,
+.check-box-personalizado:hover .box,
+.check-box-personalizado:focused .box{
+    -fx-background-color: -gris-claro;
+    -fx-border-color: -principal;
+}
+.check-box-personalizado .box:pressed,
+.check-box-personalizado:pressed .box{
+    -fx-background-color: -gris-suave;
+}
+
+/* Link */
+.enlace{
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+.enlace Text {
+    -fx-font-size: 1em;
+    -fx-fill: -enlace;
+    -fx-transition: fill 0.3s;
+}
+.enlace:hover Text,
+.enlace:focused Text{
+    -fx-fill: -enlace-hover;
+    -fx-underline: true;
+}
+

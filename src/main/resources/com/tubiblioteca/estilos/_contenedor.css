@@ -1,0 +1,11 @@
+.contenedor{
+    -fx-background-color: -fondo-gris;
+    -fx-alignment: center;
+}
+
+.contenedor .contenedor-contenido{
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(two-pass-box, -sombra-gris, 5, 0, 0, 4);
+    -fx-alignment: center;
+}
