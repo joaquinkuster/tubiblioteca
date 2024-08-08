@@ -1,4 +1,4 @@
-package com.tubiblioteca.controladores;
+package com.tubiblioteca.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.URL;
@@ -26,7 +25,6 @@ public class LoginControlador implements Initializable {
     private CheckBox checkRecordar;
 
     // Logger para mostrar informacion
-    @Getter
     private final Logger log = LoggerFactory.getLogger(LoginControlador.class);
 
     @Override
