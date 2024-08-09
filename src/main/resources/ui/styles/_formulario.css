@@ -1,5 +1,8 @@
-/* Label personalizada */
-.formulario-label{
+/* Grilla del formulario */
+.formulario-grilla{
+    -fx-alignment: center;
+}
+.formulario-grilla Label{
     -fx-font-size: 1.2em;
     -fx-font-weight: bold;
 }
@@ -24,7 +27,7 @@
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: lightgray;
-    -fx-border-width: 0 0 3 0;
+    -fx-border-width: 1;
     -fx-padding: 0 5;
     -fx-transition: border-color 0.3s;
 }
@@ -62,7 +65,7 @@
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: lightgray;
-    -fx-border-width: 0 0 3 0;
+    -fx-border-width: 1;
     -fx-padding: 0 5;
     -fx-transition: border-color 0.3s;
 }
@@ -118,7 +121,7 @@
     -fx-text-fill: black;
     -fx-background-color: transparent;
     -fx-border-color: lightgray;
-    -fx-border-width: 2;
+    -fx-border-width: 1;
     -fx-transition: border-color 0.3s;
 }
 .text-area-personalizado .content {

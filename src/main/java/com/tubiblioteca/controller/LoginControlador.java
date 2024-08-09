@@ -8,6 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.App;
+import com.tubiblioteca.view.VistasFXML;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -34,7 +38,7 @@ public class LoginControlador implements Initializable {
 
     @FXML
     private void iniciarSesion() {
-
+        App.cambiarEscena(VistasFXML.VistaPrincipal);
     }
 
     @FXML

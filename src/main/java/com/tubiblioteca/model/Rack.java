@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 public class Rack {
     
     @Id
-    @Column(name = "id", nullable =  false, unique = true)
+    @Column(name = "id", nullable =  false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "descripcion", length = 500, nullable = false)

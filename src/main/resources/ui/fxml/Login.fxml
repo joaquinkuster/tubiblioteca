@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -30,27 +29,27 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TuBiblioteca" />
          </children>
       </VBox>
-      <VBox layoutX="384.0" layoutY="60.0" prefHeight="200.0" prefWidth="400.0" spacing="50.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox layoutX="384.0" layoutY="60.0" prefHeight="200.0" prefWidth="400.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titulo-principal" text="Iniciar Sesión">
                <font>
                   <Font name="Arial Black" size="15.0" />
                </font>
             </Text>
-            <GridPane hgap="10.0" styleClass="login-formulario-grid" vgap="10.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="102.999951171875" minWidth="80.80003662109375" prefWidth="95.2" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="228.79996337890623" minWidth="206.20004882812503" prefWidth="215.2" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            <GridPane hgap="10.0" styleClass="formulario-grilla" vgap="10.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
+                  <Label text="DNI:" />
                   <TextField fx:id="txtDni" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                  <Label text="Contraseña:" GridPane.rowIndex="1" />
                   <PasswordField fx:id="txtContrasena" styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <CheckBox fx:id="checkRecordar" mnemonicParsing="false" styleClass="check-box-personalizado" text="Recordar" GridPane.rowIndex="2" />
                   <Button fx:id="btnOlvidasteContrasena" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="enlace" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
@@ -62,15 +61,9 @@
                         </Text>
                      </graphic>
                   </Button>
-                  <Button fx:id="btnEntrar" mnemonicParsing="false" onAction="#iniciarSesion" styleClass="btn-personalizado" text="Entrar" GridPane.rowIndex="4" />
-                  <Button fx:id="btnCrearCuenta" mnemonicParsing="false" onAction="#crearCuenta" styleClass="btn-personalizado" text="Crear cuenta" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label styleClass="formulario-label" text="Correo:" />
-                  <Label styleClass="formulario-label" text="Contraseña:" GridPane.rowIndex="1" />
                </children>
-               <padding>
-                  <Insets left="20.0" right="20.0" />
-               </padding>
             </GridPane>
+            <Button fx:id="btnEntrar" mnemonicParsing="false" onAction="#iniciarSesion" styleClass="btn-personalizado" text="Entrar" />
          </children>
       </VBox>
    </children>

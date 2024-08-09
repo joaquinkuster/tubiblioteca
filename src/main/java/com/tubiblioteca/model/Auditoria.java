@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Auditoria {
     
     @Id
-    @Column(name = "id", nullable =  false, unique = true)
+    @Column(name = "id", nullable =  false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "tabla_afectada", length = 50, nullable = false)

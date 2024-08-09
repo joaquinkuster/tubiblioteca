@@ -22,10 +22,25 @@
 .titulo-principal{
     -fx-font-size: 2em;
     -fx-font-weight: bold;
+    -fx-alignment: center;
 }
-.contenedor-titulo-principal Line{
+.titulo-principal Line{
     -fx-stroke: -principal;
     -fx-stroke-width: 3;
+}
+
+/* Acciones */
+.acciones-contenedor{
+    -fx-alignment: center;
+}
+
+/* Insertamos los iconos a las acciones (agregar, modificar y eliminar) */
+.acciones-contenedor .btn-personalizado.eliminar{
+    -fx-background-color: -rojo;
+}
+.acciones-contenedor .btn-personalizado.modificar{
+    -fx-text-fill: black;
+    -fx-background-color: -amarillo;
 }
 
 

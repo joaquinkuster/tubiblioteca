@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Prestamo {
     
     @Id
-    @Column(name = "id", nullable =  false, unique = true)
+    @Column(name = "id", nullable =  false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "fecha_prestamo", nullable = false)

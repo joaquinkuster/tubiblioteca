@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Libro {
     
     @Id
-    @Column(name = "isbn", nullable = false, unique = true)
+    @Column(name = "isbn", nullable = false)
     private long isbn;
     @Column(name = "titulo", length = 50, nullable = false)
     private String titulo;

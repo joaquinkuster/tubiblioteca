@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class Miembro {
 
     @Id
-    @Column(name = "dni", length = 8, nullable = false, unique = true)
+    @Column(name = "dni", length = 8, nullable = false)
     private String dni;
     @Column(name = "nombre", length = 50, nullable = false)
     private String nombre;

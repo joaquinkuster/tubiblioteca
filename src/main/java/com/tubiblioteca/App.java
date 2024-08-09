@@ -1,33 +1,70 @@
 package com.tubiblioteca;
 
 import java.io.IOException;
-
+import org.slf4j.LoggerFactory;
+import com.tubiblioteca.config.GestorDePantallas;
+import com.tubiblioteca.repository.Repositorio;
+import com.tubiblioteca.view.VistasFXML;
 import jakarta.persistence.Persistence;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import javafx.application.Platform;
+import com.tubiblioteca.service.Servicio;
+import javafx.scene.Node;
 
-public class App extends Application{
+public class App extends Application {
 
-    private static Scene scene;
+    // Utilizada para gestionar las vistas en un mismo escenario
+    private static GestorDePantallas gestorDePantallas;
+
+    // Utilizado como servicio compartido
+    private static Servicio servicio;
+
+    // Logger para gestionar informacion
+    private final Logger log = LoggerFactory.getLogger(App.class);
+
+    @Override
+    public void init() {
+        log.info("Inicializando TuBiblioteca...");
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
+        log.info("Iniciando TuBiblioteca...");
+
+        // creación del manejador de la conexión
+        var emf = Persistence.createEntityManagerFactory("TuBibliotecaPU");
+        // crea el servicio y repositorio
+        servicio = new Servicio(new Repositorio(emf));
+
         // carga la escena principal
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("fxml/Login.fxml"));
-        scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+        log.info("Cargando la ventana principal...");
+        gestorDePantallas = new GestorDePantallas(stage);
+        gestorDePantallas.cambiarEscena(VistasFXML.Login);
     }
 
-    // carga un archivo FXML
-    // retorna el FXMLLoader para poder acceder a los controladores
-    // ver por ejemplo: void editar(ActionEvent event) en PedidosController.java
-    public static FXMLLoader setRoot(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        scene.setRoot(fxmlLoader.load());
-        return fxmlLoader;
+    @Override
+    public void stop() {
+        log.info("Deteniendo TuBiblioteca...");
+        // Cerramos la aplicacion de forma ordenada
+        Platform.exit();
+    }
+
+    public static void cambiarEscena(VistasFXML vista) {
+        gestorDePantallas.cambiarEscena(vista);
+    }
+
+    public static void setTitulo(String titulo) {
+        gestorDePantallas.setTitulo(titulo);
+    }
+
+    public static Node cargarVista(String rutaFxml) {
+        return gestorDePantallas.cargarVista(rutaFxml);
+    }
+
+    public static Servicio getServicio() {
+        return servicio;
     }
 
     public static void main(String[] args) {

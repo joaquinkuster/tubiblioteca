@@ -6,9 +6,6 @@
     -fx-border-color: -borde-claro;
     -fx-border-width: 1;
 }
-.tabla-personalizada.tabla-chica{
-    -fx-font-size: 1.1em;
-}
 
 /* Columnas */
 .tabla-personalizada .table-column{
@@ -27,7 +24,7 @@
 }
 .tabla-personalizada .table-row-cell:selected,
 .tabla-personalizada .table-row-cell:hover:selected{
-    -fx-background-color: -primary;
+    -fx-background-color: -principal;
 }
 .tabla-personalizada .table-row-cell:selected .table-cell{
     -fx-text-fill: white;

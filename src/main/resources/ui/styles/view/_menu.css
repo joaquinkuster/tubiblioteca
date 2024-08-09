@@ -1,0 +1,72 @@
+/* Logo del menu */
+.menu-container Line{
+    -fx-stroke: -gris-suave;
+    -fx-stroke-width: 1;
+}
+.menu-logo{
+    -fx-alignment: center;
+}
+.menu-logo Text{
+    -fx-fill: black;
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+}
+
+/* Perfil */
+.menu-perfil{
+    -fx-alignment: center;
+    fx-transition: background-color 0.3s;
+}
+.menu-perfil:hover,
+.menu-perfil:focused{
+    -fx-background-color: -gris-claro;
+    -fx-cursor: hand;
+}
+.menu-perfil .detalles{
+    -fx-alignment: center_left;
+}
+.menu-perfil .detalles .nombre{
+    -fx-text-fill: black;
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+}
+.menu-perfil .detalles .tipo{
+    -fx-text-fill: -gris;
+    -fx-font-size: 1.1em;
+}
+
+/* Navegación del menu */
+.menu-elementos{
+    -fx-spacing: 5;
+}
+.menu-elementos .menu-btn {
+    -fx-text-fill: -negro-claro;
+    -fx-font-size: 1.2em;
+    -fx-alignment: center_left;
+    -fx-pref-width: 280;
+    -fx-background-color: white;
+    -fx-padding: 10px 40px;
+    -fx-transition: text-fill 0.3s;
+    -fx-transition: background-color 0.3s;
+}
+.menu-elementos .menu-btn:hover,
+.menu-elementos .menu-btn:focused{
+    -fx-text-fill: black;
+    -fx-background-color: -gris-claro;
+    -fx-cursor: hand;
+}
+.menu-elementos .menu-btn.actual{
+    -fx-text-fill: black;
+    -fx-background-color: -gris-claro;
+}
+.menu-elementos .menu-btn ImageView{
+    -fx-opacity: 0.5;
+    -fx-transition: opacity 0.3s;
+    -fx-padding: 0 15 0 0;
+}
+.menu-elementos .menu-btn:hover ImageView{
+    -fx-opacity: 1;
+}
+.menu-elementos .menu-btn.actual ImageView{
+    -fx-opacity: 1;
+}
