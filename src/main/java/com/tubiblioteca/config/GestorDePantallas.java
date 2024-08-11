@@ -16,13 +16,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class GestorDePantallas {
 
     // Logger para gestionar informacion
-    private static final Logger LOG = getLogger(GestorDePantallas.class);
+    private static final Logger log = getLogger(GestorDePantallas.class);
 
     // Stage principal de la aplicacion
     public final Stage stagePrincipal;
 
     // Mapa de modales asociados a su titulo (clave)
-    public final Map<Class<VistasFXML>, Stage> modalStages = new HashMap<>();
+    public final Map<String, Stage> modalStages = new HashMap<>();
 
     public GestorDePantallas(Stage stage) {
         this.stagePrincipal = stage;
@@ -87,13 +87,13 @@ public class GestorDePantallas {
 
     public void abrirModal(Parent root, VistasFXML vista) {
         // Creamos un nuevo modal y le pasamos el título deseado
-        Stage modalStage = crearModalStage(vista.getDeclaringClass());
+        Stage modalStage = crearModalStage(vista);
 
         // Mostramos el modal creado respectivo con el nodo raiz y título deseado
-        mostrarModal(modalStage, root, vista.getDeclaringClass(), vista.getTitulo());
+        mostrarModal(modalStage, root, vista);
     }
 
-    private Stage crearModalStage(Class<VistasFXML> id) {
+    private Stage crearModalStage(VistasFXML vista) {
         // Creamos una nueva ventana
         Stage modalStage = new Stage();
 
@@ -101,15 +101,15 @@ public class GestorDePantallas {
         modalStage.initModality(Modality.APPLICATION_MODAL);
 
         // Guardamos este modal en el mapa utilizando el título como clave
-        modalStages.put(id, modalStage);
+        modalStages.put(vista.getTitulo(), modalStage);
 
         // Devolvemos el modal creado
         return modalStage;
     }
 
-    public void cerrarModal(Class<VistasFXML> id) {
+    public void cerrarModal(VistasFXML vista) {
         // Buscamos el modal correspondiente en el mapa utilizando el título como clave
-        Stage modalStage = modalStages.get(id);
+        Stage modalStage = modalStages.get(vista.getTitulo());
 
         // Verificamos que el modal sea diferente de nulo
         if (modalStage != null) {
@@ -117,16 +117,16 @@ public class GestorDePantallas {
             modalStage.close();
 
             // Eliminamos el modal del mapa
-            modalStages.remove(id);
+            modalStages.remove(vista.getTitulo());
         }
     }
 
-    private void mostrarModal(Stage modalStage, Parent root, Class<VistasFXML> id, String titulo) {
+    private void mostrarModal(Stage modalStage, Parent root, VistasFXML vista) {
         // Creamos una nueva escena a partir del nodo raiz proporcionado
         Scene escena = new Scene(root);
 
         // Configuramos el modal proporcionado
-        modalStage.setTitle(titulo);
+        modalStage.setTitle(vista.getTitulo());
         modalStage.setScene(escena);
         modalStage.sizeToScene();
         modalStage.centerOnScreen();
@@ -135,7 +135,7 @@ public class GestorDePantallas {
 
         // Cuando se cierre el modal, automaticamente lo elimine del mapa
         modalStage.setOnCloseRequest(event ->
-                cerrarModal(id)
+                cerrarModal(vista)
         );
 
         // Mostramos la ventana de manera modal
@@ -173,7 +173,7 @@ public class GestorDePantallas {
 
     private void cerrar(String errorMsj, Exception e) {
         // Registramos el error utilizando el Logger
-        LOG.error(errorMsj, e, e.getCause());
+        log.error(errorMsj, e, e.getCause());
         // Cerramos de la aplicacion
         Platform.exit();
     }

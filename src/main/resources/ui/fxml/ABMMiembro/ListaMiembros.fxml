@@ -20,10 +20,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor"
     xmlns="http://javafx.com/javafx/22"
-    xmlns:fx="http://javafx.com/fxml/1">
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMMiembro.ListaMiembrosControlador">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
@@ -39,15 +38,16 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="txtDetalles" maxWidth="1.7976931348623157E308" onKeyReleased="#filtrarPorDetalles" promptText="Digite nombre completo..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
-                        <ComboBox fx:id="cmbExpediente" editable="true" maxWidth="1.7976931348623157E308" onAction="#filtrarPorExpediente" promptText="Seleccione un estado..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltro" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <TextField fx:id="txtNombre" onKeyReleased="#filtrar" prefWidth="200.0" promptText="Digite nombre completo..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                        <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -60,16 +60,15 @@
                                 <String fx:value="limpiar" />
                             </styleClass>
                         </Button>
-                        <TextField fx:id="txtDni" maxWidth="1.7976931348623157E308" onKeyReleased="#filtrarPorDetalles" promptText="Digite DNI..." styleClass="text-field-personalizado" />
-                        <ComboBox fx:id="cmbExpediente1" editable="true" maxWidth="1.7976931348623157E308" onAction="#filtrarPorExpediente" promptText="Seleccione un tipo..." styleClass="combo-personalizado" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtDni" onKeyReleased="#filtrar" prefWidth="200.0" promptText="Digite DNI..." styleClass="text-field-personalizado" />
+                        <ComboBox fx:id="cmbTipo" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione un tipo..." styleClass="combo-personalizado" GridPane.columnIndex="2" />
                     </children>
                 </GridPane>
-                <TableView fx:id="tblAcciones" editable="true" styleClass="tabla-personalizada" stylesheets="@../../../../../../../../consejofacil/src/main/resources/styles/_styles.css" tableMenuButtonVisible="true">
+                <TableView fx:id="tblMiembros" editable="true" styleClass="tabla-personalizada" tableMenuButtonVisible="true">
                     <columns>
                         <TableColumn fx:id="colDni" prefWidth="100.0" text="DNI" />
                         <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre" />
                         <TableColumn fx:id="colTipo" prefWidth="150.0" text="Tipo" />
-                        <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -80,7 +79,7 @@
                 </TableView>
                 <HBox spacing="10.0" styleClass="acciones-contenedor">
                     <children>
-                        <Button fx:id="btnAgregar" layoutX="43.0" layoutY="673.0" mnemonicParsing="false" onAction="#agregarAccion" styleClass="btn-personalizado" text="Agregar">
+                        <Button fx:id="btnAgregar" layoutX="43.0" layoutY="673.0" mnemonicParsing="false" onAction="#agregar" styleClass="btn-personalizado" text="Agregar">
                             <graphic>
                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                     <viewport>
@@ -92,7 +91,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button fx:id="btnModificar" layoutX="279.0" layoutY="682.0" mnemonicParsing="false" onAction="#modificarAccion" text="Modificar">
+                        <Button fx:id="btnModificar" layoutX="279.0" layoutY="682.0" mnemonicParsing="false" onAction="#modificar" text="Modificar">
                             <styleClass>
                                 <String fx:value="btn-personalizado" />
                                 <String fx:value="modificar" />
@@ -105,7 +104,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button fx:id="btnEliminar" layoutX="400.0" layoutY="682.0" mnemonicParsing="false" onAction="#eliminarAccion" text="Eliminar">
+                        <Button fx:id="btnEliminar" layoutX="400.0" layoutY="682.0" mnemonicParsing="false" onAction="#eliminar" text="Eliminar">
                             <styleClass>
                                 <String fx:value="btn-personalizado" />
                                 <String fx:value="eliminar" />

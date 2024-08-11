@@ -14,11 +14,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="320.0" styleClass="contenedor"
-   xmlns="http://javafx.com/javafx/22"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.MenuControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="320.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.MenuControlador">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
             <HBox spacing="10.0" styleClass="menu-logo">
                <children>
@@ -31,7 +29,7 @@
                </children>
             </HBox>
             <Line endX="250.0" />
-            <HBox fx:id="hboxPerfil" focusTraversable="true" onMouseClicked="#modificarPerfil" spacing="10.0" styleClass="menu-perfil">
+            <HBox fx:id="hboxPerfil" alignment="BASELINE_CENTER" focusTraversable="true" onMouseClicked="#modificarPerfil" spacing="10.0" styleClass="menu-perfil">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -85,15 +83,18 @@
             </VBox>
          </children>
          <styleClass>
-            <String fx:value="menu-container" />
             <String fx:value="contenedor-contenido" />
+            <String fx:value="menu-contenedor" />
          </styleClass>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
       </VBox>
    </children>
    <stylesheets>
+      <URL value="@../styles/view/_menu.css" />
       <URL value="@../styles/_contenedor.css" />
       <URL value="@../styles/_config.css" />
-      <URL value="@../styles/view/_menu.css" />
       <URL value="@../styles/_estilos.css" />
    </stylesheets>
 </AnchorPane>

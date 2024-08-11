@@ -22,9 +22,9 @@ public class VistaPrincipalControlador implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Establecemos la vista central inicial
         if (bpVistaPrincipal.getCenter() == null) {
-            //vistaCentro = VistasFXML.ListaMiembros;
-            //Node centroInicial = App.cargarVista(vistaCentro.getRutaFxml());
-            //bpVistaPrincipal.setCenter(centroInicial);
+            vistaCentro = VistasFXML.ListaMiembros;
+            Node centroInicial = App.cargarVista(vistaCentro.getRutaFxml());
+            bpVistaPrincipal.setCenter(centroInicial);
         }
     }
 

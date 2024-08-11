@@ -8,13 +8,13 @@ public class CargadorDeVistas {
 
     public static Parent cargarVista(String rutaFxml) throws IOException {
         // Preparamos el loader y le pasamos la ruta del archivo FXML
-        FXMLLoader loader = prepareLoader(rutaFxml);
+        FXMLLoader loader = crearLoader(rutaFxml);
         // Cargamos el archivo FXML segun su ruta
         // Devolvemos el nodo raiz del arbol de todos
         return loader.load();
     }
 
-    private static FXMLLoader prepareLoader(String rutaFxml){
+    public static FXMLLoader crearLoader(String rutaFxml){
         // Creamos un nuevo loader
         FXMLLoader loader = new FXMLLoader();
 

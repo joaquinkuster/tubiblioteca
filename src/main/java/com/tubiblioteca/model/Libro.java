@@ -20,6 +20,8 @@ public class Libro {
     private long isbn;
     @Column(name = "titulo", length = 50, nullable = false)
     private String titulo;
+    @Column(name = "baja", nullable = false)
+    private Boolean baja = false;
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;

@@ -42,15 +42,15 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="DNI:" />
-                  <TextField fx:id="txtDni" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtDni" prefWidth="200.0" promptText="Digite DNI..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                   <Label text="Contraseña:" GridPane.rowIndex="1" />
-                  <PasswordField fx:id="txtContrasena" styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="txtContrasena" promptText="Digite contraseña..." styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <CheckBox fx:id="checkRecordar" mnemonicParsing="false" styleClass="check-box-personalizado" text="Recordar" GridPane.rowIndex="2" />
                   <Button fx:id="btnOlvidasteContrasena" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="enlace" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                      <graphic>

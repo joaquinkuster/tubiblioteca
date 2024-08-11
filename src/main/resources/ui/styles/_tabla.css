@@ -37,7 +37,7 @@
 .tabla-personalizada .column-header{
     -fx-background-color: white;
     -fx-border-color: -borde-claro;
-    -fx-border-width: 0 0 3 0;
+    -fx-border-width: 0 1 3 0;
 }
 .tabla-personalizada .column-header .label {
     -fx-font-weight: bold;

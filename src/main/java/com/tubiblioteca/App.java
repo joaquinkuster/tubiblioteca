@@ -10,16 +10,15 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import javafx.application.Platform;
-import com.tubiblioteca.service.Servicio;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 
 public class App extends Application {
 
     // Utilizada para gestionar las vistas en un mismo escenario
     private static GestorDePantallas gestorDePantallas;
 
-    // Utilizado como servicio compartido
-    private static Servicio servicio;
+    // Utilizado como repositorio compartido
+    private static Repositorio repositorio;
 
     // Logger para gestionar informacion
     private final Logger log = LoggerFactory.getLogger(App.class);
@@ -35,8 +34,8 @@ public class App extends Application {
 
         // creación del manejador de la conexión
         var emf = Persistence.createEntityManagerFactory("TuBibliotecaPU");
-        // crea el servicio y repositorio
-        servicio = new Servicio(new Repositorio(emf));
+        // crea el repositorio 
+        repositorio = new Repositorio(emf);
 
         // carga la escena principal
         log.info("Cargando la ventana principal...");
@@ -59,12 +58,24 @@ public class App extends Application {
         gestorDePantallas.setTitulo(titulo);
     }
 
-    public static Node cargarVista(String rutaFxml) {
+    public static Parent cargarVista(String rutaFxml) {
         return gestorDePantallas.cargarVista(rutaFxml);
     }
 
-    public static Servicio getServicio() {
-        return servicio;
+    public static void abrirModal(Parent root, VistasFXML vista) {
+        gestorDePantallas.abrirModal(root, vista);
+    }
+
+    public static void cerrarmodal(VistasFXML vista) {
+        gestorDePantallas.cerrarModal(vista);
+    }
+
+    public static Repositorio getRepositorio() {
+        return repositorio;
+    }
+
+    public static void setRepositorio(Repositorio rep) {
+        repositorio = rep;
     }
 
     public static void main(String[] args) {

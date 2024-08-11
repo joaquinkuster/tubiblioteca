@@ -24,17 +24,19 @@ public class Alerta {
         return resultado == ButtonType.OK;
     }
 
-    public static void mostrarCadenaMensajes(boolean error, ArrayList<String> mensajes, String titulo, String tituloAlerta) {
+    public static String convertirCadenaErrores(ArrayList<String> mensajes) {
         if (!mensajes.isEmpty()) {
             // Concatenamos cada error en un sola cadena
             StringBuilder cadenaMensajes = new StringBuilder();
-            cadenaMensajes.append(titulo).append("\n");
+            cadenaMensajes.append("Se ha producido uno o varios errores:").append("\n");
             for (String msj : mensajes) {
                 cadenaMensajes.append("\n" + BULLET + " ").append(msj).append("\n");
             }
 
-            // Finalmente, mostramos los errores en pantalla
-            mostrarMensaje(error, tituloAlerta, cadenaMensajes.toString());
+            // Finalmente, retornamos los errores en pantalla
+            return cadenaMensajes.toString();
+        } else {
+            return null;
         }
     }
 

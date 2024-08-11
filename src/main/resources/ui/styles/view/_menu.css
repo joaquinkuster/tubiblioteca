@@ -1,5 +1,8 @@
 /* Logo del menu */
-.menu-container Line{
+.menu-contenedor{
+    -fx-alignment: top_center o !important;
+}
+.menu-contenedor Line{
     -fx-stroke: -gris-suave;
     -fx-stroke-width: 1;
 }

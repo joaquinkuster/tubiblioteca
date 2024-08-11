@@ -28,7 +28,6 @@
     -fx-background-color: white;
     -fx-border-color: lightgray;
     -fx-border-width: 1;
-    -fx-padding: 0 5;
     -fx-transition: border-color 0.3s;
 }
 .combo-personalizado > .arrow-button{
