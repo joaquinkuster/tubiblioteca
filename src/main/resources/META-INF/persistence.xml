@@ -20,7 +20,7 @@ instance" version="2.2" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persiste
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="postgres"/>
-            <property name="eclipselink.ddl-generation" value="update-tables"/>
+            <property name="eclipselink.ddl-generation" value="create-tables"/>
             <!-- <property name="eclipselink.logging.level" value="FINEST" /> -->
         </properties>
     </persistence-unit>

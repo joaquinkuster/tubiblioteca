@@ -85,6 +85,9 @@
                         <configuration>
                             <mainClass>com.tubiblioteca.App</mainClass>
                         </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

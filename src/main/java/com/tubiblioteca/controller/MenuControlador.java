@@ -24,7 +24,7 @@ public class MenuControlador implements Initializable {
 
     // Botones del menu lateral
     @FXML
-    private Button btnMiembros, btnAuditoria;
+    private Button btnMiembros, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos;
     @FXML
     private HBox hboxPerfil;
 
@@ -40,7 +40,7 @@ public class MenuControlador implements Initializable {
         addListeners();
 
         // Inicializamos la lista de items con los botones correspondientes
-        items = Arrays.asList(btnMiembros, btnAuditoria);
+        items = Arrays.asList(btnMiembros, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos);
 
         // Actualizamos la información del usuario
         //actualizarMenu();
@@ -62,6 +62,14 @@ public class MenuControlador implements Initializable {
     private void addListeners() {
         // Establecemos los handlers correspondientes a cada boton
         btnMiembros.setOnAction(event -> redireccionarMenu(VistasFXML.ListaMiembros, (Button) event.getSource()));
+        btnAuditoria.setOnAction(null);
+        btnCategorias.setOnAction(null);
+        btnCopiaLibros.setOnAction(null);
+        btnEditoriales.setOnAction(event -> redireccionarMenu(VistasFXML.ListaEditoriales, (Button) event.getSource()));
+        btnIdiomas.setOnAction(null);
+        btnLibros.setOnAction(null);
+        btnPrestamos.setOnAction(null);
+        btnRacks.setOnAction(null);
     }
 
     // Meotodo para cambiar el contenido central del main

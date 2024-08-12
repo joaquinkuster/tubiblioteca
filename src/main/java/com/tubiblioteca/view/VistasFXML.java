@@ -9,7 +9,10 @@ public enum VistasFXML {
 
     ListaMiembros("Lista de Miembros", "ABMMiembro/ListaMiembros"),
     FormularioMiembro("Formulario de Miembro", "ABMMiembro/FormularioMiembro"),
-    SelectorMiembro("Selector de Miembro", "ABMMiembro/SelectorMiembro");
+    SelectorMiembro("Selector de Miembro", "ABMMiembro/SelectorMiembro"),
+
+    ListaEditoriales("Lista de Editoriales", "ABMEditoriales/ListaEditoriales"),
+    FormularioEditoriales("Formulario de Editoriales", "ABMEditoriales/FormularioEditoriales");
 
     // Devolvemos la clave
     private final String titulo;

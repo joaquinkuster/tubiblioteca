@@ -31,14 +31,17 @@ public class VistaPrincipalControlador implements Initializable {
     public void cambiarCentro(VistasFXML vista) {
         // Guardamos la vista del nuevo centro
         vistaCentro = vista;
-
         // Obtenemos el nodo raiz del centro actual del contenedor
+
         Node centroActual = bpVistaPrincipal.getCenter();
         // Obtenemos el nodo raiz del nuevo centro a colocar en el contenedor
-        Node nuevoCentro = App.cargarVista(vista.getRutaFxml());
+        Node nuevoCentro = App.cargarVista(vistaCentro.getRutaFxml());
+        
+        //Establecemos la nueva vista que se seleccionó
+        bpVistaPrincipal.setCenter(nuevoCentro);
 
         // Cambiamos el título de la ventana principal
-        App.setTitulo(vista.getTitulo());
+        App.setTitulo(vistaCentro.getTitulo());
         // Establecemos la opacidad en 0 del nuevo centro para que aparezca inicialmente invisible
         nuevoCentro.setOpacity(0);
 
