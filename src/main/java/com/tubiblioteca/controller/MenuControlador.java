@@ -1,17 +1,25 @@
 package com.tubiblioteca.controller;
 
-import com.tubiblioteca.view.VistasFXML;
+import com.tubiblioteca.view.Vista;
+
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.Node;
+import com.tubiblioteca.App;
+import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 
 public class MenuControlador implements Initializable {
@@ -28,8 +36,7 @@ public class MenuControlador implements Initializable {
     @FXML
     private HBox hboxPerfil;
 
-    // Controladores de los fxml
-    private VistaPrincipalControlador vistaPrincipalControlador;
+    private BorderPane panel;
 
     // Lista de items (botones) del menu
     private List<Button> items;
@@ -54,18 +61,25 @@ public class MenuControlador implements Initializable {
             }
         });
         Platform.runLater(() -> btnMiembros.requestFocus());
+    }
 
+    public void setPanel(BorderPane panel){
+        this.panel = panel;
+
+        if (panel.getCenter() == null) {
+            panel.setCenter(StageManager.cargarVista(Vista.ListaMiembros.getRutaFxml()));
+        }
     }
 
     // Listeners de los items del menu
 
     private void addListeners() {
         // Establecemos los handlers correspondientes a cada boton
-        btnMiembros.setOnAction(event -> redireccionarMenu(VistasFXML.ListaMiembros, (Button) event.getSource()));
+        btnMiembros.setOnAction(event -> redireccionarMenu(Vista.ListaMiembros, (Button) event.getSource()));
         btnAuditoria.setOnAction(null);
         btnCategorias.setOnAction(null);
         btnCopiaLibros.setOnAction(null);
-        btnEditoriales.setOnAction(event -> redireccionarMenu(VistasFXML.ListaEditoriales, (Button) event.getSource()));
+        btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
         btnIdiomas.setOnAction(null);
         btnLibros.setOnAction(null);
         btnPrestamos.setOnAction(null);
@@ -74,7 +88,7 @@ public class MenuControlador implements Initializable {
 
     // Meotodo para cambiar el contenido central del main
 
-    public void redireccionarMenu(VistasFXML vista, Button btn) {
+    public void redireccionarMenu(Vista vista, Button btn) {
         // Verificamos si el boton no tiene la clase actual, lo que significa que no está actualmente seleccionado
         if (!btn.getStyleClass().contains("actual")) {
             // Itera sobre la lista de items y remueve la clase actual de cada boton, si la tienen
@@ -83,7 +97,7 @@ public class MenuControlador implements Initializable {
             btn.getStyleClass().add("actual");
 
             // Cambiamos el contenido del centro del contenedor principal
-            vistaPrincipalControlador.cambiarCentro(vista);
+            cambiarCentro(vista);
         }
     }
 
@@ -158,4 +172,50 @@ public class MenuControlador implements Initializable {
         btnMiembros.setDisable(!tieneAcceso);
         btnMiembros.setVisible(tieneAcceso);
     }*/
+
+public void cambiarCentro(Vista vista) {
+        // Obtenemos el nodo raiz del centro actual del contenedor
+        Node centroActual = panel.getCenter();
+        // Obtenemos el nodo raiz del nuevo centro a colocar en el contenedor
+        Node nuevoCentro = StageManager.cargarVista(vista.getRutaFxml());
+
+        // Establecemos la nueva vista que se seleccionó
+        panel.setCenter(nuevoCentro);
+
+        // Cambiamos el título de la ventana principal
+        StageManager.setTitulo(vista.getTitulo());
+        // Establecemos la opacidad en 0 del nuevo centro para que aparezca inicialmente
+        // invisible
+        nuevoCentro.setOpacity(0);
+
+        // Creamos una transición de desvanecimiento para cambiar el centro del
+        // contenedor
+        FadeTransition fadeOut = crearTransition(centroActual, nuevoCentro);
+        // Iniciamos la transicion de salida
+        fadeOut.play();
+    }
+
+    private FadeTransition crearTransition(Node centroActual, Node nuevoCentro) {
+        // Creamos una transición de desvanecimiento de salida para el centro actual
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.3), centroActual);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        fadeOut.setOnFinished(event -> {
+            // Al terminar el desvanecimiento de salida, establecemos el nuevo centro
+            // (invisible)
+            panel.setCenter(nuevoCentro);
+
+            // Creamos una transición de desvanecimiento de entrada para el nuevo centro
+            FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.3), nuevoCentro);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+
+            // Iniciamos la transicion de entrada
+            fadeIn.play();
+        });
+
+        // Devolvemos la transicion de salida
+        return fadeOut;
+    }
 }

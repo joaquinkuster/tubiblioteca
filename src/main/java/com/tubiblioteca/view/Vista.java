@@ -1,25 +1,26 @@
 package com.tubiblioteca.view;
 
 // Declaramos un enumerado con todas las vistas de la aplicacion
-public enum VistasFXML {
+public enum Vista {
 
     // Cada vista tiene asociada una clave de título y una ruta de archivo FXML
     Login("Iniciar Sesión", "Login"),
-    VistaPrincipal("", "VistaPrincipal"),
+    VistaPrincipal("", "Principal"),
+    Menu("", "Menu"),
 
     ListaMiembros("Lista de Miembros", "ABMMiembro/ListaMiembros"),
     FormularioMiembro("Formulario de Miembro", "ABMMiembro/FormularioMiembro"),
     SelectorMiembro("Selector de Miembro", "ABMMiembro/SelectorMiembro"),
 
-    ListaEditoriales("Lista de Editoriales", "ABMEditoriales/ListaEditoriales"),
-    FormularioEditoriales("Formulario de Editoriales", "ABMEditoriales/FormularioEditoriales");
+    ListaEditoriales("Lista de Editoriales", "ABMEditorial/ListaEditoriales"),
+    FormularioEditoriales("Formulario de Editorial", "ABMEditorial/FormularioEditorial");
 
     // Devolvemos la clave
     private final String titulo;
 
     private final String rutaFxml;
 
-    VistasFXML(String titulo, String rutaFxml) {
+    Vista(String titulo, String rutaFxml) {
         this.titulo = titulo;
         this.rutaFxml = rutaFxml;
     }
@@ -31,6 +32,6 @@ public enum VistasFXML {
 
     // Devolvemos la ruta completa del archivo FXML
     public String getRutaFxml() {
-        return String.format("/ui/fxml/%s.fxml", rutaFxml);
+        return String.format(("fxml/%s.fxml"), rutaFxml);
     }
 }

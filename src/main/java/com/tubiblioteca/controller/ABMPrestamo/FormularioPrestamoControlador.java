@@ -1,4 +1,4 @@
-package com.tubiblioteca.controller.ABMMiembro;
+package com.tubiblioteca.controller.ABMPrestamo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class FormularioMiembroControlador implements Initializable {
+public class FormularioPrestamoControlador implements Initializable {
 
     @FXML
     private TextField txtDni;

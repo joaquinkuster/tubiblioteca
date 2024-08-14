@@ -28,5 +28,12 @@ public class CopiaLibro {
     @ManyToOne
     @JoinColumn(name = "id_rack", nullable = false)
     private Rack rack;
+    @ManyToOne
+    @JoinColumn(name = "id_libro", nullable = false)
+    private Libro libro;
+
+    public String toString() {
+        return String.format("%s %s", id, tipo);
+    }
     
 }

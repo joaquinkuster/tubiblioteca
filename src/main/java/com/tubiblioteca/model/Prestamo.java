@@ -33,4 +33,58 @@ public class Prestamo {
     @ManyToOne
     @JoinColumn(name = "id_copialibro", nullable = false)
     private CopiaLibro copiaLibro;
+
+    public Prestamo(){
+
+    }
+
+    public LocalDate getFechaPrestamo() {
+        return fechaPrestamo;
+    }
+
+    public void setFechaPrestamo(LocalDate fechaPrestamo) {
+        this.fechaPrestamo = fechaPrestamo;
+    }
+
+    public LocalDate getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(LocalDate fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
+
+    public double getMulta() {
+        return multa;
+    }
+
+    public void setMulta(double multa) {
+        this.multa = multa;
+    }
+
+    public boolean isBaja() {
+        return baja;
+    }
+
+    public void setBaja() {
+        this.baja = true;
+    }
+
+    public Miembro getMiembro() {
+        return miembro;
+    }
+
+    public void setMiembro(Miembro miembro) {
+        this.miembro = miembro;
+    }
+
+    public CopiaLibro getCopiaLibro() {
+        return copiaLibro;
+    }
+
+    public void setCopiaLibro(CopiaLibro copiaLibro) {
+        this.copiaLibro = copiaLibro;
+    }
+
+    
 }

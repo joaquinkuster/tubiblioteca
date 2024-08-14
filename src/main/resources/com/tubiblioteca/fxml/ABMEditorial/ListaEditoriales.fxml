@@ -22,7 +22,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor"
     xmlns="http://javafx.com/javafx/22"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMEditoriales.ListaEditorialesControlador">
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMEditorial.ListaEditorialesControlador">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
@@ -45,7 +45,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
-                    <!-- <children>
+                    <children>
                         <TextField fx:id="txtNombre" onKeyReleased="#filtrar" prefWidth="200.0" promptText="Digite nombre completo..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                         <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
                             <graphic>
@@ -117,7 +117,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                    </children> -->
+                    </children> 
                 </HBox>
             </children>
         </VBox>
