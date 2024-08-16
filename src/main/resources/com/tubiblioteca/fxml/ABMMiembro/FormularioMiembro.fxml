@@ -47,11 +47,11 @@
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="txtDni" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
-                        <TextField fx:id="txtNombre" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="3" />
-                        <TextField fx:id="txtApellido" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <PasswordField fx:id="txtContrasena" styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="cmbTipo" maxWidth="1.7976931348623157E308" styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtDni" prefWidth="200.0" promptText="Digite DNI..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtNombre" prefWidth="200.0" promptText="Digite nombre..." styleClass="text-field-personalizado" GridPane.columnIndex="3" />
+                        <TextField fx:id="txtApellido" promptText="Digite apellido..." styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <PasswordField fx:id="txtContrasena" promptText="Digite contraseña..." styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cmbTipo" maxWidth="1.7976931348623157E308" promptText="Seleccione tipo..." styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         <Label styleClass="label-formulario" text="DNI:" />
                         <Label styleClass="label-formulario" text="Apellido/s:" GridPane.rowIndex="1" />
                         <Label fx:id="lblCargo" styleClass="label-formulario" text="Tipo:" GridPane.columnIndex="2" GridPane.rowIndex="1" />

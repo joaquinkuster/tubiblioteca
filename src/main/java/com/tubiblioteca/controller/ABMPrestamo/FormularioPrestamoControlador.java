@@ -37,7 +37,7 @@ public class FormularioPrestamoControlador implements Initializable {
     private Button btnNuevo;
 
     private ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
-    private final Logger log = LoggerFactory.getLogger(FormularioMiembroControlador.class);
+    private final Logger log = LoggerFactory.getLogger(FormularioPrestamoControlador.class);
 
     private Miembro miembro;
     private MiembroServicio servicio;

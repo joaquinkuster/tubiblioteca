@@ -2,6 +2,8 @@ package com.tubiblioteca.model;
 
 import java.util.List;
 
+import com.tubiblioteca.helper.Validacion;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,4 +26,46 @@ public class Autor {
     private Boolean baja = false;
     @ManyToMany(mappedBy = "autores")
     private List<Libro> libros;
+
+    public Autor(){
+
+    }
+
+    public Autor (String nombre) {
+        if (nombre.isEmpty()) {
+            throw new IllegalArgumentException("Por favor, ingrese el nombre del autor.");
+        } else if (nombre.length() > 50) {
+            throw new IllegalArgumentException("El nombre del autor no puede tener más de 50 caracteres.");
+        } else if (Validacion.validarCadena(nombre)) {
+            throw new IllegalArgumentException("El nombre del autor debe contener solo letras y espacios.");
+        }
+        this.nombre = nombre;
+    }
+
+    public String getNombre(){
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        if (nombre.isEmpty()) {
+            throw new IllegalArgumentException("Por favor, ingrese un nombre de autor.");
+        } else if (nombre.length() > 50) {
+            throw new IllegalArgumentException("El nombre del autor no puede tener más de 50 caracteres.");
+        } else if (Validacion.validarCadena(nombre)) {
+            throw new IllegalArgumentException("El nombre del autor debe contener solo letras y espacios.");
+        }
+        this.nombre = nombre;
+    }
+
+    public boolean isBaja() {
+        return baja;
+    }
+
+    public void setBaja() {
+        this.baja = true;
+    }
+
+    public String toString() {
+        return nombre;
+    }
 }

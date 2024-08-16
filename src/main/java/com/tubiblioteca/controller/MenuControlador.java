@@ -6,7 +6,6 @@ import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.Node;
-import com.tubiblioteca.App;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 
@@ -32,7 +30,7 @@ public class MenuControlador implements Initializable {
 
     // Botones del menu lateral
     @FXML
-    private Button btnMiembros, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos;
+    private Button btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos;
     @FXML
     private HBox hboxPerfil;
 
@@ -47,7 +45,7 @@ public class MenuControlador implements Initializable {
         addListeners();
 
         // Inicializamos la lista de items con los botones correspondientes
-        items = Arrays.asList(btnMiembros, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos);
+        items = Arrays.asList(btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos);
 
         // Actualizamos la información del usuario
         //actualizarMenu();
@@ -84,6 +82,7 @@ public class MenuControlador implements Initializable {
         btnLibros.setOnAction(null);
         btnPrestamos.setOnAction(null);
         btnRacks.setOnAction(null);
+        btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));
     }
 
     // Meotodo para cambiar el contenido central del main

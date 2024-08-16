@@ -13,7 +13,16 @@ public enum Vista {
     SelectorMiembro("Selector de Miembro", "ABMMiembro/SelectorMiembro"),
 
     ListaEditoriales("Lista de Editoriales", "ABMEditorial/ListaEditoriales"),
-    FormularioEditoriales("Formulario de Editorial", "ABMEditorial/FormularioEditorial");
+    FormularioEditorial("Formulario de Editorial", "ABMEditorial/FormularioEditorial"),
+
+    ListaAutores("Lista de Autores", "ABMAutor/ListaAutores"),
+    FormularioAutor("Formulario de Autores", "ABMAutor/FormularioAutor"),
+    
+    ListaCategorias("Lista de Categorías", "ABMCategoria/ListaCategorias"),
+    FormularioCategoria("Formulario de Categoría", "ABMCategoria/FormularioCategoria"),
+
+    ListaLibros("Lista de Libros", "ABMLibro/ListaLibros"),
+    FormularioLibro("Formulario de Libro", "ABMLibro/FormularioLibro");
 
     // Devolvemos la clave
     private final String titulo;

@@ -188,7 +188,7 @@ public class ListaPrestamosControlador implements Initializable {
             }
         }
     }
-
+    
     private Prestamo abrirFormulario(Prestamo prestamoInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioMiembro.getRutaFxml());
         FormularioMiembroControlador controladorFormulario = formulario.getKey();

@@ -1,4 +1,4 @@
-package com.tubiblioteca.controller.ABMMiembro;
+package com.tubiblioteca.controller.ABMLibro;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class FormularioMiembroControlador implements Initializable {
+public class FormularioPrestamoControlador implements Initializable {
 
     @FXML
     private TextField txtDni;
@@ -37,7 +37,7 @@ public class FormularioMiembroControlador implements Initializable {
     private Button btnNuevo;
 
     private ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
-    private final Logger log = LoggerFactory.getLogger(FormularioMiembroControlador.class);
+    private final Logger log = LoggerFactory.getLogger(FormularioPrestamoControlador.class);
 
     private Miembro miembro;
     private MiembroServicio servicio;
@@ -60,6 +60,8 @@ public class FormularioMiembroControlador implements Initializable {
         txtApellido.clear();
         cmbTipo.setValue(null);
         txtContrasena.clear();
+        txtDni.setDisable(false);
+        btnNuevo.setDisable(false);
     }
 
     @FXML

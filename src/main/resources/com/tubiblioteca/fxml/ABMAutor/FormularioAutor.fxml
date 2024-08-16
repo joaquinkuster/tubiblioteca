@@ -16,7 +16,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="328.0" prefWidth="559.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMEditorial.FormularioEditorialControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="328.0" prefWidth="559.0" styleClass="contenedor"
+    xmlns="http://javafx.com/javafx/22"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMAutor.FormularioAutorControlador">
     <stylesheets>
         <URL value="@../../styles/_config.css" />
         <URL value="@../../styles/_contenedor.css" />
@@ -28,7 +30,7 @@
             <children>
                 <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="titulo-principal">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datos de la Editorial" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datos del Autor" />
                         <Line endX="200.0" />
                     </children>
                 </HBox>
@@ -45,7 +47,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="txtNombre" prefWidth="200.0" promptText="Digite nombre..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtNombre" prefWidth="200.0" promptText="Digite nombre del autor..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                         <Label styleClass="label-formulario" text="Nombre:" />
                     </children>
                 </GridPane>

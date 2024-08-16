@@ -88,6 +88,15 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button fx:id="btnAutores" mnemonicParsing="false" styleClass="menu-btn" text="Autores">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/autores.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <Button fx:id="btnCategorias" mnemonicParsing="false" styleClass="menu-btn" text="Categorias">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
