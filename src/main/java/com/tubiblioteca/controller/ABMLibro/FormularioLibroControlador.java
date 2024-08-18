@@ -24,7 +24,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.CustomMenuItem;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,8 +65,11 @@ public class FormularioLibroControlador implements Initializable {
     private CategoriaServicio servicioCategoria;
     private IdiomaServicio servicioIdioma;
 
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         var repositorio = AppConfig.getRepositorio();
         servicio = new LibroServicio(repositorio);
         servicioAutor = new AutorServicio(repositorio);

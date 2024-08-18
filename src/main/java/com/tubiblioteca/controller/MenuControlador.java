@@ -80,7 +80,7 @@ public class MenuControlador implements Initializable {
         btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
         btnIdiomas.setOnAction(event -> redireccionarMenu(Vista.ListaIdiomas, (Button) event.getSource()));
         btnLibros.setOnAction(event -> redireccionarMenu(Vista.ListaLibros, (Button) event.getSource()));
-        btnPrestamos.setOnAction(null);
+        btnPrestamos.setOnAction(event -> redireccionarMenu(Vista.ListaPrestamos, (Button) event.getSource()));
         btnRacks.setOnAction(null);
         btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));
     }

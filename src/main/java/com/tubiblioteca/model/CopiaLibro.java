@@ -25,6 +25,8 @@ public class CopiaLibro {
     private EstadoCopiaLibro estado = EstadoCopiaLibro.Disponible;
     @Column(name = "precio", nullable = false)
     private double precio;
+    @Column(name = "baja", nullable = false)
+    private Boolean baja = false;
     @ManyToOne
     @JoinColumn(name = "id_rack", nullable = false)
     private Rack rack;
@@ -77,6 +79,14 @@ public class CopiaLibro {
 
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public boolean isBaja() {
+        return baja;
+    }
+
+    public void setBaja() {
+        this.baja = true;
     }
 
     public Rack getRack() {

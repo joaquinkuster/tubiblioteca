@@ -1,4 +1,4 @@
-package com.tubiblioteca.controller.ABMLibro;
+package com.tubiblioteca.controller.ABMPrestamo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,22 +7,14 @@ import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.controller.ABMLibro.FormularioLibroControlador;
 import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.model.Autor;
-import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.CopiaLibro;
-import com.tubiblioteca.model.Editorial;
-import com.tubiblioteca.model.Idioma;
-import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
-import com.tubiblioteca.service.Autor.AutorServicio;
-import com.tubiblioteca.service.Categoria.CategoriaServicio;
-import com.tubiblioteca.service.Editorial.EditorialServicio;
-import com.tubiblioteca.service.Idioma.IdiomaServicio;
-import com.tubiblioteca.service.Libro.LibroServicio;
+import com.tubiblioteca.model.Prestamo;
+import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.service.Prestamo.PrestamoServicio;
 import com.tubiblioteca.view.Vista;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -34,7 +26,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormularioPrestamoControlador implements Initializable {
@@ -50,7 +44,7 @@ public class FormularioPrestamoControlador implements Initializable {
     @FXML
     private TextField txtMulta;
     @FXML
-    private Spinner spinCantidad;
+    private Spinner<Integer> spinCantidad;
 
     @FXML
     private Button btnNuevo;
@@ -60,7 +54,7 @@ public class FormularioPrestamoControlador implements Initializable {
 
     private final Logger log = LoggerFactory.getLogger(FormularioLibroControlador.class);
 
-    private Libro libro;
+    private List<Prestamo> prestamos;
     private PrestamoServicio servicio;
     private MiembroServicio servicioMiembro;
     private CopiaLibroServicio servicioCopia;
@@ -68,119 +62,102 @@ public class FormularioPrestamoControlador implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         var repositorio = AppConfig.getRepositorio();
-        servicio = new LibroServicio(repositorio);
-        servicioAutor = new AutorServicio(repositorio);
-        servicioEditorial = new EditorialServicio(repositorio);
-        servicioCategoria = new CategoriaServicio(repositorio);
-        servicioIdioma = new IdiomaServicio(repositorio);
+        servicio = new PrestamoServicio(repositorio);
+        servicioMiembro = new MiembroServicio(repositorio);
+        servicioCopia = new CopiaLibroServicio(repositorio);
+
+        ControlUI.configurarSpinnerCantidad(spinCantidad);
+
+        dtpPrestamo.setValue(LocalDate.now());
 
         inicializarCombosFormulario();
-        libro = null;
+
+        prestamos.clear();
     }
 
     private void inicializarCombosFormulario() {
-        autores.clear();
-        autores.addAll(servicioAutor.buscarTodos());
-        cmbAutores.setItems(autores);
+        miembros.clear();
+        miembros.addAll(servicioMiembro.buscarTodos());
+        cmbMiembro.setItems(miembros);
 
-        editoriales.clear();
-        editoriales.addAll(servicioEditorial.buscarTodos());
-        cmbEditorial.setItems(editoriales);
-
-        categorias.clear();
-        categorias.addAll(servicioCategoria.buscarTodos());
-        cmbCategoria.setItems(categorias);
-
-        idiomas.clear();
-        idiomas.addAll(servicioIdioma.buscarTodos());
-        cmbIdioma.setItems(idiomas);
+        copias.clear();
+        copias.addAll(servicioCopia.buscarTodos());
+        cmbCopia.setItems(copias);
     }
 
     @FXML
     private void nuevo() {
-        txtIsbn.clear();
-        txtTitulo.clear();
-        cmbCategoria.setValue(null);
-        cmbEditorial.setValue(null);
-        cmbIdioma.setValue(null);
+        dtpPrestamo.setValue(null);
+        cmbMiembro.setValue(null);
+        cmbCopia.setValue(null);
+        spinCantidad.getValueFactory().setValue(1);
     }
 
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo libro auxiliar
-            Libro aux = new Libro(
-                    txtIsbn.getText().trim(),
-                    txtTitulo.getText().trim(),
-                    cmbCategoria.getValue(),
-                    cmbEditorial.getValue(),
-                    cmbIdioma.getValue(),
-                    cmbAutores.getItems());
+            // Creamos un nuevo prestamo auxiliar
+            Prestamo aux = new Prestamo(
+                    dtpPrestamo.getValue(),
+                    cmbMiembro.getValue(),
+                    cmbCopia.getValue());
 
             ArrayList<String> errores = new ArrayList<>();
 
-            // Validamos si la categoria, editorial o idioma seleccionados existen
-            if (servicioCategoria.buscarPorId(aux.getCategoria().getId()) == null) {
-                errores.add("La categoría seleccionada no se encuentra en la base de datos.");
+            // Validamos si el miembro o la copia seleccionados existen
+            if (servicioMiembro.buscarPorId(aux.getMiembro().getDni()) == null) {
+                errores.add("El miembro de la biblioteca seleccionado no se encuentra en la base de datos.");
             }
-            if (servicioEditorial.buscarPorId(aux.getEditorial().getId()) == null) {
-                errores.add("La editorial seleccionada no se encuentra en la base de datos.");
-            }
-            if (servicioIdioma.buscarPorId(aux.getIdioma().getId()) == null) {
-                errores.add("El idioma seleccionado no se encuentra en la base de datos.");
+            if (servicioCopia.buscarPorId(aux.getCopiaLibro().getId()) == null) {
+                errores.add("La copia del libro seleccionada no se encuentra en la base de datos.");
             }
 
             if (!errores.isEmpty()) {
                 throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
             }
 
-            if (libro == null) {
-                // Validamos si el ISBN ya está en uso
-                if (servicio.buscarPorId(aux.getIsbn()) == null) {
-                    libro = aux;
-                    servicio.insertar(aux);
-                    Alerta.mostrarMensaje(false, "Info", "Se ha agregado el libro correctamente!");
-                } else {
-                    throw new IllegalArgumentException(
-                            "El ISBN ingresado ya está en uso. Por favor, ingrese otro ISBN.");
+            if (prestamos.getFirst() == null) {
+                for (int i = 0; i < spinCantidad.getValue(); i++){
+                    prestamos.add(aux);
                 }
+                servicio.insertar(aux);
+                Alerta.mostrarMensaje(false, "Info", "Se ha agregado el préstamo correctamente!");
             } else {
                 // Actualizamos el libro existente
-                libro.setTitulo(aux.getTitulo());
-                libro.setCategoria(aux.getCategoria());
-                libro.setEditorial(aux.getEditorial());
-                libro.setIdioma(aux.getIdioma());
-                libro.setAutores(aux.getAutores());
+                prestamo.setFechaPrestamo(aux.getFechaPrestamo());
+                prestamo.setMiembro(aux.getMiembro());
+                prestamo.setCopiaLibro(aux.getCopiaLibro());
 
-                servicio.modificar(libro);
-                Alerta.mostrarMensaje(false, "Info", "Se ha modificado el libro correctamente!");
+                servicio.modificar(prestamo);
+                Alerta.mostrarMensaje(false, "Info", "Se ha modificado el préstamo correctamente!");
             }
 
-            StageManager.cerrarModal(Vista.FormularioLibro);
+            StageManager.cerrarModal(Vista.FormularioPrestamo);
         } catch (Exception e) {
-            log.error("Error al guardar el libro.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el libro. " + e.getMessage());
+            log.error("Error al guardar el prestamo.");
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el prestamo. " + e.getMessage());
         }
     }
 
     private void autocompletar() {
-        txtIsbn.setText(String.valueOf(libro.getIsbn()));
-        txtTitulo.setText(libro.getTitulo());
-        cmbCategoria.setValue(libro.getCategoria());
-        cmbEditorial.setValue(libro.getEditorial());
-        cmbIdioma.setValue(libro.getIdioma());
+        dtpPrestamo.setValue(prestamos.getFirst().getFechaPrestamo());
+        dtpDevolucion.setValue(prestamos.getFirst().getFechaDevolucion());
+        cmbMiembro.setValue(prestamos.getFirst().getMiembro());
+        cmbCopia.setValue(prestamos.getFirst().getCopiaLibro());
     }
 
-    public void setLibro(Libro libro) {
-        this.libro = libro;
-        if (libro != null) {
+    public void setPrestamo(Prestamo prestamo) {
+        if (prestamo != null) {
+            prestamos.add(prestamo);
             autocompletar();
-            txtIsbn.setDisable(true);
+            dtpDevolucion.setDisable(false);
+            spinCantidad.setDisable(true);
+            txtMulta.setDisable(false);
             btnNuevo.setDisable(true);
         }
     }
 
-    public Libro getLibro() {
-        return libro;
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
     }
 }

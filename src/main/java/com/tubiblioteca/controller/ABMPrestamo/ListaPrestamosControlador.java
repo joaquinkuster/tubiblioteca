@@ -12,20 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
-import com.tubiblioteca.controller.ABMMiembro.FormularioMiembroControlador;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
-import com.tubiblioteca.model.TipoMiembro;
+import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.service.Prestamo.PrestamoServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.helper.Fecha;
+import com.tubiblioteca.helper.ControlUI;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaPrestamosControlador implements Initializable {
@@ -70,6 +70,7 @@ public class ListaPrestamosControlador implements Initializable {
     private PrestamoServicio servicio;
     private Pair<FormularioPrestamoControlador, Parent> formulario;
     private MiembroServicio servicioMiembro;
+    private CopiaLibroServicio servicioCopia;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,7 +80,10 @@ public class ListaPrestamosControlador implements Initializable {
 
     private void inicializarTabla() {
         try {
-            servicio = new PrestamoServicio(AppConfig.getRepositorio());
+            var repositorio = AppConfig.getRepositorio();
+        servicio = new PrestamoServicio(repositorio);
+        servicioMiembro = new MiembroServicio(repositorio);
+        servicioCopia = new CopiaLibroServicio(repositorio);
 
             colPrestamo.setCellValueFactory(new PropertyValueFactory<>("fechaPrestamo"));
             colDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
@@ -87,8 +91,8 @@ public class ListaPrestamosControlador implements Initializable {
             colCopia.setCellValueFactory(new PropertyValueFactory<>("copiaLibro"));
             colMulta.setCellValueFactory(new PropertyValueFactory<>("multa"));
 
-            configurarCeldaFecha(colPrestamo);
-            configurarCeldaFecha(colDevolucion);
+            ControlUI.configurarCeldaFecha(colPrestamo);
+            ControlUI.configurarCeldaFecha(colDevolucion);
 
             prestamos.clear();
             filtrados.clear();
@@ -100,36 +104,13 @@ public class ListaPrestamosControlador implements Initializable {
         }
     }
 
-    private void configurarCeldaFecha(TableColumn<Prestamo, LocalDate> columna) {
-        // Establecemos una fábrica de celdas para la columna
-        columna.setCellFactory(column -> {
-            // Devolvemos una nueva celda para la visualizacion de datos
-            return new TableCell<>() {
-                // Sobreescribimos el metodo para personalizar el comportamiento de
-                // actualizacion de celda
-                @Override
-                protected void updateItem(LocalDate fecha, boolean empty) {
-                    // Llamamos a la clase padre para cualquier inicializacion necesaria
-                    super.updateItem(fecha, empty);
-                    // Verificamos si la fecha es nula
-                    if (fecha == null || empty) {
-                        setText(!empty ? "--" : null);
-                    } else {
-                        // Si es diferente de nula, formateamos la fecha antes de mostrarla en la celda
-                        setText(Fecha.formatearFecha(fecha));
-                    }
-                }
-            };
-        });
-    }
-
     private void inicializarFiltros() {
         miembros.clear();
         miembros.addAll(servicioMiembro.buscarTodos());
         cmbMiembro.setItems(miembros);
 
         copias.clear();
-        copias.addAll();
+        copias.addAll(servicioCopia.buscarTodos());
         cmbCopia.setItems(copias);
     }
 
@@ -189,7 +170,7 @@ public class ListaPrestamosControlador implements Initializable {
         }
     }
     
-    private Prestamo abrirFormulario(Prestamo prestamoInicial) throws IOException {
+    private List<Prestamo> abrirFormulario(Prestamo prestamoInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioPrestamo.getRutaFxml());
         FormularioPrestamoControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
@@ -198,8 +179,8 @@ public class ListaPrestamosControlador implements Initializable {
             controladorFormulario.setPrestamo(prestamoInicial);
         }
 
-        StageManager.abrirModal(vistaFormulario, Vista.FormularioMiembro);
-        return controladorFormulario.getMiembro();
+        StageManager.abrirModal(vistaFormulario, Vista.FormularioPrestamo);
+        return controladorFormulario.getPrestamos();
     }
 
     @FXML
@@ -246,4 +227,13 @@ public class ListaPrestamosControlador implements Initializable {
         txtMulta.clear();
         filtrar();
     }
+
+    @FXML
+    private void seleccionarCopia() {
+    }
+
+    @FXML
+    private void seleccionarMiembro() {
+    }
+
 }

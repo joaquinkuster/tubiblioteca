@@ -19,7 +19,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="681.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMLibro.FormularioLibroControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="681.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMPrestamo.FormularioPrestamoControlador">
     <stylesheets>
         <URL value="@../../styles/_config.css" />
         <URL value="@../../styles/_contenedor.css" />
@@ -48,7 +48,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <ComboBox fx:id="cmbLibro" maxWidth="1.7976931348623157E308" promptText="Seleccione libro..." styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="cmbCopia" maxWidth="1.7976931348623157E308" promptText="Seleccione libro..." styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         <Label styleClass="label-formulario" text="Préstamo:" />
                         <Label styleClass="label-formulario" text="Miembro:" GridPane.rowIndex="1" />
                         <Label fx:id="lblCargo" styleClass="label-formulario" text="Copia de Libro:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
@@ -56,10 +56,10 @@
                         <Label fx:id="lblContrasena" styleClass="label-formulario" text="Cantidad:" GridPane.rowIndex="2" />
                         <ComboBox fx:id="cmbMiembro" maxWidth="1.7976931348623157E308" promptText="Seleccione miembro..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="lblCargo1" styleClass="label-formulario" text="Multa:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <DatePicker fx:id="dtpPrestamo" editable="false" prefWidth="200.0" promptText="Seleccione préstamo..." styleClass="datepicker-personalizado" GridPane.columnIndex="1" />
-                  <DatePicker fx:id="dtpDevolucion" editable="false" prefWidth="200.0" promptText="Seleccione devolución..." styleClass="datepicker-personalizado" GridPane.columnIndex="3" />
-                  <Spinner fx:id="spinCantidad" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtMulta" promptText="--" styleClass="text-field-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <DatePicker fx:id="dtpPrestamo" editable="false" prefWidth="200.0" promptText="Seleccione préstamo..." styleClass="datepicker-personalizado" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dtpDevolucion" disable="true" editable="false" prefWidth="200.0" promptText="Seleccione devolución..." styleClass="datepicker-personalizado" GridPane.columnIndex="3" />
+                        <Spinner fx:id="spinCantidad" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMulta" disable="true" promptText="--" styleClass="text-field-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
                 <HBox spacing="10.0" styleClass="acciones-contenedor">
