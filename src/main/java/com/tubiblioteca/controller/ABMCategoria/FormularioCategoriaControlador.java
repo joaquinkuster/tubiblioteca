@@ -2,6 +2,8 @@ package com.tubiblioteca.controller.ABMCategoria;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Categoria;
@@ -29,6 +31,7 @@ public class FormularioCategoriaControlador implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        servicio = new CategoriaServicio(AppConfig.getRepositorio());
         categoria = null;
     }
 
@@ -54,7 +57,7 @@ public class FormularioCategoriaControlador implements Initializable {
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado la categoria correctamente!");
             }
 
-            StageManager.cerrarModal(Vista.FormularioAutor);
+            StageManager.cerrarModal(Vista.FormularioCategoria);
         } catch (Exception e) {
             log.error("Error al guardar la categoria.");
             Alerta.mostrarMensaje(true, "Error", "No se pudo guardar la categoria. " + e.getMessage());
@@ -75,9 +78,5 @@ public class FormularioCategoriaControlador implements Initializable {
 
     public Categoria getCategoria() {
         return categoria;
-    }
-
-    public void setServicio(CategoriaServicio servicio) {
-        this.servicio = servicio;
     }
 }

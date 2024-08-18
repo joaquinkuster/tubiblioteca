@@ -128,8 +128,6 @@ public class ListaEditorialesControlador implements Initializable {
         FormularioEditorialControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (editorialInicial != null) {
             controladorFormulario.setEditorial(editorialInicial);
         }

@@ -12,6 +12,9 @@ module com.tubiblioteca {
     opens com.tubiblioteca.controller.ABMMiembro to javafx.fxml;
     opens com.tubiblioteca.controller.ABMEditorial to javafx.fxml;
     opens com.tubiblioteca.controller.ABMAutor to javafx.fxml;
+    opens com.tubiblioteca.controller.ABMCategoria to javafx.fxml;
+    opens com.tubiblioteca.controller.ABMLibro to javafx.fxml;
+    opens com.tubiblioteca.controller.ABMIdioma to javafx.fxml;
     opens com.tubiblioteca.model to eclipselink, javafx.base;
 
     // Exportar el paquete com.tubiblioteca para que otros módulos puedan acceder a sus clases públicas

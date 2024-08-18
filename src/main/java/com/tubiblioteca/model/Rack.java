@@ -19,4 +19,8 @@ public class Rack {
     private String descripcion;
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
+
+    public int getId(){
+        return id;
+    }
 }

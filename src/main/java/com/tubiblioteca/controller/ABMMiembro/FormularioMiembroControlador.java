@@ -2,6 +2,8 @@ package com.tubiblioteca.controller.ABMMiembro;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Miembro;
@@ -36,7 +38,7 @@ public class FormularioMiembroControlador implements Initializable {
     @FXML
     private Button btnNuevo;
 
-    private ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
+    private final ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
     private final Logger log = LoggerFactory.getLogger(FormularioMiembroControlador.class);
 
     private Miembro miembro;
@@ -44,11 +46,13 @@ public class FormularioMiembroControlador implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        servicio = new MiembroServicio(AppConfig.getRepositorio());
         inicializarCombosFormulario();
         miembro = null;
     }
 
     private void inicializarCombosFormulario() {
+        tipos.clear();
         tipos.addAll(TipoMiembro.values());
         cmbTipo.setItems(tipos);
     }
@@ -73,6 +77,10 @@ public class FormularioMiembroControlador implements Initializable {
                     cmbTipo.getValue(),
                     txtContrasena.getText().trim()
             );
+
+            if (miembro == null && servicio.buscarPorId(aux.getDni()) == null) {
+                
+            }
 
             if (miembro == null) {
                 // Validamos si el DNI ya está en uso
@@ -120,9 +128,5 @@ public class FormularioMiembroControlador implements Initializable {
 
     public Miembro getMiembro() {
         return miembro;
-    }
-
-    public void setServicio(MiembroServicio servicio) {
-        this.servicio = servicio;
     }
 }

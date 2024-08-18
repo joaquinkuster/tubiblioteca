@@ -22,15 +22,23 @@ public class Categoria {
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
 
+    public Categoria(){
+
+    }
+
     public Categoria(String nombre) {
         if (nombre.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese el nombre de la categoria.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre de la categoria no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre de la categoria debe contener solo letras y espacios.");
         }
         this.nombre = nombre;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public String getNombre(){
@@ -42,7 +50,7 @@ public class Categoria {
             throw new IllegalArgumentException("Por favor, ingrese una categoria.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre de la categoria no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre de la categoria debe contener solo letras y espacios.");
         }
         this.nombre = nombre;
@@ -54,5 +62,9 @@ public class Categoria {
 
     public void setBaja() {
         this.baja = true;
+    }
+
+    public String toString() {
+        return nombre;
     }
 }

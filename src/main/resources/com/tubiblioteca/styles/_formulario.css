@@ -14,7 +14,6 @@
     -fx-background-color: white;
     -fx-border-color: lightgray;
     -fx-border-width: 1;
-    -fx-padding: 5;
     -fx-transition: border-color 0.3s;
 }
 .text-field-personalizado:hover, .text-field-personalizado:focused, .password-field-personalizado:hover, .password-field-personalizado:focused{
@@ -40,7 +39,6 @@
     -fx-background-insets: 0;
     -fx-effect: null;
     -fx-background-color: white;
-    -fx-padding: 5;
 }
 .combo-personalizado .text-field .right-button{
     -fx-background-color: transparent;
@@ -65,12 +63,10 @@
     -fx-background-color: white;
     -fx-border-color: lightgray;
     -fx-border-width: 1;
-    -fx-padding: 0 5;
     -fx-transition: border-color 0.3s;
 }
 .datepicker-personalizado .text-field{
     -fx-background-color: transparent;
-    -fx-padding: 5;
 }
 .datepicker-personalizado .arrow-button{
     -fx-background-color: transparent;

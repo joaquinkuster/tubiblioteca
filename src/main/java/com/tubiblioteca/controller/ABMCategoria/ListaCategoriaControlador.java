@@ -127,8 +127,6 @@ public class ListaCategoriaControlador implements Initializable {
         FormularioCategoriaControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (categoriaInicial != null) {
             controladorFormulario.setCategoria(categoriaInicial);
         }

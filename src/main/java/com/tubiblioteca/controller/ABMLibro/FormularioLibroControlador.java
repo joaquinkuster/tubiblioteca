@@ -2,11 +2,20 @@ package com.tubiblioteca.controller.ABMLibro;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.model.Miembro;
-import com.tubiblioteca.model.TipoMiembro;
-import com.tubiblioteca.service.Miembro.MiembroServicio;
+import com.tubiblioteca.model.Autor;
+import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.model.Editorial;
+import com.tubiblioteca.model.Idioma;
+import com.tubiblioteca.model.Libro;
+import com.tubiblioteca.service.Autor.AutorServicio;
+import com.tubiblioteca.service.Categoria.CategoriaServicio;
+import com.tubiblioteca.service.Editorial.EditorialServicio;
+import com.tubiblioteca.service.Idioma.IdiomaServicio;
+import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
 
 import javafx.collections.FXCollections;
@@ -15,116 +24,160 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class FormularioPrestamoControlador implements Initializable {
+public class FormularioLibroControlador implements Initializable {
 
     @FXML
-    private TextField txtDni;
+    private TextField txtIsbn;
     @FXML
-    private TextField txtNombre;
+    private TextField txtTitulo;
     @FXML
-    private TextField txtApellido;
+    private ComboBox<Autor> cmbAutores;
     @FXML
-    private PasswordField txtContrasena;
+    private ComboBox<Categoria> cmbCategoria;
     @FXML
-    private ComboBox<TipoMiembro> cmbTipo;
+    private ComboBox<Editorial> cmbEditorial;
+    @FXML
+    private ComboBox<Idioma> cmbIdioma;
+
     @FXML
     private Button btnNuevo;
 
-    private ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
-    private final Logger log = LoggerFactory.getLogger(FormularioPrestamoControlador.class);
+    private final ObservableList<Autor> autores = FXCollections.observableArrayList();
+    private final ObservableList<Categoria> categorias = FXCollections.observableArrayList();
+    private final ObservableList<Editorial> editoriales = FXCollections.observableArrayList();
+    private final ObservableList<Idioma> idiomas = FXCollections.observableArrayList();
 
-    private Miembro miembro;
-    private MiembroServicio servicio;
+    private final Logger log = LoggerFactory.getLogger(FormularioLibroControlador.class);
+
+    private Libro libro;
+    private LibroServicio servicio;
+    private AutorServicio servicioAutor;
+    private EditorialServicio servicioEditorial;
+    private CategoriaServicio servicioCategoria;
+    private IdiomaServicio servicioIdioma;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        var repositorio = AppConfig.getRepositorio();
+        servicio = new LibroServicio(repositorio);
+        servicioAutor = new AutorServicio(repositorio);
+        servicioEditorial = new EditorialServicio(repositorio);
+        servicioCategoria = new CategoriaServicio(repositorio);
+        servicioIdioma = new IdiomaServicio(repositorio);
+
         inicializarCombosFormulario();
-        miembro = null;
+        libro = null;
     }
 
     private void inicializarCombosFormulario() {
-        tipos.addAll(TipoMiembro.values());
-        cmbTipo.setItems(tipos);
+        autores.clear();
+        autores.addAll(servicioAutor.buscarTodos());
+        cmbAutores.setItems(autores);
+
+        editoriales.clear();
+        editoriales.addAll(servicioEditorial.buscarTodos());
+        cmbEditorial.setItems(editoriales);
+
+        categorias.clear();
+        categorias.addAll(servicioCategoria.buscarTodos());
+        cmbCategoria.setItems(categorias);
+
+        idiomas.clear();
+        idiomas.addAll(servicioIdioma.buscarTodos());
+        cmbIdioma.setItems(idiomas);
     }
 
     @FXML
     private void nuevo() {
-        txtDni.clear();
-        txtNombre.clear();
-        txtApellido.clear();
-        cmbTipo.setValue(null);
-        txtContrasena.clear();
-        txtDni.setDisable(false);
-        btnNuevo.setDisable(false);
+        txtIsbn.clear();
+        txtTitulo.clear();
+        cmbCategoria.setValue(null);
+        cmbEditorial.setValue(null);
+        cmbIdioma.setValue(null);
     }
 
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo miembro auxiliar
-            Miembro aux = new Miembro(
-                    txtDni.getText().trim(),
-                    txtNombre.getText().trim(),
-                    txtApellido.getText().trim(),
-                    cmbTipo.getValue(),
-                    txtContrasena.getText().trim()
-            );
+            // Creamos un nuevo libro auxiliar
+            Libro aux = new Libro(
+                    txtIsbn.getText().trim(),
+                    txtTitulo.getText().trim(),
+                    cmbCategoria.getValue(),
+                    cmbEditorial.getValue(),
+                    cmbIdioma.getValue(),
+                    cmbAutores.getItems());
 
-            if (miembro == null) {
-                // Validamos si el DNI ya está en uso
-                if (servicio.buscarPorId(aux.getDni()) == null) {
-                    miembro = aux;
-                    servicio.insertar(aux);
-                    Alerta.mostrarMensaje(false, "Info", "Se ha agregado el miembro de la biblioteca correctamente!");
-                } else {
-                    throw new IllegalArgumentException("El DNI ingresado ya está en uso. Por favor, ingrese otro DNI.");
-                }
-            } else {
-                // Actualizamos el miembro existente
-                miembro.setNombre(aux.getNombre());
-                miembro.setApellido(aux.getApellido());
-                miembro.setTipo(aux.getTipo());
-                miembro.setClave(aux.getClave());
+            ArrayList<String> errores = new ArrayList<>();
 
-                servicio.modificar(miembro);
-                Alerta.mostrarMensaje(false, "Info", "Se ha modificado el miembro de la biblioteca correctamente!");
+            // Validamos si la categoria, editorial o idioma seleccionados existen
+            if (servicioCategoria.buscarPorId(aux.getCategoria().getId()) == null) {
+                errores.add("La categoría seleccionada no se encuentra en la base de datos.");
+            }
+            if (servicioEditorial.buscarPorId(aux.getEditorial().getId()) == null) {
+                errores.add("La editorial seleccionada no se encuentra en la base de datos.");
+            }
+            if (servicioIdioma.buscarPorId(aux.getIdioma().getId()) == null) {
+                errores.add("El idioma seleccionado no se encuentra en la base de datos.");
             }
 
-            StageManager.cerrarModal(Vista.FormularioMiembro);
+            if (!errores.isEmpty()) {
+                throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
+            }
+
+            if (libro == null) {
+                // Validamos si el ISBN ya está en uso
+                if (servicio.buscarPorId(aux.getIsbn()) == null) {
+                    libro = aux;
+                    servicio.insertar(aux);
+                    Alerta.mostrarMensaje(false, "Info", "Se ha agregado el libro correctamente!");
+                } else {
+                    throw new IllegalArgumentException(
+                            "El ISBN ingresado ya está en uso. Por favor, ingrese otro ISBN.");
+                }
+            } else {
+                // Actualizamos el libro existente
+                libro.setTitulo(aux.getTitulo());
+                libro.setCategoria(aux.getCategoria());
+                libro.setEditorial(aux.getEditorial());
+                libro.setIdioma(aux.getIdioma());
+                libro.setAutores(aux.getAutores());
+
+                servicio.modificar(libro);
+                Alerta.mostrarMensaje(false, "Info", "Se ha modificado el libro correctamente!");
+            }
+
+            StageManager.cerrarModal(Vista.FormularioLibro);
         } catch (Exception e) {
-            log.error("Error al guardar el miembro.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el miembro de la biblioteca. " + e.getMessage());
+            log.error("Error al guardar el libro.");
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el libro. " + e.getMessage());
         }
     }
 
     private void autocompletar() {
-        txtDni.setText(miembro.getDni());
-        txtNombre.setText(miembro.getNombre());
-        txtApellido.setText(miembro.getApellido());
-        cmbTipo.setValue(miembro.getTipo());
-        txtContrasena.setText(miembro.getClave());
+        txtIsbn.setText(String.valueOf(libro.getIsbn()));
+        txtTitulo.setText(libro.getTitulo());
+        cmbCategoria.setValue(libro.getCategoria());
+        cmbEditorial.setValue(libro.getEditorial());
+        cmbIdioma.setValue(libro.getIdioma());
     }
 
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
-        if (miembro != null) {
+    public void setLibro(Libro libro) {
+        this.libro = libro;
+        if (libro != null) {
             autocompletar();
-            txtDni.setDisable(true);
+            txtIsbn.setDisable(true);
             btnNuevo.setDisable(true);
         }
     }
 
-    public Miembro getMiembro() {
-        return miembro;
-    }
-
-    public void setServicio(MiembroServicio servicio) {
-        this.servicio = servicio;
+    public Libro getLibro() {
+        return libro;
     }
 }

@@ -159,8 +159,6 @@ public class ListaMiembrosControlador implements Initializable {
         FormularioMiembroControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (miembroInicial != null) {
             controladorFormulario.setMiembro(miembroInicial);
         }

@@ -20,8 +20,8 @@ public class Prestamo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "fecha_prestamo", nullable = false)
-    private LocalDate fechaPrestamo = LocalDate.now();
-    @Column(name = "fecha_devolucion", nullable = false)
+    private LocalDate fechaPrestamo;
+    @Column(name = "fecha_devolucion", nullable = true)
     private LocalDate fechaDevolucion;
     @Column(name = "multa", nullable = false)
     private double multa = 0;
@@ -36,6 +36,12 @@ public class Prestamo {
 
     public Prestamo(){
 
+    }
+
+    public Prestamo(LocalDate fechaPrestamo, Miembro miembro, CopiaLibro copiaLibro) {
+        this.fechaPrestamo = fechaPrestamo;
+        this.miembro = miembro;
+        this.copiaLibro = copiaLibro;
     }
 
     public LocalDate getFechaPrestamo() {

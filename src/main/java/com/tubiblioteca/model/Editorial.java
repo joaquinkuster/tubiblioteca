@@ -31,12 +31,15 @@ public class Editorial {
             throw new IllegalArgumentException("Por favor, ingrese un nombre de la editorial.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre de la editorial no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre de la editorial debe contener solo letras y espacios.");
         }
         this.nombre = nombre;
     }
 
+    public int getId(){
+        return id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -48,7 +51,7 @@ public class Editorial {
             throw new IllegalArgumentException("Por favor, ingrese un nombre de la editorial.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre de la editorial no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre de la editorial debe contener solo letras y espacios.");
         }
         this.nombre = nombre;

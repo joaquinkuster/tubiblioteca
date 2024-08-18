@@ -17,7 +17,9 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="681.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMMiembro.FormularioMiembroControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="681.0" styleClass="contenedor"
+    xmlns="http://javafx.com/javafx/22"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMLibro.FormularioLibroControlador">
     <stylesheets>
         <URL value="@../../styles/_config.css" />
         <URL value="@../../styles/_contenedor.css" />
@@ -54,10 +56,10 @@
                         <Label fx:id="lblCargo" styleClass="label-formulario" text="Categoría:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Label prefHeight="21.0" styleClass="label-formulario" text="Título:" GridPane.columnIndex="2" />
                         <Label fx:id="lblContrasena" styleClass="label-formulario" text="Editorial:" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="cmbAutores" maxWidth="1.7976931348623157E308" promptText="Seleccione autores..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="lblCargo1" styleClass="label-formulario" text="Idioma:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="cmbIdioma" maxWidth="1.7976931348623157E308" promptText="Seleccione idioma..." styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="cmbEditorial" maxWidth="1.7976931348623157E308" promptText="Seleccione editorial..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cmbAutores" maxWidth="1.7976931348623157E308" promptText="Seleccione autores..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="lblCargo1" styleClass="label-formulario" text="Idioma:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cmbIdioma" maxWidth="1.7976931348623157E308" promptText="Seleccione idioma..." styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cmbEditorial" maxWidth="1.7976931348623157E308" promptText="Seleccione editorial..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     </children>
                 </GridPane>
                 <HBox spacing="10.0" styleClass="acciones-contenedor">

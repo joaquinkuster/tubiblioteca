@@ -1,6 +1,5 @@
 package com.tubiblioteca.service.Prestamo;
 
-import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;

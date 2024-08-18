@@ -12,34 +12,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
-import com.tubiblioteca.controller.ABMMiembro.FormularioMiembroControlador;
-import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
-import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Idioma;
-import com.tubiblioteca.model.TipoMiembro;
 import com.tubiblioteca.service.Autor.AutorServicio;
+import com.tubiblioteca.service.Categoria.CategoriaServicio;
 import com.tubiblioteca.service.Editorial.EditorialServicio;
-import com.tubiblioteca.service.Miembro.MiembroServicio;
-import com.tubiblioteca.service.Prestamo.PrestamoServicio;
+import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.helper.Fecha;
 import java.util.List;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ListaLibrosControlador implements Initializable {
 
     // Columnas de la tabla
     @FXML
-    private TableColumn<Libro, Long> colIbsn;
+    private TableColumn<Libro, Long> colIsbn;
     @FXML
     private TableColumn<Libro, String> colTitulo;
     @FXML
@@ -84,6 +78,8 @@ public class ListaLibrosControlador implements Initializable {
     private Pair<FormularioLibroControlador, Parent> formulario;
     private AutorServicio servicioAutor;
     private EditorialServicio servicioEditorial;
+    private CategoriaServicio servicioCategoria;
+    private IdiomaServicio servicioIdioma;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -93,9 +89,14 @@ public class ListaLibrosControlador implements Initializable {
 
     private void inicializarTabla() {
         try {
-            servicio = new LibroServicio(AppConfig.getRepositorio());
+            var repositorio = AppConfig.getRepositorio();
+            servicio = new LibroServicio(repositorio);
+            servicioAutor = new AutorServicio(repositorio);
+            servicioEditorial = new EditorialServicio(repositorio);
+            servicioCategoria = new CategoriaServicio(repositorio);
+            servicioIdioma = new IdiomaServicio(repositorio);
 
-            colIbsn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+            colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
             colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
             colAutores.setCellValueFactory(new PropertyValueFactory<>("autores"));
             colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
@@ -120,6 +121,14 @@ public class ListaLibrosControlador implements Initializable {
         editoriales.clear();
         editoriales.addAll(servicioEditorial.buscarTodos());
         cmbEditorial.setItems(editoriales);
+
+        categorias.clear();
+        categorias.addAll(servicioCategoria.buscarTodos());
+        cmbCategoria.setItems(categorias);
+
+        idiomas.clear();
+        idiomas.addAll(servicioIdioma.buscarTodos());
+        cmbIdioma.setItems(idiomas);
     }
 
     @FXML
@@ -177,20 +186,18 @@ public class ListaLibrosControlador implements Initializable {
             }
         }
     }
-    
-    private Libro abrirFormulario(Prestamo libroInicial) throws IOException {
+
+    private Libro abrirFormulario(Libro libroInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioLibro.getRutaFxml());
         FormularioLibroControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (libroInicial != null) {
-            controladorFormulario.setMiembro(libroInicial);
+            controladorFormulario.setLibro(libroInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioLibro);
-        return controladorFormulario.getMiembro();
+        return controladorFormulario.getLibro();
     }
 
     @FXML
@@ -205,12 +212,12 @@ public class ListaLibrosControlador implements Initializable {
     private boolean aplicarFiltro(Libro libro) {
         String isbn = txtIsbn.getText().trim().toLowerCase();
         String titulo = txtTitulo.getText().trim().toLowerCase();
-        //List<Autor> autores = cmbAutores.getItems();
+        // List<Autor> autores = cmbAutores.getItems();
         Categoria categoria = cmbCategoria.getValue();
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
         return (isbn == null || String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
-        && (titulo == null || libro.getTitulo().toLowerCase().contains(titulo))
+                && (titulo == null || libro.getTitulo().toLowerCase().contains(titulo))
                 && (categoria == null || categoria.equals(libro.getCategoria()))
                 && (editorial == null || editorial.equals(libro.getEditorial()))
                 && (idioma == null || idioma.equals(libro.getIdioma()));
@@ -219,12 +226,12 @@ public class ListaLibrosControlador implements Initializable {
     private boolean quitarFiltro(Libro libro) {
         String isbn = txtIsbn.getText().trim().toLowerCase();
         String titulo = txtTitulo.getText().trim().toLowerCase();
-        //List<Autor> autores = cmbAutores.getItems();
+        // List<Autor> autores = cmbAutores.getItems();
         Categoria categoria = cmbCategoria.getValue();
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
         return (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
-        || (titulo != null && !libro.getTitulo().toLowerCase().contains(titulo))
+                || (titulo != null && !libro.getTitulo().toLowerCase().contains(titulo))
                 || (categoria != null && !categoria.equals(libro.getCategoria()))
                 || (editorial != null && !editorial.equals(libro.getEditorial()))
                 || (idioma != null && !idioma.equals(libro.getIdioma()));

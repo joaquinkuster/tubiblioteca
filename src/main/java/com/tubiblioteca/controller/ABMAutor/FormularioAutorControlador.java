@@ -2,6 +2,8 @@ package com.tubiblioteca.controller.ABMAutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Autor;
@@ -29,6 +31,7 @@ public class FormularioAutorControlador implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        servicio = new AutorServicio(AppConfig.getRepositorio());
         autor = null;
     }
 
@@ -75,9 +78,5 @@ public class FormularioAutorControlador implements Initializable {
 
     public Autor getAutor() {
         return autor;
-    }
-
-    public void setServicio(AutorServicio servicio) {
-        this.servicio = servicio;
     }
 }

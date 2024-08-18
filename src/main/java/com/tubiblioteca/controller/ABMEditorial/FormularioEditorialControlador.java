@@ -2,6 +2,8 @@ package com.tubiblioteca.controller.ABMEditorial;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Editorial;
@@ -29,13 +31,13 @@ public class FormularioEditorialControlador implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        servicio = new EditorialServicio(AppConfig.getRepositorio());
         editorial = null;
     }
 
     @FXML
     private void nuevo() {
         txtNombre.clear();
-        btnNuevo.setDisable(false);
     }
 
     @FXML
@@ -78,9 +80,5 @@ public class FormularioEditorialControlador implements Initializable {
 
     public Editorial getEditorial() {
         return editorial;
-    }
-
-    public void setServicio(EditorialServicio servicio) {
-        this.servicio = servicio;
     }
 }

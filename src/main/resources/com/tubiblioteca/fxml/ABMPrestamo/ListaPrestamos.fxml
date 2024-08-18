@@ -21,9 +21,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor"
-    xmlns="http://javafx.com/javafx/22"
-    xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
@@ -63,7 +61,7 @@
                                 <String fx:value="limpiar" />
                             </styleClass>
                         </Button>
-                        <ComboBox fx:id="cmbCopia" editable="true" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione una copia..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="cmbCopia" editable="true" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione una copia de libro..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <DatePicker fx:id="dtpPrestamo" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione un préstamo..." styleClass="datepicker-personalizado" />
                         <DatePicker fx:id="dtpDevolucion" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione una devolución..." styleClass="datepicker-personalizado" GridPane.rowIndex="1" />
                         <ComboBox fx:id="cmbMiembro" editable="true" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione un miembro..." styleClass="combo-personalizado" GridPane.columnIndex="1" />
@@ -100,7 +98,7 @@
                         <TableColumn fx:id="colPrestamo" prefWidth="125.0" text="Fecha Préstamo" />
                         <TableColumn fx:id="colDevolucion" prefWidth="125.0" text="Fecha Devolución" />
                         <TableColumn fx:id="colMiembro" prefWidth="125.0" text="Miembro" />
-                        <TableColumn fx:id="colCopia" prefWidth="125.0" text="Copia" />
+                        <TableColumn fx:id="colCopia" prefWidth="125.0" text="Copia de Libro" />
                         <TableColumn fx:id="colMulta" prefWidth="125.0" text="Multa" />
                     </columns>
                     <columnResizePolicy>

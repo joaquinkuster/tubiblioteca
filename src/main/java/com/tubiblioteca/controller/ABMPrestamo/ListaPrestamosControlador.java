@@ -190,14 +190,12 @@ public class ListaPrestamosControlador implements Initializable {
     }
     
     private Prestamo abrirFormulario(Prestamo prestamoInicial) throws IOException {
-        formulario = StageManager.cargarVistaConControlador(Vista.FormularioMiembro.getRutaFxml());
-        FormularioMiembroControlador controladorFormulario = formulario.getKey();
+        formulario = StageManager.cargarVistaConControlador(Vista.FormularioPrestamo.getRutaFxml());
+        FormularioPrestamoControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (prestamoInicial != null) {
-            controladorFormulario.setMiembro(prestamoInicial);
+            controladorFormulario.setPrestamo(prestamoInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioMiembro);

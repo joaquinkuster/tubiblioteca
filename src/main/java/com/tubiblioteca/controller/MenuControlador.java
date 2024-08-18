@@ -75,11 +75,11 @@ public class MenuControlador implements Initializable {
         // Establecemos los handlers correspondientes a cada boton
         btnMiembros.setOnAction(event -> redireccionarMenu(Vista.ListaMiembros, (Button) event.getSource()));
         btnAuditoria.setOnAction(null);
-        btnCategorias.setOnAction(null);
+        btnCategorias.setOnAction(event -> redireccionarMenu(Vista.ListaCategorias, (Button) event.getSource()));
         btnCopiaLibros.setOnAction(null);
         btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
-        btnIdiomas.setOnAction(null);
-        btnLibros.setOnAction(null);
+        btnIdiomas.setOnAction(event -> redireccionarMenu(Vista.ListaIdiomas, (Button) event.getSource()));
+        btnLibros.setOnAction(event -> redireccionarMenu(Vista.ListaLibros, (Button) event.getSource()));
         btnPrestamos.setOnAction(null);
         btnRacks.setOnAction(null);
         btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));

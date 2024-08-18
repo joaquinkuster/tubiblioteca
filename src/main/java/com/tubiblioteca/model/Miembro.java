@@ -48,7 +48,7 @@ public class Miembro {
             errores.add("Por favor, ingrese un nombre.");
         } else if (nombre.length() > 50) {
             errores.add("El nombre no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarNombreApellido(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             errores.add("El nombre debe contener solo letras y espacios.");
         }
 
@@ -57,7 +57,7 @@ public class Miembro {
             errores.add("Por favor, ingrese un apellido.");
         } else if (apellido.length() > 50) {
             errores.add("El apellido no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarNombreApellido(apellido)) {
+        } else if (Validacion.validarNombre(apellido)) {
             errores.add("El apellido debe contener solo letras y espacios.");
         }
 
@@ -116,7 +116,7 @@ public class Miembro {
             throw new IllegalArgumentException("Por favor, ingrese un nombre.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarNombreApellido(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre debe contener solo letras y espacios.");
         }
         this.nombre = nombre;
@@ -131,7 +131,7 @@ public class Miembro {
             throw new IllegalArgumentException("Por favor, ingrese un apellido.");
         } else if (apellido.length() > 50) {
             throw new IllegalArgumentException("El apellido no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarNombreApellido(apellido)) {
+        } else if (Validacion.validarNombre(apellido)) {
             throw new IllegalArgumentException("El apellido debe contener solo letras y espacios.");
         }
         this.apellido = apellido;

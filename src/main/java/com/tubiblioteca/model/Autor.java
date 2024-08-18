@@ -36,10 +36,14 @@ public class Autor {
             throw new IllegalArgumentException("Por favor, ingrese el nombre del autor.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre del autor no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre del autor debe contener solo letras y espacios.");
         }
         this.nombre = nombre;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public String getNombre(){
@@ -51,7 +55,7 @@ public class Autor {
             throw new IllegalArgumentException("Por favor, ingrese un nombre de autor.");
         } else if (nombre.length() > 50) {
             throw new IllegalArgumentException("El nombre del autor no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarCadena(nombre)) {
+        } else if (Validacion.validarNombre(nombre)) {
             throw new IllegalArgumentException("El nombre del autor debe contener solo letras y espacios.");
         }
         this.nombre = nombre;

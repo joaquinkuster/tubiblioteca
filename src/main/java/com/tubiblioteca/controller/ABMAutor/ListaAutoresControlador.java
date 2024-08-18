@@ -127,8 +127,6 @@ public class ListaAutoresControlador implements Initializable {
         FormularioAutorControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
-        controladorFormulario.setServicio(servicio);
-
         if (autorInicial != null) {
             controladorFormulario.setAutor(autorInicial);
         }

@@ -22,7 +22,13 @@ public enum Vista {
     FormularioCategoria("Formulario de Categoría", "ABMCategoria/FormularioCategoria"),
 
     ListaLibros("Lista de Libros", "ABMLibro/ListaLibros"),
-    FormularioLibro("Formulario de Libro", "ABMLibro/FormularioLibro");
+    FormularioLibro("Formulario de Libro", "ABMLibro/FormularioLibro"),
+    
+    ListaIdiomas("LIsta de Idiomas", "ABMIdioma/ListaIdiomas"),
+    FormularioIdioma("Formulario de Idioma", "ABMIdioma/FormularioIdioma"),
+
+    ListaPrestamos("LIsta de Préstamos", "ABMPrestamo/ListaPrestamos"),
+    FormularioPrestamo("Formulario de Préstamo", "ABMPrestamo/FormularioPrestamo");
 
     // Devolvemos la clave
     private final String titulo;
