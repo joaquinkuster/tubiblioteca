@@ -3,6 +3,9 @@ package com.tubiblioteca.helper;
 import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
+
+import com.tubiblioteca.model.Miembro;
+
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableCell;
@@ -60,6 +63,21 @@ public class ControlUI {
                 }
             };
         });
+    }
+
+    public static void configurarCeldaNombreApellido(TableColumn<Miembro, String> columna){
+        columna.setCellFactory(col -> new TableCell<>() {
+                @Override
+                protected void updateItem(String nombre, boolean empty) {
+                    super.updateItem(nombre, empty);
+                    if (nombre == null || empty) {
+                        setText(null);
+                    } else {
+                        Miembro miembro = getTableView().getItems().get(getIndex());
+                        setText(nombre + " " + miembro.getApellido());
+                    }
+                }
+            });
     }
 
 }

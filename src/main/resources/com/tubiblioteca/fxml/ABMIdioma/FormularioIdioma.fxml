@@ -45,7 +45,7 @@
                         <RowConstraints vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TextField fx:id="txtIdioma" prefWidth="200.0" promptText="Digite nombre..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                        <TextField fx:id="txtNombre" prefWidth="200.0" promptText="Digite nombre..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                         <Label styleClass="label-formulario" text="Nombre:" />
                     </children>
                 </GridPane>

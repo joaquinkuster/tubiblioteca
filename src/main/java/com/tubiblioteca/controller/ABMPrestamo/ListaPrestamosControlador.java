@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
+
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
@@ -21,6 +23,7 @@ import com.tubiblioteca.service.Prestamo.PrestamoServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
+import com.tubiblioteca.helper.Selector;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,9 +55,9 @@ public class ListaPrestamosControlador implements Initializable {
     @FXML
     private DatePicker dtpDevolucion;
     @FXML
-    private ComboBox<Miembro> cmbMiembro;
+    private SearchableComboBox<Miembro> cmbMiembro;
     @FXML
-    private ComboBox<CopiaLibro> cmbCopia;
+    private SearchableComboBox<CopiaLibro> cmbCopia;
     @FXML
     private TextField txtMulta;
 
@@ -81,9 +84,9 @@ public class ListaPrestamosControlador implements Initializable {
     private void inicializarTabla() {
         try {
             var repositorio = AppConfig.getRepositorio();
-        servicio = new PrestamoServicio(repositorio);
-        servicioMiembro = new MiembroServicio(repositorio);
-        servicioCopia = new CopiaLibroServicio(repositorio);
+            servicio = new PrestamoServicio(repositorio);
+            servicioMiembro = new MiembroServicio(repositorio);
+            servicioCopia = new CopiaLibroServicio(repositorio);
 
             colPrestamo.setCellValueFactory(new PropertyValueFactory<>("fechaPrestamo"));
             colDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
@@ -122,7 +125,7 @@ public class ListaPrestamosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un préstamo!");
         } else {
             try {
-                prestamo = abrirFormulario(prestamo);
+                abrirFormulario(prestamo);
                 if (prestamo != null && quitarFiltro(prestamo)) {
                     filtrados.remove(prestamo);
                 }
@@ -136,12 +139,15 @@ public class ListaPrestamosControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Prestamo prestamo = abrirFormulario(null);
-            if (prestamo != null) {
-                prestamos.add(prestamo);
-                if (aplicarFiltro(prestamo)) {
-                    filtrados.add(prestamo);
-                    tblPrestamos.refresh();
+            List<Prestamo> prestamos = abrirFormulario(null);
+            if (prestamos != null) {
+                for (Prestamo prestamo : prestamos) {
+                    if (prestamo != null) {
+                        if (aplicarFiltro(prestamo)) {
+                            filtrados.add(prestamo);
+                            tblPrestamos.refresh();
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -169,7 +175,7 @@ public class ListaPrestamosControlador implements Initializable {
             }
         }
     }
-    
+
     private List<Prestamo> abrirFormulario(Prestamo prestamoInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioPrestamo.getRutaFxml());
         FormularioPrestamoControlador controladorFormulario = formulario.getKey();
@@ -234,6 +240,10 @@ public class ListaPrestamosControlador implements Initializable {
 
     @FXML
     private void seleccionarMiembro() {
+        Miembro miembro = Selector.seleccionarMiembro(cmbMiembro.getValue());
+        if (miembro != null) {
+            cmbMiembro.setValue(miembro);
+        }
     }
 
 }

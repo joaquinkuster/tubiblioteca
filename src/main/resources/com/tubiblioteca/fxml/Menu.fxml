@@ -8,165 +8,155 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="320.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.MenuControlador">
+<VBox alignment="CENTER" prefHeight="750.0" spacing="10.0" styleClass="menu-contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.MenuControlador">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <HBox spacing="10.0" styleClass="menu-logo">
          <children>
-            <HBox spacing="10.0" styleClass="menu-logo">
+            <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="logo">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TuBiblioteca" />
+         </children>
+      </HBox>
+      <Line endX="250.0" />
+      <HBox fx:id="hboxPerfil" alignment="BASELINE_CENTER" focusTraversable="true" onMouseClicked="#modificarPerfil" spacing="10.0" styleClass="menu-perfil">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <children>
+            <VBox alignment="CENTER" spacing="5.0" styleClass="detalles">
                <children>
-                  <ImageView fitHeight="60.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="logo">
-                     <image>
-                        <Image url="@../images/logo.png" />
-                     </image>
-                  </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TuBiblioteca" />
-               </children>
-            </HBox>
-            <Line endX="250.0" />
-            <HBox fx:id="hboxPerfil" alignment="BASELINE_CENTER" focusTraversable="true" onMouseClicked="#modificarPerfil" spacing="10.0" styleClass="menu-perfil">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <children>
-                  <VBox alignment="CENTER" spacing="5.0" styleClass="detalles">
-                     <children>
-                        <Label fx:id="lblNombre" maxWidth="220.0" styleClass="nombre" text="Joaquín Küster" wrapText="true" />
-                        <Label fx:id="lblTipo" maxWidth="220.0" styleClass="tipo" text="Bibliotecario" />
-                     </children>
-                  </VBox>
-                  <Button mnemonicParsing="false" onAction="#cerrarSesion" styleClass="btn-personalizado">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/logout.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding>
-            </HBox>
-            <Line endX="250.0" />
-            <VBox styleClass="menu-elementos">
-               <children>
-                  <Button fx:id="btnMiembros" mnemonicParsing="false" text="Miembros">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/miembros.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <styleClass>
-                        <String fx:value="menu-btn" />
-                        <String fx:value="actual" />
-                     </styleClass>
-                  </Button>
-                  <Button fx:id="btnAuditoria" mnemonicParsing="false" styleClass="menu-btn" text="Auditoría">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/operaciones.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnEditoriales" mnemonicParsing="false" styleClass="menu-btn" text="Editoriales">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/editoriales.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnAutores" mnemonicParsing="false" styleClass="menu-btn" text="Autores">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/autores.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnCategorias" mnemonicParsing="false" styleClass="menu-btn" text="Categorias">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/categorias.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnIdiomas" mnemonicParsing="false" styleClass="menu-btn" text="Idiomas">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/idiomas.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnLibros" mnemonicParsing="false" styleClass="menu-btn" text="Libros">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/libro.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnCopiaLibros" mnemonicParsing="false" styleClass="menu-btn" text="Copias de Libros">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/copiaLibros.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnRacks" mnemonicParsing="false" styleClass="menu-btn" text="Racks de Libros">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/racks.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="btnPrestamos" mnemonicParsing="false" styleClass="menu-btn" text="Préstamos">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/icons/prestamos.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
+                  <Label fx:id="lblNombre" maxWidth="220.0" styleClass="nombre" text="Joaquín Küster" wrapText="true" />
+                  <Label fx:id="lblTipo" maxWidth="220.0" styleClass="tipo" text="Bibliotecario" />
                </children>
             </VBox>
+            <Button mnemonicParsing="false" onAction="#cerrarSesion" styleClass="btn-personalizado">
+               <graphic>
+                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
-         <styleClass>
-            <String fx:value="contenedor-contenido" />
-            <String fx:value="menu-contenedor" />
-         </styleClass>
          <padding>
-            <Insets top="20.0" />
+            <Insets bottom="10.0" top="10.0" />
          </padding>
+      </HBox>
+      <Line endX="250.0" />
+      <VBox styleClass="menu-elementos">
+         <children>
+            <Button fx:id="btnMiembros" mnemonicParsing="false" text="Miembros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/miembros.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <styleClass>
+                  <String fx:value="menu-btn" />
+                  <String fx:value="actual" />
+               </styleClass>
+            </Button>
+            <Button fx:id="btnAuditoria" mnemonicParsing="false" styleClass="menu-btn" text="Auditoría">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/operaciones.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnEditoriales" mnemonicParsing="false" styleClass="menu-btn" text="Editoriales">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/editoriales.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnAutores" mnemonicParsing="false" styleClass="menu-btn" text="Autores">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/autores.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnCategorias" mnemonicParsing="false" styleClass="menu-btn" text="Categorias">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/categorias.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnIdiomas" mnemonicParsing="false" styleClass="menu-btn" text="Idiomas">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/idiomas.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnLibros" mnemonicParsing="false" styleClass="menu-btn" text="Libros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/libro.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnCopiaLibros" mnemonicParsing="false" styleClass="menu-btn" text="Copias de Libros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/copiaLibros.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnRacks" mnemonicParsing="false" styleClass="menu-btn" text="Racks de Libros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/racks.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnPrestamos" mnemonicParsing="false" styleClass="menu-btn" text="Préstamos">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/prestamos.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
       </VBox>
    </children>
+   <padding>
+      <Insets top="20.0" />
+   </padding>
    <stylesheets>
-      <URL value="@../styles/view/_menu.css" />
-      <URL value="@../styles/_contenedor.css" />
       <URL value="@../styles/_config.css" />
       <URL value="@../styles/_estilos.css" />
+      <URL value="@../styles/view/_menu.css" />
    </stylesheets>
-</AnchorPane>
+</VBox>

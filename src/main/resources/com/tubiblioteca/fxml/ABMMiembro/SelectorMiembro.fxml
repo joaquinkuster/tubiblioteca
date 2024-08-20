@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.SearchableComboBox?>
+
+
+  <VBox spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMMiembro.SelectorMiembroControlador">
+      <children>
+      <GridPane hgap="10.0" styleClass="formulario-grilla" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TextField fx:id="txtNombre1" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="btnLimpiar1" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/icons/limpiar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <styleClass>
+                  <String fx:value="btn-personalizado" />
+                  <String fx:value="limpiar" />
+               </styleClass>
+            </Button>
+            <TextField fx:id="txtDni1" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.rowIndex="1" />
+            <Label text="DNI:" GridPane.halignment="CENTER" />
+            <Label text="Nombre completo:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Label text="Tipo:" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <SearchableComboBox fx:id="cmbTipo1" maxHeight="-Infinity" prefWidth="200.0" styleClass="combo-personalizado" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+          <TableView fx:id="tblMiembros" editable="true" styleClass="tabla-personalizada" tableMenuButtonVisible="true">
+              <columns>
+                  <TableColumn fx:id="colDni" prefWidth="200.0" text="DNI" />
+                  <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre" />
+                  <TableColumn fx:id="colTipo" prefWidth="200.0" text="Tipo" />
+              </columns>
+              <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+              </columnResizePolicy>
+              <VBox.margin>
+                  <Insets />
+              </VBox.margin>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+          </TableView>
+          <HBox spacing="10.0" styleClass="acciones-contenedor">
+              <children>
+                  <Button fx:id="btnConfirmar" layoutX="43.0" layoutY="673.0" mnemonicParsing="false" onAction="#confirmar" styleClass="btn-personalizado" text="Confirmar" />
+              </children>
+          </HBox>
+      </children>
+   <stylesheets>
+      <URL value="@../../styles/_config.css" />
+      <URL value="@../../styles/_contenedor.css" />
+      <URL value="@../../styles/_estilos.css" />
+      <URL value="@../../styles/_formulario.css" />
+      <URL value="@../../styles/_tabla.css" />
+   </stylesheets>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+  </VBox>

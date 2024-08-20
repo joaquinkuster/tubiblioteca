@@ -2,7 +2,7 @@
 .btn-personalizado {
     -fx-background-color: -principal;
     -fx-text-fill: white;
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-font-weight: bold;
     -fx-border-color: transparent;
     -fx-border-radius: 5px;
@@ -20,7 +20,7 @@
 
 /* Titulo principal */
 .titulo-principal{
-    -fx-font-size: 2em;
+    -fx-font-size: 1.5em;
     -fx-font-weight: bold;
     -fx-alignment: center;
 }

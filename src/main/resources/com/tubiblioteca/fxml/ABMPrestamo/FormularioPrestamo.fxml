@@ -54,10 +54,10 @@
                         <Label fx:id="lblCargo" styleClass="label-formulario" text="Copia de Libro:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Label prefHeight="21.0" styleClass="label-formulario" text="Devolución:" GridPane.columnIndex="2" />
                         <Label fx:id="lblContrasena" styleClass="label-formulario" text="Cantidad:" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="cmbMiembro" maxWidth="1.7976931348623157E308" promptText="Seleccione miembro..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="cmbMiembro" maxWidth="1.7976931348623157E308" onAction="#calcularMulta" promptText="Seleccione miembro..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="lblCargo1" styleClass="label-formulario" text="Multa:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <DatePicker fx:id="dtpPrestamo" editable="false" prefWidth="200.0" promptText="Seleccione préstamo..." styleClass="datepicker-personalizado" GridPane.columnIndex="1" />
-                        <DatePicker fx:id="dtpDevolucion" disable="true" editable="false" prefWidth="200.0" promptText="Seleccione devolución..." styleClass="datepicker-personalizado" GridPane.columnIndex="3" />
+                        <DatePicker fx:id="dtpPrestamo" editable="false" onAction="#calcularMulta" prefWidth="200.0" promptText="Seleccione préstamo..." styleClass="datepicker-personalizado" GridPane.columnIndex="1" />
+                        <DatePicker fx:id="dtpDevolucion" disable="true" editable="false" onAction="#calcularMulta" prefWidth="200.0" promptText="Seleccione devolución..." styleClass="datepicker-personalizado" GridPane.columnIndex="3" />
                         <Spinner fx:id="spinCantidad" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtMulta" disable="true" promptText="--" styleClass="text-field-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                     </children>

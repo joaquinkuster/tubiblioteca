@@ -4,26 +4,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
+import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.TipoMiembro;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.view.Vista;
-import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.helper.ControlUI;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ListaMiembrosControlador implements Initializable {
+public class SelectorMiembroControlador implements Initializable {
 
     // Columnas de la tabla
     @FXML
@@ -54,12 +51,13 @@ public class ListaMiembrosControlador implements Initializable {
     private final Logger log = LoggerFactory.getLogger(ListaMiembrosControlador.class);
 
     private MiembroServicio servicio;
-    private Pair<FormularioMiembroControlador, Parent> formulario;
+    Miembro miembro;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
+
     }
 
     private void inicializarTabla() {
@@ -89,72 +87,28 @@ public class ListaMiembrosControlador implements Initializable {
     }
 
     @FXML
-    private void modificar() {
+    private void confirmar() {
+        // Obtenemos el miembro seleccionado
         Miembro miembro = tblMiembros.getSelectionModel().getSelectedItem();
 
+        // Verificamos que sea diferente de nulo
         if (miembro == null) {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un miembro de la biblioteca!");
         } else {
-            try {
-                miembro = abrirFormulario(miembro);
-                if (miembro != null && quitarFiltro(miembro)) {
-                    filtrados.remove(miembro);
-                }
-                tblMiembros.refresh();
-            } catch (Exception e) {
-                log.error("Error al modificar el miembro: ", e);
-            }
+            this.miembro = miembro;
+            // Salimos del modal
+            StageManager.cerrarModal(Vista.SelectorMiembro);
         }
     }
 
-    @FXML
-    private void agregar() {
-        try {
-            Miembro miembro = abrirFormulario(null);
-            if (miembro != null) {
-                miembros.add(miembro);
-                if (aplicarFiltro(miembro)) {
-                    filtrados.add(miembro);
-                    tblMiembros.refresh();
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error al agregar un miembro: ", e);
+    public void setMiembro(Miembro miembro) {
+        if (miembro != null) {
+            tblMiembros.getSelectionModel().select(miembro);
         }
     }
 
-    @FXML
-    private void eliminar() {
-        Miembro miembro = tblMiembros.getSelectionModel().getSelectedItem();
-
-        if (miembro == null) {
-            Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un miembro de la biblioteca!");
-        } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el miembro de la biblioteca?")) {
-            try {
-                servicio.borrar(miembro);
-                miembros.remove(miembro);
-                filtrados.remove(miembro);
-                Alerta.mostrarMensaje(false, "Info", "Miembro de la biblioteca eliminado correctamente!");
-                tblMiembros.refresh();
-            } catch (Exception e) {
-                log.error("Error al eliminar el miembro: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el miembro. Puede estar vinculado a otros registros.");
-            }
-        }
-    }
-
-    private Miembro abrirFormulario(Miembro miembroInicial) throws IOException {
-        formulario = StageManager.cargarVistaConControlador(Vista.FormularioMiembro.getRutaFxml());
-        FormularioMiembroControlador controladorFormulario = formulario.getKey();
-        Parent vistaFormulario = formulario.getValue();
-
-        if (miembroInicial != null) {
-            controladorFormulario.setMiembro(miembroInicial);
-        }
-
-        StageManager.abrirModal(vistaFormulario, Vista.FormularioMiembro);
-        return controladorFormulario.getMiembro();
+    public Miembro getMiembro(){
+        return miembro;
     }
 
     @FXML
@@ -173,15 +127,6 @@ public class ListaMiembrosControlador implements Initializable {
         return (dni == null || miembro.getDni().toLowerCase().contains(dni))
                 && (nombre == null || miembro.toString().toLowerCase().contains(nombre))
                 && (tipo == null || tipo.equals(miembro.getTipo()));
-    }
-
-    private boolean quitarFiltro(Miembro miembro) {
-        String dni = txtDni.getText().trim().toLowerCase();
-        String nombre = txtNombre.getText().trim().toLowerCase();
-        TipoMiembro tipo = cmbTipo.getValue();
-        return (dni != null && !miembro.getDni().toLowerCase().startsWith(dni))
-                || (nombre != null && !miembro.toString().toLowerCase().contains(nombre))
-                || (tipo != null && !tipo.equals(miembro.getTipo()));
     }
 
     @FXML

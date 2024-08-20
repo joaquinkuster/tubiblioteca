@@ -1,6 +1,9 @@
 package com.tubiblioteca.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import com.tubiblioteca.helper.Alerta;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,9 +17,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "prestamo")
 public class Prestamo {
-    
+
     @Id
-    @Column(name = "id", nullable =  false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "fecha_prestamo", nullable = false)
@@ -34,11 +37,33 @@ public class Prestamo {
     @JoinColumn(name = "id_copialibro", nullable = false)
     private CopiaLibro copiaLibro;
 
-    public Prestamo(){
+    public Prestamo() {
 
     }
 
     public Prestamo(LocalDate fechaPrestamo, Miembro miembro, CopiaLibro copiaLibro) {
+
+        ArrayList<String> errores = new ArrayList<>();
+
+        // Verificamos que la fecha de prestamo no este vacia
+        if (fechaPrestamo == null) {
+            errores.add("Por favor, ingrese una fecha de reunión.");
+        }
+
+        // Verificamos que haya seleccionado un miembro
+        if (miembro == null) {
+            errores.add("Por favor, seleccione un miembro de la biblioteca.");
+        }
+
+        // Verificamos que haya seleccionado una copia
+        if (copiaLibro == null) {
+            errores.add("Por favor, seleccione una copia de libro");
+        }
+
+        // Verificamos si hay errores
+        if (!errores.isEmpty()) {
+            throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
+        }
         this.fechaPrestamo = fechaPrestamo;
         this.miembro = miembro;
         this.copiaLibro = copiaLibro;
@@ -64,8 +89,13 @@ public class Prestamo {
         return multa;
     }
 
-    public void setMulta(double multa) {
-        this.multa = multa;
+    public void setMulta(String multa) {
+        try {
+            this.multa = Double.parseDouble(multa);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "La multa debe ser un valor numérico. Por favor, ingrese un monto válido.");
+        }
     }
 
     public boolean isBaja() {
@@ -91,6 +121,4 @@ public class Prestamo {
     public void setCopiaLibro(CopiaLibro copiaLibro) {
         this.copiaLibro = copiaLibro;
     }
-
-    
 }

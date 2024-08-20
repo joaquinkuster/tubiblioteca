@@ -26,15 +26,15 @@ public class Idioma {
 
     }
 
-    public Idioma(String idioma){
-       if (idioma.isEmpty()) {
-            throw new IllegalArgumentException("Por favor, ingrese el idioma.");
+    public Idioma(String nombre){
+       if (nombre.isEmpty()) {
+            throw new IllegalArgumentException("Por favor, ingrese el nombre.");
         } else if (nombre.length() > 50) {
-            throw new IllegalArgumentException("El idioma no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarNombre(idioma)) {
-            throw new IllegalArgumentException("El idioma debe contener solo letras y espacios.");
+            throw new IllegalArgumentException("El nombre no puede tener más de 50 caracteres.");
+        } else if (Validacion.validarNombre(nombre)) {
+            throw new IllegalArgumentException("El nombre debe contener solo letras y espacios.");
         }
-        this.nombre = idioma;
+        this.nombre = nombre;
     }
 
     public int getId(){

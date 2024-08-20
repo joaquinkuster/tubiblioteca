@@ -1,11 +1,5 @@
 /* Estilos generales */
 
-/* Reseteamos márgenes y rellenos */
-.root {
-    -fx-padding: 0;
-    -fx-spacing: 0;
-}
-
 /* Establecemos fuente predeterminada */
 * {
     -fx-font-family: "Poppins Medium", sans-serif;

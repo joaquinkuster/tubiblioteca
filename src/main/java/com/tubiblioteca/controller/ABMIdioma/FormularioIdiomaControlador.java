@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 public class FormularioIdiomaControlador implements Initializable {
 
     @FXML
-    private TextField txtIdioma;
+    private TextField txtNombre;
     @FXML
     private Button btnNuevo;
 
@@ -37,14 +37,14 @@ public class FormularioIdiomaControlador implements Initializable {
 
     @FXML
     private void nuevo() {
-        txtIdioma.clear();
+        txtNombre.clear();
     }
 
     @FXML
     private void guardar() {
         try {
             // Creamos un nuevo idioma auxiliar
-            Idioma aux = new Idioma(txtIdioma.getText().trim());
+            Idioma aux = new Idioma(txtNombre.getText().trim());
 
             if (idioma == null) {
                 idioma = aux;
@@ -65,7 +65,7 @@ public class FormularioIdiomaControlador implements Initializable {
     }
 
     private void autocompletar() {
-        txtIdioma.setText(idioma.getNombre());
+        txtNombre.setText(idioma.getNombre());
     }
 
     public void setIdioma(Idioma idioma) {

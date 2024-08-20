@@ -17,22 +17,18 @@ import com.tubiblioteca.service.Editorial.EditorialServicio;
 import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.CustomMenuItem;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import org.controlsfx.control.CheckComboBox;
 public class FormularioLibroControlador implements Initializable {
 
     @FXML
@@ -40,7 +36,7 @@ public class FormularioLibroControlador implements Initializable {
     @FXML
     private TextField txtTitulo;
     @FXML
-    private ComboBox<Autor> cmbAutores;
+    private CheckComboBox<Autor> cmbAutores;
     @FXML
     private ComboBox<Categoria> cmbCategoria;
     @FXML
@@ -65,8 +61,6 @@ public class FormularioLibroControlador implements Initializable {
     private CategoriaServicio servicioCategoria;
     private IdiomaServicio servicioIdioma;
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -76,7 +70,6 @@ public class FormularioLibroControlador implements Initializable {
         servicioEditorial = new EditorialServicio(repositorio);
         servicioCategoria = new CategoriaServicio(repositorio);
         servicioIdioma = new IdiomaServicio(repositorio);
-
         inicializarCombosFormulario();
         libro = null;
     }
@@ -84,7 +77,7 @@ public class FormularioLibroControlador implements Initializable {
     private void inicializarCombosFormulario() {
         autores.clear();
         autores.addAll(servicioAutor.buscarTodos());
-        cmbAutores.setItems(autores);
+        cmbAutores.getItems().addAll(autores);
 
         editoriales.clear();
         editoriales.addAll(servicioEditorial.buscarTodos());
@@ -118,8 +111,7 @@ public class FormularioLibroControlador implements Initializable {
                     cmbCategoria.getValue(),
                     cmbEditorial.getValue(),
                     cmbIdioma.getValue(),
-                    cmbAutores.getItems());
-
+                    cmbAutores.getCheckModel().getCheckedItems());
             ArrayList<String> errores = new ArrayList<>();
 
             // Validamos si la categoria, editorial o idioma seleccionados existen
@@ -131,6 +123,11 @@ public class FormularioLibroControlador implements Initializable {
             }
             if (servicioIdioma.buscarPorId(aux.getIdioma().getId()) == null) {
                 errores.add("El idioma seleccionado no se encuentra en la base de datos.");
+            }
+            for (Autor autor : aux.getAutores()) {
+                if (servicioAutor.buscarPorId(autor.getId()) == null) {
+                    errores.add("El autor "  + autor + " no se encuentra en la base de datos.");
+                }
             }
 
             if (!errores.isEmpty()) {

@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
+
+import org.controlsfx.control.CheckComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
@@ -55,7 +57,7 @@ public class ListaLibrosControlador implements Initializable {
     @FXML
     private TextField txtTitulo;
     @FXML
-    private ComboBox<Autor> cmbAutores;
+    private CheckComboBox<Autor> cmbAutores;
     @FXML
     private ComboBox<Categoria> cmbCategoria;
     @FXML
@@ -116,7 +118,7 @@ public class ListaLibrosControlador implements Initializable {
     private void inicializarFiltros() {
         autores.clear();
         autores.addAll(servicioAutor.buscarTodos());
-        cmbAutores.setItems(autores);
+        cmbAutores.getItems().addAll(autores);
 
         editoriales.clear();
         editoriales.addAll(servicioEditorial.buscarTodos());
@@ -202,6 +204,7 @@ public class ListaLibrosControlador implements Initializable {
 
     @FXML
     private void filtrar() {
+        System.out.println("okslkals");
         filtrados.clear();
         libros.stream()
                 .filter(this::aplicarFiltro)
@@ -212,25 +215,37 @@ public class ListaLibrosControlador implements Initializable {
     private boolean aplicarFiltro(Libro libro) {
         String isbn = txtIsbn.getText().trim().toLowerCase();
         String titulo = txtTitulo.getText().trim().toLowerCase();
-        // List<Autor> autores = cmbAutores.getItems();
         Categoria categoria = cmbCategoria.getValue();
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
-        return (isbn == null || String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
+        return filtrarPorAutores(libro.getAutores())
+                && (isbn == null || String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
                 && (titulo == null || libro.getTitulo().toLowerCase().contains(titulo))
                 && (categoria == null || categoria.equals(libro.getCategoria()))
                 && (editorial == null || editorial.equals(libro.getEditorial()))
                 && (idioma == null || idioma.equals(libro.getIdioma()));
     }
 
+    private boolean filtrarPorAutores(List<Autor> autores) {
+        List<Autor> seleccionados = cmbAutores.getCheckModel().getCheckedItems();
+
+        for (Autor seleccionado : seleccionados) {
+            if (!autores.contains(seleccionado)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private boolean quitarFiltro(Libro libro) {
         String isbn = txtIsbn.getText().trim().toLowerCase();
         String titulo = txtTitulo.getText().trim().toLowerCase();
-        // List<Autor> autores = cmbAutores.getItems();
         Categoria categoria = cmbCategoria.getValue();
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
-        return (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
+        return !filtrarPorAutores(libro.getAutores())
+                || (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
                 || (titulo != null && !libro.getTitulo().toLowerCase().contains(titulo))
                 || (categoria != null && !categoria.equals(libro.getCategoria()))
                 || (editorial != null && !editorial.equals(libro.getEditorial()))

@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.LoginControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="380.0" prefWidth="616.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.LoginControlador">
    <children>
       <VBox layoutX="27.0" layoutY="53.0" prefHeight="200.0" prefWidth="200.0" spacing="20.0" styleClass="login-logo" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TuBiblioteca" />
          </children>
       </VBox>
-      <VBox layoutX="384.0" layoutY="60.0" prefHeight="200.0" prefWidth="400.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox layoutX="200.0" layoutY="60.0" prefHeight="314.0" prefWidth="318.0" spacing="30.0" styleClass="contenedor" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titulo-principal" text="Iniciar Sesión">
                <font>
@@ -48,9 +48,9 @@
               </rowConstraints>
                <children>
                   <Label text="DNI:" />
-                  <TextField fx:id="txtDni" prefWidth="200.0" promptText="Digite DNI..." styleClass="text-field-personalizado" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtDni" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                   <Label text="Contraseña:" GridPane.rowIndex="1" />
-                  <PasswordField fx:id="txtContrasena" promptText="Digite contraseña..." styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="txtContrasena" styleClass="password-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <CheckBox fx:id="checkRecordar" mnemonicParsing="false" styleClass="check-box-personalizado" text="Recordar" GridPane.rowIndex="2" />
                   <Button fx:id="btnOlvidasteContrasena" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="enlace" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                      <graphic>

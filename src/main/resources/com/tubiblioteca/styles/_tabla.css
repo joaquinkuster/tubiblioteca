@@ -1,8 +1,7 @@
 /* Estilo TableView personalizado */
 .tabla-personalizada{
     -fx-background-color: white;
-    -fx-font-size: 1.2em;
-    -fx-border-radius: 5;
+    -fx-font-size: 1em;
     -fx-border-color: -borde-claro;
     -fx-border-width: 1;
 }
@@ -17,9 +16,9 @@
 /* Filas */
 .tabla-personalizada .table-row-cell{
     -fx-background-color: white;
-    -fx-cell-size: 50px;
     -fx-border-color: -borde-claro;
     -fx-border-width: 0 0 1 0;
+    -fx-border-radius: 5;
     -fx-transition: background-color 0.3s;
 }
 .tabla-personalizada .table-row-cell:selected,
@@ -41,7 +40,7 @@
 }
 .tabla-personalizada .column-header .label {
     -fx-font-weight: bold;
-    -fx-padding: 10 5;
+    -fx-padding: 5;
 }
 
 /* Scroll bar */

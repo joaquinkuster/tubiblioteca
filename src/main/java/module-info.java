@@ -6,6 +6,7 @@ module com.tubiblioteca {
     requires eclipselink;
     requires jakarta.persistence;
     requires org.slf4j;
+    requires org.controlsfx.controls;
 
     // Abrir el paquete com.tubiblioteca a javafx.fxml para permitir la carga de FXML
     opens com.tubiblioteca.controller to javafx.fxml;

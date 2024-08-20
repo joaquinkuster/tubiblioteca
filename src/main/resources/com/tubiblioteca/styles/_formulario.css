@@ -3,13 +3,13 @@
     -fx-alignment: center;
 }
 .formulario-grilla Label{
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-font-weight: bold;
 }
 
 /* TextField personalizado */
 .text-field-personalizado, .password-field-personalizado{
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: lightgray;
@@ -22,7 +22,7 @@
 
 /* Combo personalizado */
 .combo-personalizado{
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: lightgray;
@@ -58,7 +58,7 @@
 
 /* DatePicker personalizado */
 .datepicker-personalizado{
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: white;
     -fx-border-color: lightgray;
@@ -112,7 +112,7 @@
 
 /* TextArea */
 .text-area-personalizado{
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: transparent;
     -fx-border-color: lightgray;
@@ -128,7 +128,7 @@
 
 /* CheckBox */
 .check-box-personalizado{
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -165,7 +165,7 @@
     -fx-cursor: hand;
 }
 .enlace Text {
-    -fx-font-size: 1em;
+    -fx-font-size: 0.9em;
     -fx-fill: -enlace;
     -fx-transition: fill 0.3s;
 }

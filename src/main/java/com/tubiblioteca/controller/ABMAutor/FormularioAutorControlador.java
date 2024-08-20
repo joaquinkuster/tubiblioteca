@@ -51,7 +51,7 @@ public class FormularioAutorControlador implements Initializable {
                 servicio.insertar(aux);
                 Alerta.mostrarMensaje(false, "Info", "Se ha agregado el autor correctamente!");
             } else {
-                // Actualizamos el miembro existente
+                // Actualizamos el autor existente
                 autor.setNombre(aux.getNombre());
                 servicio.modificar(autor);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado el autor correctamente!");

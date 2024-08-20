@@ -19,10 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor"
-    xmlns="http://javafx.com/javafx/22"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMLibro.ListaLibrosControlador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="950.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMLibro.ListaLibrosControlador">
     <children>
         <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0" styleClass="contenedor-contenido" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
@@ -63,9 +62,9 @@
                         </Button>
                         <TextField fx:id="txtIsbn" onKeyReleased="#filtrar" prefWidth="200.0" promptText="Digite ISBN..." styleClass="text-field-personalizado" />
                         <ComboBox fx:id="cmbCategoria" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione categoría..." styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="cmbAutores" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione autores..." styleClass="combo-personalizado" GridPane.columnIndex="1" />
                         <ComboBox fx:id="cmbIdioma" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione idioma..." styleClass="combo-personalizado" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <ComboBox fx:id="cmbEditorial" onAction="#filtrar" prefWidth="200.0" promptText="Seleccione editorial..." styleClass="combo-personalizado" GridPane.columnIndex="2" />
+                  <CheckComboBox fx:id="cmbAutores" prefWidth="200.0" GridPane.columnIndex="1" />
                     </children>
                 </GridPane>
                 <TableView fx:id="tblLibros" editable="true" styleClass="tabla-personalizada" tableMenuButtonVisible="true">

@@ -1,6 +1,10 @@
 /* Logo del menu */
 .menu-contenedor{
     -fx-alignment: top_center o !important;
+    -fx-background-color: white;
+    -fx-border-color: -gris-suave;
+    -fx-border-width: 0 1 0 0;
+
 }
 .menu-contenedor Line{
     -fx-stroke: -gris-suave;
@@ -11,7 +15,7 @@
 }
 .menu-logo Text{
     -fx-fill: black;
-    -fx-font-size: 1.8em;
+    -fx-font-size: 1.5em;
     -fx-font-weight: bold;
 }
 
@@ -30,12 +34,12 @@
 }
 .menu-perfil .detalles .nombre{
     -fx-text-fill: black;
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1.1em;
     -fx-font-weight: bold;
 }
 .menu-perfil .detalles .tipo{
     -fx-text-fill: -gris;
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
 }
 
 /* Navegación del menu */
@@ -44,7 +48,7 @@
 }
 .menu-elementos .menu-btn {
     -fx-text-fill: -negro-claro;
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1m;
     -fx-alignment: center_left;
     -fx-pref-width: 280;
     -fx-background-color: white;
