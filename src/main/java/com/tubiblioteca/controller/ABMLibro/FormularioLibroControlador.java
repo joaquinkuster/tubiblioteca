@@ -26,6 +26,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.controlsfx.control.CheckComboBox;
@@ -169,6 +170,15 @@ public class FormularioLibroControlador implements Initializable {
         cmbCategoria.setValue(libro.getCategoria());
         cmbEditorial.setValue(libro.getEditorial());
         cmbIdioma.setValue(libro.getIdioma());
+        
+        // Para seleccionar los autores primero limpiamos los autores seleccionados
+        cmbAutores.getCheckModel().clearChecks();
+        // Creamos una lista de los autores que tiene el libro
+        List<Autor> autoresDelLibro = libro.getAutores();
+        // recorremos la lista para ir seleccionando las opciones segun los autores que tenga el libro
+        for (Autor autor : autoresDelLibro) {
+            cmbAutores.getCheckModel().check(autor);
+        }
     }
 
     public void setLibro(Libro libro) {

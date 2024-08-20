@@ -1,6 +1,7 @@
 package com.tubiblioteca.controller.ABMLibro;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -131,6 +132,24 @@ public class ListaLibrosControlador implements Initializable {
         idiomas.clear();
         idiomas.addAll(servicioIdioma.buscarTodos());
         cmbIdioma.setItems(idiomas);
+
+        // Agregamos el listener para detectar cambios en los autores seleccionados
+        cmbAutores.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Autor>() {
+            @Override
+            public void onChanged(Change<? extends Autor> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        // En el caso de que se añada un item a los checkbox seleccionados filtramos 
+                        filtrar();
+                    }
+                    if (change.wasRemoved()) {
+                        // En el caso de que se elimine un item a los checkbox seleccionados filtramos 
+                        filtrar();
+                        System.out.println("Autor deseleccionado: " + change.getRemoved());
+                    }
+                }
+            }
+        });
     }
 
     @FXML

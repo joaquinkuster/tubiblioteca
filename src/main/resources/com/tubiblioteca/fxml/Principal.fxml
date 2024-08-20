@@ -11,6 +11,5 @@
 
     </center>
     <bottom>
-        <fx:include source="Footer.fxml"/>
     </bottom>
 </BorderPane>
