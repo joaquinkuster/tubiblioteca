@@ -145,19 +145,14 @@ public class ListaLibrosControlador implements Initializable {
     }
 
     private void configurarListenerComboAutores() {
-        // Agregamos el listener para detectar cambios en los autores seleccionados
+        // Listener para detectar cambios en los autores seleccionados
         cmbAutores.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Autor>() {
             @Override
             public void onChanged(Change<? extends Autor> change) {
                 while (change.next()) {
-                    if (change.wasAdded()) {
-                        // En el caso de que se añada un item a los checkbox seleccionados filtramos
+                    if (change.wasAdded() || change.wasRemoved()) {
+                        List<Autor> seleccionados = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());    
                         filtrar();
-                    }
-                    if (change.wasRemoved()) {
-                        // En el caso de que se elimine un item a los checkbox seleccionados filtramos
-                        filtrar();
-                        System.out.println("Autor deseleccionado: " + change.getRemoved());
                     }
                 }
             }
@@ -260,9 +255,13 @@ public class ListaLibrosControlador implements Initializable {
 
     private boolean filtrarPorAutores(List<Autor> autores) {
         List<Autor> seleccionados = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());
-        for (Autor seleccionado : seleccionados) {
-            if (!autores.contains(seleccionado)) {
-                return false;
+        if (seleccionados == null || seleccionados.isEmpty()) {
+            return true;
+        } else {
+            for (Autor seleccionado : seleccionados) {
+                if (!autores.contains(seleccionado)) {
+                    return false;
+                }
             }
         }
         return true;

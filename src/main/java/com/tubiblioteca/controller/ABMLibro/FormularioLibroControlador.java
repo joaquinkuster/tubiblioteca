@@ -18,6 +18,7 @@ import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -81,6 +82,18 @@ public class FormularioLibroControlador implements Initializable {
         nuevosLibros.clear();
 
         ControlUI.configurarAtajoTecladoEnter(btnGuardar);
+
+        // listener para ver los cambios al seleccionar los autores
+
+        cmbAutores.getCheckModel().getCheckedItems().addListener((ListChangeListener<Autor>) change -> {
+            while (change.next()) {
+                if (change.wasAdded() || change.wasRemoved()) {
+                    List<Autor> seleccionados = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());
+                }
+            }
+        });
+
+
     }
 
     private void inicializarCombosFormulario() {
@@ -99,6 +112,7 @@ public class FormularioLibroControlador implements Initializable {
         idiomas.clear();
         idiomas.addAll(servicioIdioma.buscarTodos());
         cmbIdioma.setItems(idiomas);
+
     }
 
     @FXML
@@ -142,7 +156,6 @@ public class FormularioLibroControlador implements Initializable {
         cmbCategoria.setValue(libroInicial.getCategoria());
         cmbEditorial.setValue(libroInicial.getEditorial());
         cmbIdioma.setValue(libroInicial.getIdioma());
-
         // Para seleccionar los autores primero limpiamos los autores seleccionados
         cmbAutores.getCheckModel().clearChecks();
         // Creamos una lista de los autores que tiene el libro
