@@ -1,5 +1,6 @@
 package com.tubiblioteca.controller.ABMCopiaLibro;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -189,6 +190,63 @@ public class ListaCopiasLibrosControlador implements Initializable {
         }
     }
 
+    @FXML
+    private void verificarReferencias(){
+        // Si no hay libros entonces salimos de la funcion inmediatamente
+        if (libros.isEmpty() || libros == null) {
+            System.out.println("No se encuentra ningun libro");
+            Alerta.mostrarMensaje(true, "Error","No existe ningun libro registrado.");
+            return;
+        }
+
+        if (copias.isEmpty() || copias == null) {
+            System.out.println("No hay copias de ningun libro");
+            Alerta.mostrarMensaje(true, "Error","No existe ninguna copia registrada.");
+            return;
+        }
+
+        ObservableList<Libro> librosSinReferencias = FXCollections.observableArrayList();
+        for (Libro libro : libros) {
+            ObservableList<CopiaLibro> copiasDelLibro = FXCollections.observableArrayList();
+            for (CopiaLibro copiaLibro : copias) {
+                if (libro.equals(copiaLibro.getLibro())){
+                    copiasDelLibro.add(copiaLibro);
+                } 
+            }
+            if (copiasDelLibro.isEmpty()) {
+                // Alerta.mostrarMensaje(true, "Error","El libro " + libro.getTitulo() + " no tiene copias.");
+               continue;
+            }
+
+            // Verificar las referencias
+            if (!cerciorarReferencias(copiasDelLibro)) {
+                librosSinReferencias.add(libro);
+            }
+        }
+        if (librosSinReferencias.isEmpty()) {
+            Alerta.mostrarMensaje(false, "Exito","Todos los libros tienen referencias.");
+        } else {
+            // Mostrar los libros que no tienen referencias
+            Alerta.mostrarMensaje(false, "Error", cadenaDeLibrosSinReferencia(librosSinReferencias));
+        }
+    }
+
+    private boolean cerciorarReferencias(List<CopiaLibro> copiasDelLibro){
+        for (CopiaLibro copia : copiasDelLibro) {
+            if (copia.isReferencia()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String cadenaDeLibrosSinReferencia(List<Libro> librosSinReferencias) {
+        String texto = "";
+        for (Libro libroSinReferencia : librosSinReferencias) {
+            texto += "El libro: " + libroSinReferencia.getTitulo() + " no tiene referencia\n";
+        }
+        return texto;
+    }
     private List<CopiaLibro> abrirFormulario(CopiaLibro copiaInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioCopiaLibro.getRutaFxml());
         FormularioCopiaLibroControlador controladorFormulario = formulario.getKey();

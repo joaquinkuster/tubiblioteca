@@ -110,6 +110,7 @@ public class CopiaLibro {
         return estado;
     }
 
+
     public void setEstado(EstadoCopiaLibro estado) {
         if (estado == null) {
             throw new IllegalArgumentException("Por favor, seleccione un estado.");
