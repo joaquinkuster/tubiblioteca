@@ -1,5 +1,6 @@
 package com.tubiblioteca.model;
 
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
 
 import jakarta.persistence.Column;
@@ -67,6 +68,6 @@ public class Editorial {
     }
 
     public String toString() {
-        return nombre;
+        return ControlUI.limitar(nombre, 15);
     }
 }

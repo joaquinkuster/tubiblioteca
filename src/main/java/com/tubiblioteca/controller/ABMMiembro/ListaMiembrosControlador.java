@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
@@ -18,9 +19,9 @@ import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaMiembrosControlador implements Initializable {
@@ -43,7 +44,7 @@ public class ListaMiembrosControlador implements Initializable {
     @FXML
     private TextField txtNombre;
     @FXML
-    private ComboBox<TipoMiembro> cmbTipo;
+    private SearchableComboBox<TipoMiembro> cmbTipo;
 
     // Listas utilizadas
     private final ObservableList<Miembro> miembros = FXCollections.observableArrayList();
@@ -68,9 +69,8 @@ public class ListaMiembrosControlador implements Initializable {
 
             colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-
             ControlUI.configurarCeldaNombreApellido(colNombre);
+            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
             miembros.clear();
             filtrados.clear();
@@ -96,7 +96,7 @@ public class ListaMiembrosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un miembro de la biblioteca!");
         } else {
             try {
-                miembro = abrirFormulario(miembro);
+                abrirFormulario(miembro);
                 if (miembro != null && quitarFiltro(miembro)) {
                     filtrados.remove(miembro);
                 }
@@ -110,13 +110,15 @@ public class ListaMiembrosControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Miembro miembro = abrirFormulario(null);
-            if (miembro != null) {
-                miembros.add(miembro);
-                if (aplicarFiltro(miembro)) {
-                    filtrados.add(miembro);
-                    tblMiembros.refresh();
+            List<Miembro> nuevosMiembros = abrirFormulario(null);
+            if (nuevosMiembros != null) {
+                for (Miembro miembro : nuevosMiembros) {
+                    miembros.add(miembro);
+                    if (aplicarFiltro(miembro)) {
+                        filtrados.add(miembro);
+                    }
                 }
+                tblMiembros.refresh();
             }
         } catch (Exception e) {
             log.error("Error al agregar un miembro: ", e);
@@ -144,17 +146,17 @@ public class ListaMiembrosControlador implements Initializable {
         }
     }
 
-    private Miembro abrirFormulario(Miembro miembroInicial) throws IOException {
+    private List<Miembro> abrirFormulario(Miembro miembroInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioMiembro.getRutaFxml());
         FormularioMiembroControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (miembroInicial != null) {
-            controladorFormulario.setMiembro(miembroInicial);
+            controladorFormulario.setMiembroInicial(miembroInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioMiembro);
-        return controladorFormulario.getMiembro();
+        return controladorFormulario.getMiembros();
     }
 
     @FXML
@@ -170,7 +172,7 @@ public class ListaMiembrosControlador implements Initializable {
         String dni = txtDni.getText().trim().toLowerCase();
         String nombre = txtNombre.getText().trim().toLowerCase();
         TipoMiembro tipo = cmbTipo.getValue();
-        return (dni == null || miembro.getDni().toLowerCase().contains(dni))
+        return (dni == null || miembro.getDni().toLowerCase().startsWith(dni))
                 && (nombre == null || miembro.toString().toLowerCase().contains(nombre))
                 && (tipo == null || tipo.equals(miembro.getTipo()));
     }

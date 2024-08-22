@@ -67,11 +67,38 @@
                   <String fx:value="actual" />
                </styleClass>
             </Button>
-            <Button fx:id="btnAuditoria" mnemonicParsing="false" styleClass="menu-btn" text="Auditoría">
+            <Button fx:id="btnPrestamos" mnemonicParsing="false" styleClass="menu-btn" text="Préstamos">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons/operaciones.png" />
+                        <Image url="@../images/icons/prestamos.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnLibros" mnemonicParsing="false" styleClass="menu-btn" text="Libros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/libro.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnCopiaLibros" mnemonicParsing="false" styleClass="menu-btn" text="Copias de Libros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/copiaLibros.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnRacks" mnemonicParsing="false" styleClass="menu-btn" text="Racks">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/racks.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -112,38 +139,11 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnLibros" mnemonicParsing="false" styleClass="menu-btn" text="Libros">
+            <Button fx:id="btnAuditoria" mnemonicParsing="false" styleClass="menu-btn" text="Auditoría">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons/libro.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="btnCopiaLibros" mnemonicParsing="false" styleClass="menu-btn" text="Copias de Libros">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/copiaLibros.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="btnRacks" mnemonicParsing="false" styleClass="menu-btn" text="Racks de Libros">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/racks.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="btnPrestamos" mnemonicParsing="false" styleClass="menu-btn" text="Préstamos">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/prestamos.png" />
+                        <Image url="@../images/icons/operaciones.png" />
                      </image>
                   </ImageView>
                </graphic>

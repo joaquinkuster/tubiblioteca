@@ -16,9 +16,9 @@ import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaIdiomasControlador implements Initializable {
@@ -34,11 +34,11 @@ public class ListaIdiomasControlador implements Initializable {
     // Filtros adicionales
     @FXML
     private TextField txtNombre;
-    
+
     // Listas utilizadas
     private final ObservableList<Idioma> idiomas = FXCollections.observableArrayList();
     private final ObservableList<Idioma> filtrados = FXCollections.observableArrayList();
-    
+
     // Logger para gestionar información
     private final Logger log = LoggerFactory.getLogger(ListaIdiomasControlador.class);
 
@@ -74,7 +74,7 @@ public class ListaIdiomasControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un idioma!");
         } else {
             try {
-                idioma = abrirFormulario(idioma);
+                abrirFormulario(idioma);
                 if (idioma != null && quitarFiltro(idioma)) {
                     filtrados.remove(idioma);
                 }
@@ -88,13 +88,15 @@ public class ListaIdiomasControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Idioma idioma = abrirFormulario(null);
-            if (idioma != null) {
-                idiomas.add(idioma);
-                if (aplicarFiltro(idioma)) {
-                    filtrados.add(idioma);
-                    tblIdiomas.refresh();
+            List<Idioma> nuevosIdiomas = abrirFormulario(null);
+            if (nuevosIdiomas != null) {
+                for (Idioma idioma : nuevosIdiomas) {
+                    idiomas.add(idioma);
+                    if (aplicarFiltro(idioma)) {
+                        filtrados.add(idioma);
+                    }
                 }
+                tblIdiomas.refresh();
             }
         } catch (Exception e) {
             log.error("Error al agregar un idioma: ", e);
@@ -122,17 +124,17 @@ public class ListaIdiomasControlador implements Initializable {
         }
     }
 
-    private Idioma abrirFormulario(Idioma idiomaInicial) throws IOException {
+    private List<Idioma> abrirFormulario(Idioma idiomaInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioIdioma.getRutaFxml());
         FormularioIdiomaControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (idiomaInicial != null) {
-            controladorFormulario.setIdioma(idiomaInicial);
+            controladorFormulario.setIdiomaInicial(idiomaInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioIdioma);
-        return controladorFormulario.getIdioma();
+        return controladorFormulario.getIdiomas();
     }
 
     @FXML

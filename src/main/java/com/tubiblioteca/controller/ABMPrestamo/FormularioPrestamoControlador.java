@@ -1,13 +1,13 @@
 package com.tubiblioteca.controller.ABMPrestamo;
 
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
-import com.tubiblioteca.controller.ABMLibro.FormularioLibroControlador;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
+import com.tubiblioteca.helper.Selector;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
@@ -19,17 +19,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -40,23 +35,23 @@ public class FormularioPrestamoControlador implements Initializable {
     @FXML
     private DatePicker dtpDevolucion;
     @FXML
-    private ComboBox<Miembro> cmbMiembro;
+    private SearchableComboBox<Miembro> cmbMiembro;
     @FXML
-    private ComboBox<CopiaLibro> cmbCopia;
+    private SearchableComboBox<CopiaLibro> cmbCopia;
     @FXML
     private TextField txtMulta;
-    @FXML
-    private Spinner<Integer> spinCantidad;
 
     @FXML
     private Button btnNuevo;
+    @FXML
+    private Button btnGuardar;
 
     private final ObservableList<Miembro> miembros = FXCollections.observableArrayList();
     private final ObservableList<CopiaLibro> copias = FXCollections.observableArrayList();
 
-    private final Logger log = LoggerFactory.getLogger(FormularioLibroControlador.class);
+    private final Logger log = LoggerFactory.getLogger(FormularioPrestamoControlador.class);
 
-    private Prestamo prestamo;
+    private Prestamo prestamoInicial;
     private ObservableList<Prestamo> nuevosPrestamos = FXCollections.observableArrayList();
     private PrestamoServicio servicio;
     private MiembroServicio servicioMiembro;
@@ -69,14 +64,16 @@ public class FormularioPrestamoControlador implements Initializable {
         servicioMiembro = new MiembroServicio(repositorio);
         servicioCopia = new CopiaLibroServicio(repositorio);
 
-        ControlUI.configurarSpinnerCantidad(spinCantidad);
-
+        ControlUI.configurarDatePicker(dtpPrestamo);
+        ControlUI.configurarDatePicker(dtpDevolucion);
         dtpPrestamo.setValue(LocalDate.now());
 
         inicializarCombosFormulario();
 
-        prestamo = null;
+        prestamoInicial = null;
         nuevosPrestamos.clear();
+
+        ControlUI.configurarAtajoTecladoEnter(btnGuardar);
     }
 
     private void inicializarCombosFormulario() {
@@ -94,115 +91,87 @@ public class FormularioPrestamoControlador implements Initializable {
         dtpPrestamo.setValue(null);
         cmbMiembro.setValue(null);
         cmbCopia.setValue(null);
-        spinCantidad.getValueFactory().setValue(1);
     }
 
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo prestamo auxiliar
-            Prestamo aux = new Prestamo(
-                    dtpPrestamo.getValue(),
-                    cmbMiembro.getValue(),
-                    cmbCopia.getValue());
 
-            ArrayList<String> errores = new ArrayList<>();
+            LocalDate fechaPrestamo = dtpPrestamo.getValue();
+            LocalDate fechaDevolucion = dtpDevolucion.getValue();
+            Miembro miembro = cmbMiembro.getValue();
+            CopiaLibro copia = cmbCopia.getValue();
+            String multa = txtMulta.getText().trim();
 
-            // Validamos si el miembro o la copia seleccionados existen
-            if (servicioMiembro.buscarPorId(aux.getMiembro().getDni()) == null) {
-                errores.add("El miembro de la biblioteca seleccionado no se encuentra en la base de datos.");
-            }
-
-            if (servicioCopia.buscarPorId(aux.getCopiaLibro().getId()) == null) {
-                errores.add("La copia del libro seleccionada no se encuentra en la base de datos.");
-            }
-
-            if (!errores.isEmpty()) {
-                throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
-            }
-
-            if (prestamo == null) {
-                nuevosPrestamos.add(aux);
-                servicio.insertar(aux);
-                for (int i = 1; i < spinCantidad.getValue(); i++) {
-                    aux = new Prestamo(
-                            dtpPrestamo.getValue(),
-                            cmbMiembro.getValue(),
-                            cmbCopia.getValue());
-                    nuevosPrestamos.add(aux);
-                    servicio.insertar(aux);
-                }
-                Alerta.mostrarMensaje(false, "Info", "Se han agregados el/los préstamos correctamente!");
+            if (prestamoInicial == null) {
+                nuevosPrestamos.add(servicio.validarEInsertar(fechaPrestamo, miembro, copia));
+                Alerta.mostrarMensaje(false, "Info", "Se ha agregado el préstamo correctamente!");
             } else {
-
-                LocalDate fechaPrestamo = aux.getFechaPrestamo();
-                LocalDate fechaDevolucion = dtpDevolucion.getValue();
-
-                if (fechaDevolucion != null) {
-                    if (fechaDevolucion.isBefore(fechaPrestamo)) {
-                        throw new IllegalArgumentException(
-                                "La fecha de devolución debe ser posterior o igual a la fecha de préstamo.");
-                    }
-
-                    // Actualizamos el libro existente
-                    prestamo.setFechaPrestamo(aux.getFechaPrestamo());
-                    prestamo.setFechaDevolucion(fechaDevolucion);
-                    prestamo.setMiembro(aux.getMiembro());
-                    prestamo.setCopiaLibro(aux.getCopiaLibro());
-                    prestamo.setMulta(txtMulta.getText());
-
-                    servicio.modificar(prestamo);
-                    Alerta.mostrarMensaje(false, "Info", "Se ha modificado el préstamo correctamente!");
-                } else {
-                    throw new IllegalArgumentException("Por favor, ingrese una fecha de devolución.");
-                }
+                servicio.validarYModificar(prestamoInicial, fechaPrestamo, fechaDevolucion, miembro, copia, multa);
+                Alerta.mostrarMensaje(false, "Info", "Se ha modificado el préstamo correctamente!");
+                StageManager.cerrarModal(Vista.FormularioPrestamo);
             }
-
-            StageManager.cerrarModal(Vista.FormularioPrestamo);
         } catch (Exception e) {
             log.error("Error al guardar el prestamo.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el prestamo. " + e.getMessage());
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el prestamo.\n" + e.getMessage());
         }
     }
 
     @FXML
     public void calcularMulta() {
-        LocalDate prestamo = dtpPrestamo.getValue();
-        LocalDate devolucion = dtpDevolucion.getValue();
+        LocalDate fechaPrestamo = dtpPrestamo.getValue();
+        LocalDate fechaDevolucion = dtpDevolucion.getValue();
 
-        if (prestamo != null && devolucion != null) {
-            if (devolucion.isAfter(prestamo) || devolucion.isEqual(devolucion)) {
-                LocalDate vencimiento = prestamo.plusDays(10);
-                long diasRetraso = ChronoUnit.DAYS.between(vencimiento, devolucion);
-                if (diasRetraso > 0) {
+        txtMulta.setText("0.0");
 
-                    CopiaLibro copia = cmbCopia.getValue();
+        // Verificar si las fechas de préstamo y devolución están seleccionadas
+        if (fechaPrestamo == null || fechaDevolucion == null) {
+            return;
+        }
 
-                    if (copia != null) {
-                        txtMulta.setText(String.valueOf(copia.getPrecio() * diasRetraso));
-                    }
+        // Comprobar si la devolución es después o el mismo día del préstamo
+        if (!fechaDevolucion.isBefore(fechaPrestamo)) {
+            LocalDate fechaVencimiento = fechaPrestamo.plusDays(10);
+            long diasRetraso = ChronoUnit.DAYS.between(fechaVencimiento, fechaDevolucion);
 
-                } else {
-                    txtMulta.setText("0.0");
+            // Si hay días de retraso, calcular la multa
+            if (diasRetraso > 0) {
+                CopiaLibro copia = cmbCopia.getValue();
+
+                // Verificar si la copia del libro está seleccionada
+                if (copia != null) {
+                    double multa = copia.getPrecio() * diasRetraso;
+                    txtMulta.setText(String.format("%.2f", multa).replace(',', '.'));
                 }
             }
         }
     }
 
-    private void autocompletar() {
-        dtpPrestamo.setValue(prestamo.getFechaPrestamo());
-        dtpDevolucion.setValue(prestamo.getFechaDevolucion());
-        cmbMiembro.setValue(prestamo.getMiembro());
-        cmbCopia.setValue(prestamo.getCopiaLibro());
-        txtMulta.setText(String.valueOf(prestamo.getMulta()));
+    @FXML
+    private void buscarCopia() {
     }
 
-    public void setPrestamo(Prestamo prestamo) {
+    @FXML
+    private void buscarMiembro() {
+        Miembro miembro = Selector.seleccionarMiembro(cmbMiembro.getValue());
+        if (miembro != null) {
+            cmbMiembro.setValue(miembro);
+        }
+    }
+
+    private void autocompletar() {
+        dtpPrestamo.setValue(prestamoInicial.getFechaPrestamo());
+        dtpDevolucion.setValue(prestamoInicial.getFechaDevolucion());
+        cmbMiembro.setValue(prestamoInicial.getMiembro());
+        cmbCopia.setValue(prestamoInicial.getCopiaLibro());
+        txtMulta.setText(String.valueOf(prestamoInicial.getMulta()));
+    }
+
+    public void setPrestamoInicial(Prestamo prestamo) {
         if (prestamo != null) {
-            this.prestamo = prestamo;
+            this.prestamoInicial = prestamo;
             autocompletar();
             dtpDevolucion.setDisable(false);
-            spinCantidad.setDisable(true);
             txtMulta.setDisable(false);
             btnNuevo.setDisable(true);
         }

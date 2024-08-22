@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
@@ -40,7 +41,7 @@ public class SelectorMiembroControlador implements Initializable {
     @FXML
     private TextField txtNombre;
     @FXML
-    private ComboBox<TipoMiembro> cmbTipo;
+    private SearchableComboBox<TipoMiembro> cmbTipo;
 
     // Listas utilizadas
     private final ObservableList<Miembro> miembros = FXCollections.observableArrayList();
@@ -66,9 +67,8 @@ public class SelectorMiembroControlador implements Initializable {
 
             colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
             colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-
             ControlUI.configurarCeldaNombreApellido(colNombre);
+            colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
             miembros.clear();
             filtrados.clear();

@@ -19,8 +19,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
 
-
-  <VBox spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMCategoria.ListaCategoriaControlador">
+<VBox spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMCategoria.ListaCategoriaControlador">
       <children>
           <HBox spacing="20.0" styleClass="titulo-principal">
               <children>
@@ -42,6 +41,7 @@
                   <RowConstraints vgrow="SOMETIMES" />
               </rowConstraints>
               <children>
+            <Label text="Nombre de la Categoría:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <TextField fx:id="txtNombre" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                       <graphic>
@@ -56,12 +56,11 @@
                           <String fx:value="limpiar" />
                       </styleClass>
                   </Button>
-            <Label text="Nombre de la categoría:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
               </children>
           </GridPane>
           <TableView fx:id="tblCategorias" editable="true" styleClass="tabla-personalizada" tableMenuButtonVisible="true">
               <columns>
-                  <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre de la categoría" />
+                  <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre de la Categoría" />
               </columns>
               <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

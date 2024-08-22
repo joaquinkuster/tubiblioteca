@@ -32,8 +32,11 @@ public enum Vista {
     FormularioPrestamo("Formulario de Préstamo", "ABMPrestamo/FormularioPrestamo"),
 
     ListaCopiasLibros("Lista de Copias de Libros", "ABMCopiaLibro/ListaCopiasLibros"),
-    FormularioCopiaLibro("Formulario de Copia de Libro", "ABMCopiaLibro/FormularioCopiaLibro"),
-    SelectorCopiaLibro("Selector de Copia de Libro", "ABMCopiaLibro/SelectorCopiaLibro");
+    FormularioCopiaLibro("Formulario de Copia del Libro", "ABMCopiaLibro/FormularioCopiaLibro"),
+    SelectorCopiaLibro("Selector de Copia del Libro", "ABMCopiaLibro/SelectorCopiaLibro"),
+
+    ListaRacks("Lista de Racks", "ABMRack/ListaRacks"),
+    FormularioRack("Formulario de Rack", "ABMRack/FormularioRack");
 
     // Devolvemos la clave
     private final String titulo;

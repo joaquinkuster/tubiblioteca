@@ -35,16 +35,16 @@
                   <RowConstraints vgrow="SOMETIMES" />
               </rowConstraints>
               <children>
-                  <TextField fx:id="txtNombre" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
                   <Label styleClass="label-formulario" text="Nombre de la categoría:" />
+                  <TextField fx:id="txtNombre" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" />
               </children>
           </GridPane>
           <HBox spacing="10.0" styleClass="acciones-contenedor">
               <children>
-                  <Button mnemonicParsing="false" onAction="#guardar" styleClass="btn-personalizado" text="Guardar" GridPane.halignment="LEFT" />
+                  <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardar" styleClass="btn-personalizado" text="Guardar" GridPane.halignment="LEFT" />
                   <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#nuevo" text="Nuevo">
                       <graphic>
-                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                               <image>
                                   <Image url="@../../images/icons/nuevo.png" />
                               </image>

@@ -17,9 +17,9 @@ import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.service.Editorial.EditorialServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaEditorialesControlador implements Initializable {
@@ -35,11 +35,11 @@ public class ListaEditorialesControlador implements Initializable {
     // Filtros adicionales
     @FXML
     private TextField txtNombre;
-    
+
     // Listas utilizadas
     private final ObservableList<Editorial> editoriales = FXCollections.observableArrayList();
     private final ObservableList<Editorial> filtrados = FXCollections.observableArrayList();
-    
+
     // Logger para gestionar información
     private final Logger log = LoggerFactory.getLogger(ListaEditorialesControlador.class);
 
@@ -75,7 +75,7 @@ public class ListaEditorialesControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una editorial!");
         } else {
             try {
-                editorial = abrirFormulario(editorial);
+                abrirFormulario(editorial);
                 if (editorial != null && quitarFiltro(editorial)) {
                     filtrados.remove(editorial);
                 }
@@ -89,13 +89,15 @@ public class ListaEditorialesControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Editorial editorial = abrirFormulario(null);
-            if (editorial != null) {
-                editoriales.add(editorial);
-                if (aplicarFiltro(editorial)) {
-                    filtrados.add(editorial);
-                    tblEditoriales.refresh();
+            List<Editorial> nuevasEditoriales = abrirFormulario(null);
+            if (nuevasEditoriales != null) {
+                for (Editorial editorial : nuevasEditoriales) {
+                    editoriales.add(editorial);
+                    if (aplicarFiltro(editorial)) {
+                        filtrados.add(editorial);
+                    }
                 }
+                tblEditoriales.refresh();
             }
         } catch (Exception e) {
             log.error("Error al agregar una editorial: ", e);
@@ -123,17 +125,17 @@ public class ListaEditorialesControlador implements Initializable {
         }
     }
 
-    private Editorial abrirFormulario(Editorial editorialInicial) throws IOException {
+    private List<Editorial> abrirFormulario(Editorial editorialInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioEditorial.getRutaFxml());
         FormularioEditorialControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (editorialInicial != null) {
-            controladorFormulario.setEditorial(editorialInicial);
+            controladorFormulario.setEditorialInicial(editorialInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioEditorial);
-        return controladorFormulario.getEditorial();
+        return controladorFormulario.getEditoriales();
     }
 
     @FXML

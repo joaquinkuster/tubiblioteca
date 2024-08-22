@@ -2,19 +2,21 @@ package com.tubiblioteca.controller.ABMCategoria;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.service.Categoria.CategoriaServicio;
 import com.tubiblioteca.view.Vista;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormularioCategoriaControlador implements Initializable {
@@ -23,16 +25,21 @@ public class FormularioCategoriaControlador implements Initializable {
     private TextField txtNombre;
     @FXML
     private Button btnNuevo;
+    @FXML
+    private Button btnGuardar;
 
     private final Logger log = LoggerFactory.getLogger(FormularioCategoriaControlador.class);
 
-    private Categoria categoria;
+    private Categoria categoriaInicial;
+    private ObservableList<Categoria> nuevasCategorias = FXCollections.observableArrayList();
     private CategoriaServicio servicio;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         servicio = new CategoriaServicio(AppConfig.getRepositorio());
-        categoria = null;
+        categoriaInicial = null;
+        nuevasCategorias.clear();
+        ControlUI.configurarAtajoTecladoEnter(btnGuardar);
     }
 
     @FXML
@@ -43,40 +50,36 @@ public class FormularioCategoriaControlador implements Initializable {
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo autor auxiliar
-            Categoria aux = new Categoria(txtNombre.getText().trim());
+ 
+            String nombre = txtNombre.getText().trim();
 
-            if (categoria == null) {
-                categoria = aux;
-                servicio.insertar(aux);
+            if (categoriaInicial == null) {
+                nuevasCategorias.add(servicio.validarEInsertar(nombre));
                 Alerta.mostrarMensaje(false, "Info", "Se ha agregado la categoria correctamente!");
             } else {
-                // Actualizamos la categoria existente
-                categoria.setNombre(aux.getNombre());
-                servicio.modificar(categoria);
+                servicio.validarYModificar(categoriaInicial, nombre);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado la categoria correctamente!");
+                StageManager.cerrarModal(Vista.FormularioCategoria);
             }
-
-            StageManager.cerrarModal(Vista.FormularioCategoria);
         } catch (Exception e) {
             log.error("Error al guardar la categoria.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar la categoria. " + e.getMessage());
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar la categoria. \n" + e.getMessage());
         }
     }
 
     private void autocompletar() {
-        txtNombre.setText(categoria.getNombre());
+        txtNombre.setText(categoriaInicial.getNombre());
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoriaInicial(Categoria categoria) {
+        this.categoriaInicial = categoria;
         if (categoria != null) {
             autocompletar();
             btnNuevo.setDisable(true);
         }
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public List<Categoria> getCategorias() {
+        return nuevasCategorias;
     }
 }

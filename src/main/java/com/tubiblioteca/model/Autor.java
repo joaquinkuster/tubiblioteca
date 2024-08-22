@@ -2,6 +2,7 @@ package com.tubiblioteca.model;
 
 import java.util.List;
 
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
 
 import jakarta.persistence.Column;
@@ -69,7 +70,8 @@ public class Autor {
         this.baja = true;
     }
 
+    @Override
     public String toString() {
-        return nombre;
+        return ControlUI.limitar(nombre, 15);
     }
 }

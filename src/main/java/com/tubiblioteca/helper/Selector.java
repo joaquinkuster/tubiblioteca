@@ -2,7 +2,6 @@ package com.tubiblioteca.helper;
 
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.controller.ABMMiembro.SelectorMiembroControlador;
-import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.view.Vista;
 

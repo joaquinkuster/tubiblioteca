@@ -2,8 +2,9 @@ package com.tubiblioteca.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.Fecha;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ public class Prestamo {
     @Column(name = "fecha_prestamo", nullable = false)
     private LocalDate fechaPrestamo;
     @Column(name = "fecha_devolucion", nullable = true)
-    private LocalDate fechaDevolucion;
+    private LocalDate fechaDevolucion = null;
     @Column(name = "multa", nullable = false)
     private double multa = 0;
     @Column(name = "baja", nullable = false)
@@ -43,11 +44,15 @@ public class Prestamo {
 
     public Prestamo(LocalDate fechaPrestamo, Miembro miembro, CopiaLibro copiaLibro) {
 
-        ArrayList<String> errores = new ArrayList<>();
+        List<String> errores = new ArrayList<>();
 
-        // Verificamos que la fecha de prestamo no este vacia
+        // Verificamos que la fecha de prestamo no este vacia y que no sea anterior al
+        // día de hoy
         if (fechaPrestamo == null) {
-            errores.add("Por favor, ingrese una fecha de reunión.");
+            errores.add("Por favor, ingrese una fecha de préstamo.");
+        } else if (fechaPrestamo.isBefore(LocalDate.now())) {
+            errores.add("Debe seleccionar una fecha de préstamo que sea igual o posterior al dia de hoy "
+                    + Fecha.fechaHoy() + ".");
         }
 
         // Verificamos que haya seleccionado un miembro
@@ -57,16 +62,21 @@ public class Prestamo {
 
         // Verificamos que haya seleccionado una copia
         if (copiaLibro == null) {
-            errores.add("Por favor, seleccione una copia de libro");
+            errores.add("Por favor, seleccione una copia de libro.");
         }
 
         // Verificamos si hay errores
         if (!errores.isEmpty()) {
-            throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
+            throw new IllegalArgumentException(String.join("\n", errores));
         }
+
         this.fechaPrestamo = fechaPrestamo;
         this.miembro = miembro;
         this.copiaLibro = copiaLibro;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public LocalDate getFechaPrestamo() {
@@ -74,6 +84,13 @@ public class Prestamo {
     }
 
     public void setFechaPrestamo(LocalDate fechaPrestamo) {
+        if (fechaPrestamo == null) {
+            throw new IllegalArgumentException("Por favor, ingrese una fecha de préstamo.");
+        } else if (fechaPrestamo.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException(
+                    "Debe seleccionar una fecha de préstamo que sea igual o posterior al dia de hoy " + Fecha.fechaHoy()
+                            + ".");
+        }
         this.fechaPrestamo = fechaPrestamo;
     }
 
@@ -82,6 +99,17 @@ public class Prestamo {
     }
 
     public void setFechaDevolucion(LocalDate fechaDevolucion) {
+        if (fechaDevolucion != null) {
+            if (fechaDevolucion.isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException(
+                        "Debe seleccionar una fecha de devolución que sea igual o anterior al dia de hoy "
+                                + Fecha.fechaHoy() + ".");
+            } else if (this.fechaPrestamo != null) {
+                if (fechaDevolucion.isBefore(fechaPrestamo)) {
+                    throw new IllegalArgumentException("La fecha de devolución debe ser posterior o igual a la fecha de préstamo.");
+                }
+            }
+        }
         this.fechaDevolucion = fechaDevolucion;
     }
 
@@ -111,6 +139,9 @@ public class Prestamo {
     }
 
     public void setMiembro(Miembro miembro) {
+        if (miembro == null) {
+            throw new IllegalArgumentException("Por favor, seleccione un miembro de la biblioteca.");
+        }
         this.miembro = miembro;
     }
 
@@ -119,6 +150,9 @@ public class Prestamo {
     }
 
     public void setCopiaLibro(CopiaLibro copiaLibro) {
+        if (miembro == null) {
+            throw new IllegalArgumentException("Por favor, seleccione un miembro de la biblioteca.");
+        }
         this.copiaLibro = copiaLibro;
     }
 }

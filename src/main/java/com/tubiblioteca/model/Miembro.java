@@ -1,13 +1,16 @@
 package com.tubiblioteca.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,6 +30,8 @@ public class Miembro {
     private String clave;
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
+    @OneToMany(mappedBy = "miembro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Prestamo> prestamos;
 
     public Miembro(){
         
@@ -34,7 +39,7 @@ public class Miembro {
 
     public Miembro(String dni, String nombre, String apellido, TipoMiembro tipo, String clave) {
 
-        ArrayList<String> errores = new ArrayList<>();
+        List<String> errores = new ArrayList<>();
 
         // Verificamos que el DNI no este vacio, que solo contenga digitos        
         if (dni.isEmpty()) {
@@ -43,14 +48,14 @@ public class Miembro {
             errores.add("El DNI debe contener 8 dígitos o una letra mayúscula M o F seguida de 7 dígitos numéricos.");
         } 
 
-        // Verificamos que el nomnbre no este vacio y que no supere los 50 caracteres
+        // Verificamos que el nombre no este vacio y que no supere los 50 caracteres
         if (nombre.isEmpty()) {
             errores.add("Por favor, ingrese un nombre.");
         } else if (nombre.length() > 50) {
             errores.add("El nombre no puede tener más de 50 caracteres.");
         } else if (Validacion.validarNombre(nombre)) {
             errores.add("El nombre debe contener solo letras y espacios.");
-        }
+        } 
 
         // Verificamos que el apellido no este vacio y que no supere los 50 caracteres
         if (apellido.isEmpty()) {
@@ -59,39 +64,39 @@ public class Miembro {
             errores.add("El apellido no puede tener más de 50 caracteres.");
         } else if (Validacion.validarNombre(apellido)) {
             errores.add("El apellido debe contener solo letras y espacios.");
-        }
+        } 
 
         // Verificamos que haya seleccionado un tipo
         if (tipo == null) {
             errores.add("Por favor, seleccione un tipo.");
         } else if (TipoMiembro.valueOf(tipo.toString()) == null) {
                 errores.add("El tipo seleccionado no se encuentra registrado en el sistema.");
-        }
+        } 
 
+        // Verificamos que la clave no este vacia, no supere los 50 caracteres y cumpla con los requisitos
         if (clave.isEmpty()) {
             errores.add("Por favor, ingrese un contraseña.");
         } else if (clave.length() > 50) {
             errores.add("La contraseña no puede tener más de 50 caracteres.");
         } else if (Validacion.validarContrasena(clave)) {
             errores.add("Por favor, introduce una contraseña válida que cumpla con los siguientes requisitos:\n" +
-            "  • Al menos 6 caracteres de longitud.\n" +
-            "  • Al menos una letra mayúscula.\n" +
-            "  • Al menos una letra minúscula.\n" +
-            "  • Al menos un dígito numérico.\n" +
-            "  • Al menos un carácter especial [@#$%^&+=!].");
-        }
+            "  - Al menos 6 caracteres de longitud.\n" +
+            "  - Al menos una letra mayúscula.\n" +
+            "  - Al menos una letra minúscula.\n" +
+            "  - Al menos un dígito numérico.\n" +
+            "  - Al menos un carácter especial [@#$%^&+=!].");
+        } 
 
         // Verificamos si hay errores
         if (!errores.isEmpty()) {
-            throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
+            throw new IllegalArgumentException(String.join("\n", errores));
         }
 
         this.dni = dni;
         this.nombre = nombre;
-        this.apellido = apellido;
+        this.apellido = apellido; 
         this.tipo = tipo;
         this.clave = clave;
-
     }
 
     public String getDni() {
@@ -178,7 +183,11 @@ public class Miembro {
         this.baja = true;
     }
 
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
     public String toString() {
-        return String.format("%s %s", nombre, apellido);
+        return ControlUI.limitar(String.format("%s %s", nombre, apellido), 15);
     }
 }

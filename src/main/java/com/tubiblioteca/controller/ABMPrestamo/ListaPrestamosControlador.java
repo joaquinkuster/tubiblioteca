@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
-
 import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,6 @@ import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Selector;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -94,9 +92,6 @@ public class ListaPrestamosControlador implements Initializable {
             colCopia.setCellValueFactory(new PropertyValueFactory<>("copiaLibro"));
             colMulta.setCellValueFactory(new PropertyValueFactory<>("multa"));
 
-            ControlUI.configurarCeldaFecha(colPrestamo);
-            ControlUI.configurarCeldaFecha(colDevolucion);
-
             prestamos.clear();
             filtrados.clear();
             prestamos.addAll(servicio.buscarTodos());
@@ -115,6 +110,11 @@ public class ListaPrestamosControlador implements Initializable {
         copias.clear();
         copias.addAll(servicioCopia.buscarTodos());
         cmbCopia.setItems(copias);
+
+        ControlUI.configurarCeldaFecha(colPrestamo);
+        ControlUI.configurarCeldaFecha(colDevolucion);
+        ControlUI.configurarDatePicker(dtpPrestamo);
+        ControlUI.configurarDatePicker(dtpDevolucion);
     }
 
     @FXML
@@ -131,7 +131,7 @@ public class ListaPrestamosControlador implements Initializable {
                 }
                 tblPrestamos.refresh();
             } catch (Exception e) {
-                log.error("Error al modificar el prestamo: ", e);
+                log.error("Error al modificar el préstamo: ", e);
             }
         }
     }
@@ -139,19 +139,18 @@ public class ListaPrestamosControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            List<Prestamo> prestamos = abrirFormulario(null);
-            if (prestamos != null) {
-                for (Prestamo prestamo : prestamos) {
-                    if (prestamo != null) {
-                        if (aplicarFiltro(prestamo)) {
-                            filtrados.add(prestamo);
-                            tblPrestamos.refresh();
-                        }
+            List<Prestamo> nuevosPrestamos = abrirFormulario(null);
+            if (nuevosPrestamos != null) {
+                for (Prestamo prestamo : nuevosPrestamos) {
+                    prestamos.add(prestamo);
+                    if (aplicarFiltro(prestamo)) {
+                        filtrados.add(prestamo);
                     }
                 }
+                tblPrestamos.refresh();
             }
         } catch (Exception e) {
-            log.error("Error al agregar un prestamo: ", e);
+            log.error("Error al agregar un préstamo: ", e);
         }
     }
 
@@ -169,10 +168,24 @@ public class ListaPrestamosControlador implements Initializable {
                 Alerta.mostrarMensaje(false, "Info", "Préstamo eliminado correctamente!");
                 tblPrestamos.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el miembro: ", e);
+                log.error("Error al eliminar el préstamo: ", e);
                 Alerta.mostrarMensaje(true, "Error",
                         "No se pudo eliminar el préstamo. Puede estar vinculado a otros registros.");
             }
+        }
+    }
+
+    @FXML
+    private void confirmarDevolucion() {
+        Prestamo prestamo = tblPrestamos.getSelectionModel().getSelectedItem();
+        try {
+            servicio.confirmarDevolucion(prestamo);
+            Alerta.mostrarMensaje(false, "Info", "La devolución del préstamo se ha registrado correctamente!");
+            tblPrestamos.refresh();
+        } catch (Exception e) {
+            log.error("Error al confirmar la devolución del préstamo.");
+            Alerta.mostrarMensaje(true, "Error",
+                    "No se pudo confirmar la devolución del prestamo.\n" + e.getMessage());
         }
     }
 
@@ -182,7 +195,7 @@ public class ListaPrestamosControlador implements Initializable {
         Parent vistaFormulario = formulario.getValue();
 
         if (prestamoInicial != null) {
-            controladorFormulario.setPrestamo(prestamoInicial);
+            controladorFormulario.setPrestamoInicial(prestamoInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioPrestamo);
@@ -205,8 +218,10 @@ public class ListaPrestamosControlador implements Initializable {
         Miembro miembro = cmbMiembro.getValue();
         CopiaLibro copia = cmbCopia.getValue();
         return (fechaPrestamo == null || prestamo.getFechaPrestamo().equals(fechaPrestamo))
-                && (fechaDevolucion == null || prestamo.getFechaDevolucion().equals(fechaDevolucion))
-                && (multa == null || String.valueOf(prestamo.getMulta()).toLowerCase().contains(multa))
+                && (fechaDevolucion == null
+                        || (prestamo.getFechaDevolucion() != null
+                                && prestamo.getFechaDevolucion().equals(fechaDevolucion)))
+                && (multa == null || String.valueOf(prestamo.getMulta()).toLowerCase().startsWith(multa))
                 && (miembro == null || miembro.equals(prestamo.getMiembro()))
                 && (copia == null || copia.equals(prestamo.getCopiaLibro()));
     }
@@ -218,8 +233,10 @@ public class ListaPrestamosControlador implements Initializable {
         Miembro miembro = cmbMiembro.getValue();
         CopiaLibro copia = cmbCopia.getValue();
         return (fechaPrestamo != null && !prestamo.getFechaPrestamo().equals(fechaPrestamo))
-                || (fechaDevolucion != null && !prestamo.getFechaDevolucion().equals(fechaDevolucion))
-                || (multa != null && !String.valueOf(prestamo.getMulta()).toLowerCase().contains(multa))
+                || (fechaDevolucion != null
+                        && (prestamo.getFechaDevolucion() == null
+                                || !prestamo.getFechaDevolucion().equals(fechaDevolucion)))
+                || (multa != null && !String.valueOf(prestamo.getMulta()).toLowerCase().startsWith(multa))
                 || (miembro != null && !miembro.equals(prestamo.getMiembro()))
                 || (copia != null && !copia.equals(prestamo.getCopiaLibro()));
     }
@@ -235,11 +252,11 @@ public class ListaPrestamosControlador implements Initializable {
     }
 
     @FXML
-    private void seleccionarCopia() {
+    private void buscarCopia() {
     }
 
     @FXML
-    private void seleccionarMiembro() {
+    private void buscarMiembro() {
         Miembro miembro = Selector.seleccionarMiembro(cmbMiembro.getValue());
         if (miembro != null) {
             cmbMiembro.setValue(miembro);

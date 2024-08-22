@@ -16,9 +16,9 @@ import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.service.Autor.AutorServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaAutoresControlador implements Initializable {
@@ -34,11 +34,11 @@ public class ListaAutoresControlador implements Initializable {
     // Filtros adicionales
     @FXML
     private TextField txtNombre;
-    
+
     // Listas utilizadas
     private final ObservableList<Autor> autores = FXCollections.observableArrayList();
     private final ObservableList<Autor> filtrados = FXCollections.observableArrayList();
-    
+
     // Logger para gestionar información
     private final Logger log = LoggerFactory.getLogger(ListaAutoresControlador.class);
 
@@ -74,7 +74,7 @@ public class ListaAutoresControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un autor!");
         } else {
             try {
-                autor = abrirFormulario(autor);
+                abrirFormulario(autor);
                 if (autor != null && quitarFiltro(autor)) {
                     filtrados.remove(autor);
                 }
@@ -88,14 +88,16 @@ public class ListaAutoresControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Autor autor = abrirFormulario(null);
-            if (autor != null) {
-                autores.add(autor);
-                if (aplicarFiltro(autor)) {
-                    filtrados.add(autor);
-                    tblAutores.refresh();
+            List<Autor> nuevosAutores = abrirFormulario(null);
+            if (nuevosAutores != null) {
+                for (Autor autor : nuevosAutores) {
+                    autores.add(autor);
+                    if (aplicarFiltro(autor)) {
+                        filtrados.add(autor);
+                    }
                 }
             }
+            tblAutores.refresh();
         } catch (Exception e) {
             log.error("Error al agregar un autor: ", e);
         }
@@ -122,17 +124,17 @@ public class ListaAutoresControlador implements Initializable {
         }
     }
 
-    private Autor abrirFormulario(Autor autorInicial) throws IOException {
+    private List<Autor> abrirFormulario(Autor autorInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioAutor.getRutaFxml());
         FormularioAutorControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (autorInicial != null) {
-            controladorFormulario.setAutor(autorInicial);
+            controladorFormulario.setAutorInicial(autorInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioAutor);
-        return controladorFormulario.getAutor();
+        return controladorFormulario.getAutores();
     }
 
     @FXML

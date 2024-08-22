@@ -1,15 +1,20 @@
 package com.tubiblioteca.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.tubiblioteca.App;
 import com.tubiblioteca.config.StageManager;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.view.Vista;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +26,8 @@ public class LoginControlador implements Initializable {
     private TextField txtDni;
     @FXML
     private PasswordField txtContrasena;
+    @FXML
+    private Button btnEntrar;
 
     // CheckBox para recordar los credenciales
     @FXML
@@ -32,6 +39,7 @@ public class LoginControlador implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         txtDni.requestFocus();
+        ControlUI.configurarAtajoTecladoEnter(btnEntrar);
     }
 
     @FXML
@@ -53,7 +61,8 @@ public class LoginControlador implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setTitle("Info");
-        alert.setContentText("Por favor, comunícate con el personal administrativo para obtener ayuda y recuperar el acceso a tu cuenta.");
+        alert.setContentText(
+                "Por favor, comunícate con el personal administrativo para obtener ayuda y recuperar el acceso a tu cuenta.");
         alert.showAndWait();
     }
 }

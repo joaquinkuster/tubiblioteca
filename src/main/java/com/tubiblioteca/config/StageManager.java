@@ -2,7 +2,6 @@ package com.tubiblioteca.config;
 
 import com.tubiblioteca.App;
 import com.tubiblioteca.view.Vista;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,12 +11,10 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 public class StageManager {
 

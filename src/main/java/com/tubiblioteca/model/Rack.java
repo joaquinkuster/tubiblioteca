@@ -1,5 +1,7 @@
 package com.tubiblioteca.model;
 
+import com.tubiblioteca.helper.ControlUI;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,46 @@ public class Rack {
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
 
+    public Rack(){
+
+    }
+
+    public Rack (String descripcion) {
+        if (descripcion.isEmpty()) {
+            throw new IllegalArgumentException("Por favor, ingrese una descripción del rack.");
+        } else if (descripcion.length() > 500) {
+            throw new IllegalArgumentException("La descripción del rack no puede tener más de 500 caracteres.");
+        } 
+        this.descripcion = descripcion;
+    }
+
     public int getId(){
         return id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        if (descripcion.isEmpty()) {
+            throw new IllegalArgumentException("Por favor, ingrese una descripción del rack.");
+        } else if (descripcion.length() > 500) {
+            throw new IllegalArgumentException("La descripción del rack no puede tener más de 500 caracteres.");
+        } 
+        this.descripcion = descripcion;
+    }
+
+
+    public boolean isBaja() {
+        return baja;
+    }
+
+    public void setBaja() {
+        this.baja = true;
+    }
+
+    public String toString() {
+        return ControlUI.limitar(descripcion, 15);
     }
 }

@@ -74,15 +74,15 @@ public class MenuControlador implements Initializable {
     private void addListeners() {
         // Establecemos los handlers correspondientes a cada boton
         btnMiembros.setOnAction(event -> redireccionarMenu(Vista.ListaMiembros, (Button) event.getSource()));
-        btnAuditoria.setOnAction(null);
-        btnCategorias.setOnAction(event -> redireccionarMenu(Vista.ListaCategorias, (Button) event.getSource()));
-        btnCopiaLibros.setOnAction(null);
-        btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
-        btnIdiomas.setOnAction(event -> redireccionarMenu(Vista.ListaIdiomas, (Button) event.getSource()));
-        btnLibros.setOnAction(event -> redireccionarMenu(Vista.ListaLibros, (Button) event.getSource()));
         btnPrestamos.setOnAction(event -> redireccionarMenu(Vista.ListaPrestamos, (Button) event.getSource()));
-        btnRacks.setOnAction(null);
+        btnLibros.setOnAction(event -> redireccionarMenu(Vista.ListaLibros, (Button) event.getSource()));
+        btnCopiaLibros.setOnAction(event -> redireccionarMenu(Vista.ListaCopiasLibros, (Button) event.getSource()));
+        btnRacks.setOnAction(event -> redireccionarMenu(Vista.ListaRacks, (Button) event.getSource()));
+        btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
         btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));
+        btnCategorias.setOnAction(event -> redireccionarMenu(Vista.ListaCategorias, (Button) event.getSource()));
+        btnIdiomas.setOnAction(event -> redireccionarMenu(Vista.ListaIdiomas, (Button) event.getSource()));
+        btnAuditoria.setOnAction(null);
     }
 
     // Meotodo para cambiar el contenido central del main

@@ -3,9 +3,8 @@ package com.tubiblioteca.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -78,13 +77,13 @@ public class Libro {
         }
 
         // Verificamos que haya seleccionado un o mas autores
-        if (autores == null) {
+        if (autores.isEmpty()) {
             errores.add("Por favor, seleccione uno o más autores.");
         }
 
         // Verificamos si hay errores
         if (!errores.isEmpty()) {
-            throw new IllegalArgumentException(Alerta.convertirCadenaErrores(errores));
+            throw new IllegalArgumentException(String.join("\n", errores));
         }
 
         this.isbn = Long.parseLong(isbn);
@@ -100,7 +99,6 @@ public class Libro {
     }
 
     public void setIsbn(String isbn) {
-        // Verificamos que el ISBN no este vacio, que solo contenga digitos        
         if (isbn.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese un DNI.");
         } else if (Validacion.validarIsbn(String.valueOf(isbn))) {
@@ -114,7 +112,6 @@ public class Libro {
     }
 
     public void setTitulo(String titulo) {
-        // Verificamos que el titulo no este vacio y que no supere los 50 caracteres
         if (titulo.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese un título.");
         } else if (titulo.length() > 50) {
@@ -136,7 +133,6 @@ public class Libro {
     }
 
     public void setCategoria(Categoria categoria) {
-        // Verificamos que haya seleccionado una categoria
         if (categoria == null) {
             throw new IllegalArgumentException("Por favor, seleccione una categoría.");
         }
@@ -148,7 +144,6 @@ public class Libro {
     }
 
     public void setEditorial(Editorial editorial) {
-        // Verificamos que haya seleccionado una editorial
         if (editorial == null) {
             throw new IllegalArgumentException("Por favor, seleccione una editorial.");
         }
@@ -160,7 +155,6 @@ public class Libro {
     }
 
     public void setIdioma(Idioma idioma) {
-        // Verificamos que haya seleccionado un idioma
         if (idioma == null) {
             throw new IllegalArgumentException("Por favor, seleccione un idioma.");
         }
@@ -172,14 +166,13 @@ public class Libro {
     }
 
     public void setAutores(List<Autor> autores) {
-        // Verificamos que haya seleccionado un o mas autores
-        if (autores == null) {
+        if (autores.isEmpty()) {
             throw new IllegalArgumentException("Por favor, seleccione uno o más autores.");
         }
         this.autores = autores;
     }
 
     public String toString() {
-        return titulo;
+        return ControlUI.limitar(titulo, 15);
     }
 }

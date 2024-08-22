@@ -42,6 +42,7 @@
                   <RowConstraints vgrow="SOMETIMES" />
               </rowConstraints>
               <children>
+            <Label text="Nombre del Autor:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <TextField fx:id="txtNombre" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                       <graphic>
@@ -56,12 +57,11 @@
                           <String fx:value="limpiar" />
                       </styleClass>
                   </Button>
-            <Label text="Nombre del autor:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
               </children>
           </GridPane>
           <TableView fx:id="tblAutores" editable="true" styleClass="tabla-personalizada" tableMenuButtonVisible="true">
               <columns>
-                  <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre del autor" />
+                  <TableColumn fx:id="colNombre" prefWidth="200.0" text="Nombre del Autor" />
               </columns>
               <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

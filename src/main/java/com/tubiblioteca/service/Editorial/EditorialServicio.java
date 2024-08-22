@@ -11,6 +11,42 @@ public class EditorialServicio extends CrudServicio<Editorial> {
     }
 
     @Override
+    public Editorial validarEInsertar(Object... datos) {
+        if (datos.length != 1) {
+            throw new IllegalArgumentException("Número incorrecto de parámetros.");
+        }
+
+        String nombre = (String) datos[0];
+
+        try {
+            Editorial nuevaEditorial = new Editorial(nombre);
+            insertar(nuevaEditorial);
+            return nuevaEditorial;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void validarYModificar(Editorial editorial, Object... datos) {
+        if (datos.length != 1) {
+            throw new IllegalArgumentException("Número incorrecto de parámetros.");
+        }
+
+        String nombre = (String) datos[0];
+        Editorial aux = new Editorial();
+
+        try {
+            aux.setNombre(nombre);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
+        editorial.setNombre(nombre);
+        modificar(editorial);
+    }
+
+    @Override
     protected boolean esInactivo(Editorial editorial) {
         return editorial.isBaja();
     }
@@ -18,5 +54,11 @@ public class EditorialServicio extends CrudServicio<Editorial> {
     @Override
     protected void marcarComoInactivo(Editorial editorial) {
         editorial.setBaja();
+    }
+
+    @Override
+    public boolean existe(Editorial editorial) {
+        return buscarPorId(editorial.getId()) != null 
+        && !editorial.isBaja();
     }
 }

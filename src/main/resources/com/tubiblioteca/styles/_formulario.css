@@ -49,7 +49,7 @@
 .combo-personalizado .arrow-button:pressed {
     -fx-background-color: -principal-oscuro-2;
 }
-.combo-personalizado:hover, .combo-personalizado:selected{
+.combo-personalizado:hover, .combo-personalizado:selected, .combo-personalizado:focused{
     -fx-border-color: -principal-oscuro-3;
 }
 .combo-personalizado .list-view .list-cell:hover, .combo-personalizado .list-view .list-cell:selected {
@@ -64,6 +64,9 @@
     -fx-border-color: lightgray;
     -fx-border-width: 1;
     -fx-transition: border-color 0.3s;
+}
+.datepicker-personalizado:hover, .datepicker-personalizado:focused{
+    -fx-border-color: -principal-oscuro-3;
 }
 .datepicker-personalizado .text-field{
     -fx-background-color: transparent;

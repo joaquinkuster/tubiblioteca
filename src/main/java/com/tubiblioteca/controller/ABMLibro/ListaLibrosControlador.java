@@ -1,5 +1,6 @@
 package com.tubiblioteca.controller.ABMLibro;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -9,8 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Pair;
-
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
@@ -27,10 +28,13 @@ import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ListaLibrosControlador implements Initializable {
 
@@ -40,7 +44,7 @@ public class ListaLibrosControlador implements Initializable {
     @FXML
     private TableColumn<Libro, String> colTitulo;
     @FXML
-    private TableColumn<Libro, List<Autor>> colAutores;
+    private TableColumn<Libro, String> colAutores;
     @FXML
     private TableColumn<Libro, Categoria> colCategoria;
     @FXML
@@ -60,11 +64,11 @@ public class ListaLibrosControlador implements Initializable {
     @FXML
     private CheckComboBox<Autor> cmbAutores;
     @FXML
-    private ComboBox<Categoria> cmbCategoria;
+    private SearchableComboBox<Categoria> cmbCategoria;
     @FXML
-    private ComboBox<Editorial> cmbEditorial;
+    private SearchableComboBox<Editorial> cmbEditorial;
     @FXML
-    private ComboBox<Idioma> cmbIdioma;
+    private SearchableComboBox<Idioma> cmbIdioma;
 
     // Listas utilizadas
     private final ObservableList<Libro> libros = FXCollections.observableArrayList();
@@ -101,7 +105,12 @@ public class ListaLibrosControlador implements Initializable {
 
             colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
             colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-            colAutores.setCellValueFactory(new PropertyValueFactory<>("autores"));
+            colAutores.setCellValueFactory(cellData -> {
+                Libro libro = cellData.getValue();
+                ObservableList<Autor> autores = FXCollections.observableArrayList(libro.getAutores());
+                return new SimpleStringProperty(
+                        autores.stream().map(Autor::toString).collect(Collectors.joining(", ")));
+            });
             colCategoria.setCellValueFactory(new PropertyValueFactory<>("categoria"));
             colEditorial.setCellValueFactory(new PropertyValueFactory<>("editorial"));
             colIdioma.setCellValueFactory(new PropertyValueFactory<>("idioma"));
@@ -120,6 +129,7 @@ public class ListaLibrosControlador implements Initializable {
         autores.clear();
         autores.addAll(servicioAutor.buscarTodos());
         cmbAutores.getItems().addAll(autores);
+        configurarListenerComboAutores();
 
         editoriales.clear();
         editoriales.addAll(servicioEditorial.buscarTodos());
@@ -132,18 +142,20 @@ public class ListaLibrosControlador implements Initializable {
         idiomas.clear();
         idiomas.addAll(servicioIdioma.buscarTodos());
         cmbIdioma.setItems(idiomas);
+    }
 
+    private void configurarListenerComboAutores() {
         // Agregamos el listener para detectar cambios en los autores seleccionados
         cmbAutores.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Autor>() {
             @Override
             public void onChanged(Change<? extends Autor> change) {
                 while (change.next()) {
                     if (change.wasAdded()) {
-                        // En el caso de que se añada un item a los checkbox seleccionados filtramos 
+                        // En el caso de que se añada un item a los checkbox seleccionados filtramos
                         filtrar();
                     }
                     if (change.wasRemoved()) {
-                        // En el caso de que se elimine un item a los checkbox seleccionados filtramos 
+                        // En el caso de que se elimine un item a los checkbox seleccionados filtramos
                         filtrar();
                         System.out.println("Autor deseleccionado: " + change.getRemoved());
                     }
@@ -160,7 +172,7 @@ public class ListaLibrosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un libro!");
         } else {
             try {
-                libro = abrirFormulario(libro);
+                abrirFormulario(libro);
                 if (libro != null && quitarFiltro(libro)) {
                     filtrados.remove(libro);
                 }
@@ -174,13 +186,15 @@ public class ListaLibrosControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Libro libro = abrirFormulario(null);
-            if (libro != null) {
-                libros.add(libro);
-                if (aplicarFiltro(libro)) {
-                    filtrados.add(libro);
-                    tblLibros.refresh();
+            List<Libro> nuevosLibros = abrirFormulario(null);
+            if (nuevosLibros != null) {
+                for (Libro libro : nuevosLibros) {
+                    libros.add(libro);
+                    if (aplicarFiltro(libro)) {
+                        filtrados.add(libro);
+                    }
                 }
+                tblLibros.refresh();
             }
         } catch (Exception e) {
             log.error("Error al agregar un libro: ", e);
@@ -208,22 +222,21 @@ public class ListaLibrosControlador implements Initializable {
         }
     }
 
-    private Libro abrirFormulario(Libro libroInicial) throws IOException {
+    private List<Libro> abrirFormulario(Libro libroInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioLibro.getRutaFxml());
         FormularioLibroControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (libroInicial != null) {
-            controladorFormulario.setLibro(libroInicial);
+            controladorFormulario.setLibroInicial(libroInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioLibro);
-        return controladorFormulario.getLibro();
+        return controladorFormulario.getLibros();
     }
 
     @FXML
     private void filtrar() {
-        System.out.println("okslkals");
         filtrados.clear();
         libros.stream()
                 .filter(this::aplicarFiltro)
@@ -238,7 +251,7 @@ public class ListaLibrosControlador implements Initializable {
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
         return filtrarPorAutores(libro.getAutores())
-                && (isbn == null || String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
+                && (isbn == null || String.valueOf(libro.getIsbn()).toLowerCase().startsWith(isbn))
                 && (titulo == null || libro.getTitulo().toLowerCase().contains(titulo))
                 && (categoria == null || categoria.equals(libro.getCategoria()))
                 && (editorial == null || editorial.equals(libro.getEditorial()))
@@ -246,14 +259,12 @@ public class ListaLibrosControlador implements Initializable {
     }
 
     private boolean filtrarPorAutores(List<Autor> autores) {
-        List<Autor> seleccionados = cmbAutores.getCheckModel().getCheckedItems();
-
+        List<Autor> seleccionados = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());
         for (Autor seleccionado : seleccionados) {
             if (!autores.contains(seleccionado)) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -264,7 +275,7 @@ public class ListaLibrosControlador implements Initializable {
         Editorial editorial = cmbEditorial.getValue();
         Idioma idioma = cmbIdioma.getValue();
         return !filtrarPorAutores(libro.getAutores())
-                || (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().contains(isbn))
+                || (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().startsWith(isbn))
                 || (titulo != null && !libro.getTitulo().toLowerCase().contains(titulo))
                 || (categoria != null && !categoria.equals(libro.getCategoria()))
                 || (editorial != null && !editorial.equals(libro.getEditorial()))
@@ -278,6 +289,7 @@ public class ListaLibrosControlador implements Initializable {
         cmbCategoria.setValue(null);
         cmbEditorial.setValue(null);
         cmbIdioma.setValue(null);
+        cmbAutores.getCheckModel().clearChecks();
         filtrar();
     }
 }

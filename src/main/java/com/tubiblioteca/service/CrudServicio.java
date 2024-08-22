@@ -7,7 +7,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.slf4j.Logger;
 
 public abstract class CrudServicio<T> {
-    
+
     // Logger para gestionar informacion
     private static final Logger log = getLogger(CrudServicio.class);
 
@@ -40,26 +40,30 @@ public abstract class CrudServicio<T> {
         return null;
     }
 
-    public void insertar(T entidad) {
+    protected void insertar(T entidad) {
         try {
             this.repositorio.iniciarTransaccion();
             this.repositorio.insertar(entidad);
             this.repositorio.confirmarTransaccion();
         } catch (Exception e) {
             this.repositorio.descartarTransaccion();
-            log.error("Error al insertar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e, e.getCause());
+            log.error("Error al insertar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e,
+                    e.getCause());
             throw e;
         }
     }
 
-    public void modificar(T entidad) {
+    protected void modificar(T entidad) {
         try {
             this.repositorio.iniciarTransaccion();
-            this.repositorio.modificar(entidad);
-            this.repositorio.confirmarTransaccion();
+            if (entidad != null && existe(entidad)) {
+                this.repositorio.modificar(entidad);
+                this.repositorio.confirmarTransaccion();
+            }
         } catch (Exception e) {
             this.repositorio.descartarTransaccion();
-            log.error("Error al modificar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e, e.getCause());
+            log.error("Error al modificar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e,
+                    e.getCause());
             throw e;
         }
     }
@@ -67,7 +71,7 @@ public abstract class CrudServicio<T> {
     public void borrar(T entidad) {
         try {
             this.repositorio.iniciarTransaccion();
-            if (entidad != null && !esInactivo(entidad)) {
+            if (entidad != null && existe(entidad)) {
                 marcarComoInactivo(entidad);
                 this.repositorio.modificar(entidad);
                 this.repositorio.confirmarTransaccion();
@@ -76,12 +80,19 @@ public abstract class CrudServicio<T> {
             }
         } catch (Exception e) {
             this.repositorio.descartarTransaccion();
-            log.error("Error al eliminar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e, e.getCause());
+            log.error("Error al eliminar la entidad de tipo {}: {}", entidad.getClass().getSimpleName(), e,
+                    e.getCause());
             throw e;
         }
     }
 
+    public abstract T validarEInsertar(Object... datos);
+
+    public abstract void validarYModificar(T entidad, Object... datos);
+
     protected abstract boolean esInactivo(T entidad);
 
     protected abstract void marcarComoInactivo(T entidad);
+
+    public abstract boolean existe(T entidad);
 }

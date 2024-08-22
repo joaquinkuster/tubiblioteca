@@ -1,26 +1,25 @@
 package com.tubiblioteca.controller.ABMMiembro;
 
+import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.TipoMiembro;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.view.Vista;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormularioMiembroControlador implements Initializable {
@@ -34,21 +33,26 @@ public class FormularioMiembroControlador implements Initializable {
     @FXML
     private PasswordField txtContrasena;
     @FXML
-    private ComboBox<TipoMiembro> cmbTipo;
+    private SearchableComboBox<TipoMiembro> cmbTipo;
     @FXML
     private Button btnNuevo;
+    @FXML
+    private Button btnGuardar;
 
     private final ObservableList<TipoMiembro> tipos = FXCollections.observableArrayList();
     private final Logger log = LoggerFactory.getLogger(FormularioMiembroControlador.class);
 
-    private Miembro miembro;
+    private Miembro miembroInicial;
+    private ObservableList<Miembro> nuevosMiembros = FXCollections.observableArrayList();;
     private MiembroServicio servicio;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         servicio = new MiembroServicio(AppConfig.getRepositorio());
         inicializarCombosFormulario();
-        miembro = null;
+        miembroInicial = null;
+        nuevosMiembros.clear();
+        ControlUI.configurarAtajoTecladoEnter(btnGuardar);
     }
 
     private void inicializarCombosFormulario() {
@@ -69,56 +73,37 @@ public class FormularioMiembroControlador implements Initializable {
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo miembro auxiliar
-            Miembro aux = new Miembro(
-                    txtDni.getText().trim(),
-                    txtNombre.getText().trim(),
-                    txtApellido.getText().trim(),
-                    cmbTipo.getValue(),
-                    txtContrasena.getText().trim()
-            );
 
-            if (miembro == null && servicio.buscarPorId(aux.getDni()) == null) {
-                
-            }
+            String dni = txtDni.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String apellido = txtApellido.getText().trim();
+            TipoMiembro tipo = cmbTipo.getValue();
+            String clave = txtContrasena.getText().trim();
 
-            if (miembro == null) {
-                // Validamos si el DNI ya está en uso
-                if (servicio.buscarPorId(aux.getDni()) == null) {
-                    miembro = aux;
-                    servicio.insertar(aux);
-                    Alerta.mostrarMensaje(false, "Info", "Se ha agregado el miembro de la biblioteca correctamente!");
-                } else {
-                    throw new IllegalArgumentException("El DNI ingresado ya está en uso. Por favor, ingrese otro DNI.");
-                }
+            if (miembroInicial == null) {
+                nuevosMiembros.add(servicio.validarEInsertar(dni, nombre, apellido, tipo, clave));
+                Alerta.mostrarMensaje(false, "Info", "Se ha agregado el miembro de la biblioteca correctamente!");
             } else {
-                // Actualizamos el miembro existente
-                miembro.setNombre(aux.getNombre());
-                miembro.setApellido(aux.getApellido());
-                miembro.setTipo(aux.getTipo());
-                miembro.setClave(aux.getClave());
-
-                servicio.modificar(miembro);
+                servicio.validarYModificar(miembroInicial, nombre, apellido, tipo, clave);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado el miembro de la biblioteca correctamente!");
+                StageManager.cerrarModal(Vista.FormularioMiembro);
             }
-
-            StageManager.cerrarModal(Vista.FormularioMiembro);
         } catch (Exception e) {
             log.error("Error al guardar el miembro.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el miembro de la biblioteca. " + e.getMessage());
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el miembro de la biblioteca.\n" + e.getMessage());
         }
     }
 
     private void autocompletar() {
-        txtDni.setText(miembro.getDni());
-        txtNombre.setText(miembro.getNombre());
-        txtApellido.setText(miembro.getApellido());
-        cmbTipo.setValue(miembro.getTipo());
-        txtContrasena.setText(miembro.getClave());
+        txtDni.setText(miembroInicial.getDni());
+        txtNombre.setText(miembroInicial.getNombre());
+        txtApellido.setText(miembroInicial.getApellido());
+        cmbTipo.setValue(miembroInicial.getTipo());
+        txtContrasena.setText(miembroInicial.getClave());
     }
 
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
+    public void setMiembroInicial(Miembro miembro) {
+        this.miembroInicial = miembro;
         if (miembro != null) {
             autocompletar();
             txtDni.setDisable(true);
@@ -126,7 +111,7 @@ public class FormularioMiembroControlador implements Initializable {
         }
     }
 
-    public Miembro getMiembro() {
-        return miembro;
+    public List<Miembro> getMiembros() {
+        return nuevosMiembros;
     }
 }

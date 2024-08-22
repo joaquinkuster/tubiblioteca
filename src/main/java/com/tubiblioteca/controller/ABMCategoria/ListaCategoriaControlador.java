@@ -16,9 +16,9 @@ import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.service.Categoria.CategoriaServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ListaCategoriaControlador implements Initializable {
@@ -74,7 +74,7 @@ public class ListaCategoriaControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una categoria!");
         } else {
             try {
-                categoria = abrirFormulario(categoria);
+                abrirFormulario(categoria);
                 if (categoria != null && quitarFiltro(categoria)) {
                     filtrados.remove(categoria);
                 }
@@ -88,13 +88,15 @@ public class ListaCategoriaControlador implements Initializable {
     @FXML
     private void agregar() {
         try {
-            Categoria categoria = abrirFormulario(null);
-            if (categoria != null) {
-                categorias.add(categoria);
-                if (aplicarFiltro(categoria)) {
-                    filtrados.add(categoria);
-                    tblCategorias.refresh();
+            List<Categoria> nuevasCategorias = abrirFormulario(null);
+            if (nuevasCategorias != null) {
+                for (Categoria categoria : nuevasCategorias) {
+                    categorias.add(categoria);
+                    if (aplicarFiltro(categoria)) {
+                        filtrados.add(categoria);
+                    }
                 }
+                tblCategorias.refresh();
             }
         } catch (Exception e) {
             log.error("Error al agregar una categoría: ", e);
@@ -122,17 +124,17 @@ public class ListaCategoriaControlador implements Initializable {
         }
     }
 
-    private Categoria abrirFormulario(Categoria categoriaInicial) throws IOException {
+    private List<Categoria> abrirFormulario(Categoria categoriaInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioCategoria.getRutaFxml());
         FormularioCategoriaControlador controladorFormulario = formulario.getKey();
         Parent vistaFormulario = formulario.getValue();
 
         if (categoriaInicial != null) {
-            controladorFormulario.setCategoria(categoriaInicial);
+            controladorFormulario.setCategoriaInicial(categoriaInicial);
         }
 
         StageManager.abrirModal(vistaFormulario, Vista.FormularioCategoria);
-        return controladorFormulario.getCategoria();
+        return controladorFormulario.getCategorias();
     }
 
     @FXML

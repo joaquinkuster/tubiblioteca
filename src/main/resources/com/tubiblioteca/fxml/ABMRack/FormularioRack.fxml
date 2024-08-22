@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="470.0" prefWidth="500.0" spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMRack.FormularioRackControlador">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="titulo-principal">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Datos del Rack" />
+                <Line endX="200.0" />
+            </children>
+        </HBox>
+        <GridPane hgap="10.0" styleClass="formulario-grilla" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="-Infinity" prefHeight="200.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label styleClass="label-formulario" text="Descripción del Rack:" GridPane.halignment="CENTER" />
+                <TextArea fx:id="txtDescripcion" styleClass="text-area-personalizado" wrapText="true" GridPane.rowIndex="1" />
+            </children>
+        </GridPane>
+        <HBox spacing="10.0" styleClass="acciones-contenedor">
+            <children>
+                <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardar" styleClass="btn-personalizado" text="Guardar" GridPane.halignment="LEFT" />
+                <Button fx:id="btnNuevo" mnemonicParsing="false" onAction="#nuevo" text="Nuevo">
+                    <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../images/icons/nuevo.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <styleClass>
+                        <String fx:value="btn-personalizado" />
+                        <String fx:value="nuevo" />
+                    </styleClass>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@../../styles/_config.css" />
+        <URL value="@../../styles/_contenedor.css" />
+        <URL value="@../../styles/_estilos.css" />
+        <URL value="@../../styles/_formulario.css" />
+    </stylesheets>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

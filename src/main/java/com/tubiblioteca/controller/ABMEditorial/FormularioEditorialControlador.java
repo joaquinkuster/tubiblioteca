@@ -2,19 +2,21 @@ package com.tubiblioteca.controller.ABMEditorial;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.service.Editorial.EditorialServicio;
 import com.tubiblioteca.view.Vista;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormularioEditorialControlador implements Initializable {
@@ -23,16 +25,21 @@ public class FormularioEditorialControlador implements Initializable {
     private TextField txtNombre;
     @FXML
     private Button btnNuevo;
+    @FXML
+    private Button btnGuardar;
 
     private final Logger log = LoggerFactory.getLogger(FormularioEditorialControlador.class);
 
-    private Editorial editorial;
+    private Editorial editorialInicial;
+    private ObservableList<Editorial> nuevasEditoriales = FXCollections.observableArrayList();
     private EditorialServicio servicio;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         servicio = new EditorialServicio(AppConfig.getRepositorio());
-        editorial = null;
+        editorialInicial = null;
+        nuevasEditoriales.clear();
+        ControlUI.configurarAtajoTecladoEnter(btnGuardar);
     }
 
     @FXML
@@ -43,42 +50,36 @@ public class FormularioEditorialControlador implements Initializable {
     @FXML
     private void guardar() {
         try {
-            // Creamos un nuevo editorial auxiliar
-            Editorial aux = new Editorial(txtNombre.getText().trim());
 
-            if (editorial == null) {
-                // Validamos si el DNI ya está en uso
-                editorial = aux;
-                servicio.insertar(aux);
+            String nombre = txtNombre.getText().trim();
+
+            if (editorialInicial == null) {
+                nuevasEditoriales.add(servicio.validarEInsertar(nombre));
                 Alerta.mostrarMensaje(false, "Info", "Se ha agregado la editorial correctamente!");
             } else {
-                // Actualizamos el miembro existente
-                editorial.setNombre(aux.getNombre());
-
-                servicio.modificar(editorial);
+                servicio.validarYModificar(editorialInicial, nombre);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado la editorial correctamente!");
+                StageManager.cerrarModal(Vista.FormularioEditorial);
             }
-
-            StageManager.cerrarModal(Vista.FormularioEditorial);
         } catch (Exception e) {
             log.error("Error al guardar la editorial.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar la editorial. " + e.getMessage());
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar la editorial.\n" + e.getMessage());
         }
     }
 
     private void autocompletar() {
-        txtNombre.setText(editorial.getNombre());
+        txtNombre.setText(editorialInicial.getNombre());
     }
 
-    public void setEditorial(Editorial editorial) {
-        this.editorial = editorial;
+    public void setEditorialInicial(Editorial editorial) {
+        this.editorialInicial = editorial;
         if (editorial != null) {
             autocompletar();
             btnNuevo.setDisable(true);
         }
     }
 
-    public Editorial getEditorial() {
-        return editorial;
+    public List<Editorial> getEditoriales() {
+        return nuevasEditoriales;
     }
 }
