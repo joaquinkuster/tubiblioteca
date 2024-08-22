@@ -62,7 +62,7 @@
                 <Label fx:id="lblContrasena" styleClass="label-formulario" text="Rack:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                 <SearchableComboBox fx:id="cmbRack" maxHeight="-Infinity" styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                 <Label fx:id="lblCargo1" styleClass="label-formulario" text="Cantidad:" GridPane.rowIndex="2" />
-                <Spinner fx:id="spinCantidad" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Spinner fx:id="spinCantidad" styleClass="spinCantidad" editable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Label text="Referencia:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <CheckBox fx:id="checkReferencia" mnemonicParsing="false" styleClass="check-box-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             </children>

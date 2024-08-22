@@ -20,8 +20,8 @@
     -fx-border-color: -principal-oscuro-3;
 }
 
-/* Combo personalizado */
-.combo-personalizado{
+/* Combo y checkCombo personalizado */
+.combo-personalizado > .combo-box, #checkComboBox > .combo-box{
     -fx-font-size: 1em;
     -fx-text-fill: black;
     -fx-background-color: white;
@@ -29,32 +29,66 @@
     -fx-border-width: 1;
     -fx-transition: border-color 0.3s;
 }
-.combo-personalizado > .arrow-button{
+.combo-personalizado > .combo-box > .arrow-button, #checkComboBox > .arrow-button{
     -fx-background-color: transparent;
     -fx-transition: background-color 0.3s;
 }
-.combo-personalizado .text-input{
+.combo-personalizado > .combo-box .text-input, #checkComboBox .text-input{
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-background-insets: 0;
     -fx-effect: null;
     -fx-background-color: white;
 }
-.combo-personalizado .text-field .right-button{
+.combo-personalizado > .combo-box .text-field .right-button, #checkComboBox .text-field .right-button {
     -fx-background-color: transparent;
 }
-.combo-personalizado .arrow-button:hover{
+.combo-personalizado > .combo-box .arrow-button:hover, #checkComboBox .arrow-button:hover{
     -fx-background-color: -principal-oscuro-1;
 }
-.combo-personalizado .arrow-button:pressed {
+.combo-personalizado > .combo-box .arrow-button:pressed, #checkComboBox .arrow-button:pressed {
     -fx-background-color: -principal-oscuro-2;
 }
-.combo-personalizado:hover, .combo-personalizado:selected, .combo-personalizado:focused{
+.combo-personalizado > .combo-box:hover, #checkComboBox > .combo-box:hover, .combo-personalizado > .combo-box:selected, #checkComboBox > .combo-box:selected, .combo-personalizado > .combo-box:focused, #checkComboBox > .combo-box:focused{
     -fx-border-color: -principal-oscuro-3;
 }
-.combo-personalizado .list-view .list-cell:hover, .combo-personalizado .list-view .list-cell:selected {
+.combo-personalizado > .combo-box .list-view .list-cell:hover, #checkComboBox .list-view .list-cell:hover, .combo-personalizado > .combo-box .list-view .list-cell:selected, #checkComboBox .list-view .list-cell:selected  {
     -fx-background-color: -principal-oscuro-3;
 }
+
+/* Spinner de cantidad personalizado */
+
+.spinCantidad > .increment-arrow-button, .spinCantidad > .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-transition: background-color 0.3s;
+}
+
+.spinCantidad:focused > .increment-arrow-button, .spinCantidad:focused > .decrement-arrow-button {
+    -fx-background-color: white;
+
+}
+
+.spinCantidad:focused > .FakeFocusTextField > .text-field .text-input {
+    -fx-background-color: black;
+
+}
+
+.spinCantidad > .increment-arrow-button:hover, .spinCantidad > .decrement-arrow-button:hover  {
+    -fx-background-color: -principal-oscuro-1;
+
+}
+
+.spinCantidad > .increment-arrow-button:pressed, .spinCantidad > .decrement-arrow-button:pressed  {
+    -fx-background-color: -principal-oscuro-2;
+
+}
+
+.spinCantidad:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: -principal-oscuro-3;
+
+}
+
 
 /* DatePicker personalizado */
 .datepicker-personalizado{
@@ -109,7 +143,7 @@
 	-fx-background-color: white;
 }
 .datepicker-personalizado .date-picker-popup .spinner .button:hover,
-.datepicker-personalizado .date-picker-popup .spinner .button:focused{
+.datepicker-personalizado .date-picker-popup .spinner .button:focused {
 	-fx-background-color: transparent;
 }
 

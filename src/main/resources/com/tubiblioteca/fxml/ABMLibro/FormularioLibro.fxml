@@ -44,7 +44,7 @@
                   <Label prefHeight="21.0" styleClass="label-formulario" text="Título:" GridPane.columnIndex="2" />
                   <TextField fx:id="txtTitulo" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="3" />
                   <Label styleClass="label-formulario" text="Autores:" GridPane.rowIndex="1" />
-            <CheckComboBox fx:id="cmbAutores" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckComboBox id="checkComboBox" fx:id="cmbAutores" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label fx:id="lblCargo" styleClass="label-formulario" text="Categoría:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <SearchableComboBox fx:id="cmbCategoria" maxHeight="-Infinity" prefWidth="200.0" styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label fx:id="lblContrasena" styleClass="label-formulario" text="Editorial:" GridPane.rowIndex="2" />

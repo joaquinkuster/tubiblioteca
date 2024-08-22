@@ -50,7 +50,7 @@
             <Label text="Título:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <TextField fx:id="txtTitulo" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Autores:" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <CheckComboBox fx:id="cmbAutores" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <CheckComboBox id="checkComboBox" fx:id="cmbAutores" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="Categoría:" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
             <SearchableComboBox fx:id="cmbCategoria" maxHeight="-Infinity" onAction="#filtrar" prefWidth="200.0" styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label text="Editorial:" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
