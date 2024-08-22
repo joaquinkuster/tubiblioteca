@@ -122,16 +122,17 @@ public class ListaLibrosControlador implements Initializable {
                         btnVerificar.getStyleClass().add("btn-personalizado");
                         btnVerificar.setOnAction(event -> {
                             Libro libro = getTableView().getItems().get(getIndex());
-                            List<CopiaLibro> copiasDelLibro = new ArrayList<>();
+                            List<CopiaLibro> copiasDelLibroDisponibles = new ArrayList<>();
+                            
                             for (CopiaLibro copia : copias) {
-                                if(copia.getLibro().equals(libro)) {
-                                    copiasDelLibro.add(copia);
+                                if(copia.getLibro().equals(libro) && copia.isDisponible(copia.getEstado())) {
+                                    copiasDelLibroDisponibles.add(copia);
                                 }
                             }
-                            if (copiasDelLibro.isEmpty()) {
-                                Alerta.mostrarConfirmacion("Info", "El libro seleccionado no tiene ninguna copia");
+                            if (copiasDelLibroDisponibles.isEmpty()) {
+                                Alerta.mostrarConfirmacion("Info", "El libro seleccionado no tiene ninguna copia disponible");
                             } else {
-                                Alerta.mostrarConfirmacion("Info", cadenaCopiasDelLibro(copiasDelLibro, libro));
+                                Alerta.mostrarConfirmacion("Info", cadenacopiasDelLibroDisponibles(copiasDelLibroDisponibles, libro));
                             }
                         });
                     }
@@ -149,10 +150,10 @@ public class ListaLibrosControlador implements Initializable {
         });
     }
 
-    private String cadenaCopiasDelLibro(List<CopiaLibro> copias, Libro libro) {
-        String texto = "El libro: " + libro.getTitulo() + " tiene las siguientes copias: \n";
+    private String cadenacopiasDelLibroDisponibles(List<CopiaLibro> copias, Libro libro) {
+        String texto = "El libro: " + libro.getTitulo() + " tiene las siguientes copias disponibles: \n";
         for (CopiaLibro copia : copias) {
-            texto += "Tipo: " + copia.getTipo() + " | Estado: " + copia.getEstado() + " Precio: " + copia.getPrecio() + "\n";
+            texto += "Tipo: " + copia.getTipo() + " | Precio: " + copia.getPrecio() + "\n";
         }
         return texto;
     }

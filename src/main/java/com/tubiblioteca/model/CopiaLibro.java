@@ -158,4 +158,8 @@ public class CopiaLibro {
     public String toString() {
         return String.format("%s %s - $%s", ControlUI.limitar(libro.toString(), 10), tipo, precio);
     }
+
+    public boolean isDisponible(EstadoCopiaLibro estado) {
+        return estado.toString() == "Disponible" ? true : false;
+    }
 }
