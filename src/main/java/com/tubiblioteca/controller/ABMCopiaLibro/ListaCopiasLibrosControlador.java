@@ -194,14 +194,12 @@ public class ListaCopiasLibrosControlador implements Initializable {
     private void verificarReferencias(){
         // Si no hay libros entonces salimos de la funcion inmediatamente
         if (libros.isEmpty() || libros == null) {
-            System.out.println("No se encuentra ningun libro");
-            Alerta.mostrarMensaje(true, "Error","No existe ningun libro registrado.");
+            Alerta.mostrarConfirmacion("Error", "No existe ningun libro registrado.");
             return;
         }
 
         if (copias.isEmpty() || copias == null) {
-            System.out.println("No hay copias de ningun libro");
-            Alerta.mostrarMensaje(true, "Error","No existe ninguna copia registrada.");
+            Alerta.mostrarConfirmacion("Error","No existe ninguna copia registrada.");
             return;
         }
 
@@ -224,10 +222,10 @@ public class ListaCopiasLibrosControlador implements Initializable {
             }
         }
         if (librosSinReferencias.isEmpty()) {
-            Alerta.mostrarMensaje(false, "Exito","Todos los libros tienen referencias.");
+            Alerta.mostrarConfirmacion("Atencion","Todos los libros tienen referencias.");
         } else {
             // Mostrar los libros que no tienen referencias
-            Alerta.mostrarMensaje(false, "Error", cadenaDeLibrosSinReferencia(librosSinReferencias));
+            Alerta.mostrarConfirmacion( "Referencias", cadenaDeLibrosSinReferencia(librosSinReferencias));
         }
     }
 
@@ -247,6 +245,7 @@ public class ListaCopiasLibrosControlador implements Initializable {
         }
         return texto;
     }
+
     private List<CopiaLibro> abrirFormulario(CopiaLibro copiaInicial) throws IOException {
         formulario = StageManager.cargarVistaConControlador(Vista.FormularioCopiaLibro.getRutaFxml());
         FormularioCopiaLibroControlador controladorFormulario = formulario.getKey();

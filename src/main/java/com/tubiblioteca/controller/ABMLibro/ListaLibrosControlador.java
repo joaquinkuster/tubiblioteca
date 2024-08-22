@@ -1,5 +1,6 @@
 package com.tubiblioteca.controller.ABMLibro;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -9,6 +10,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Callback;
 import javafx.util.Pair;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.SearchableComboBox;
@@ -19,10 +23,12 @@ import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.service.Autor.AutorServicio;
 import com.tubiblioteca.service.Categoria.CategoriaServicio;
+import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Editorial.EditorialServicio;
 import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
@@ -51,6 +57,8 @@ public class ListaLibrosControlador implements Initializable {
     private TableColumn<Libro, Editorial> colEditorial;
     @FXML
     private TableColumn<Libro, Idioma> colIdioma;
+    @FXML
+    private TableColumn<Libro, Void> colVerificarCopias;
 
     // Tabla de libros
     @FXML
@@ -72,6 +80,7 @@ public class ListaLibrosControlador implements Initializable {
 
     // Listas utilizadas
     private final ObservableList<Libro> libros = FXCollections.observableArrayList();
+    private final ObservableList<CopiaLibro> copias = FXCollections.observableArrayList();
     private final ObservableList<Libro> filtrados = FXCollections.observableArrayList();
     private final ObservableList<Autor> autores = FXCollections.observableArrayList();
     private final ObservableList<Categoria> categorias = FXCollections.observableArrayList();
@@ -82,6 +91,7 @@ public class ListaLibrosControlador implements Initializable {
     private final Logger log = LoggerFactory.getLogger(ListaLibrosControlador.class);
 
     private LibroServicio servicio;
+    private CopiaLibroServicio servicioCopiaLibro;
     private Pair<FormularioLibroControlador, Parent> formulario;
     private AutorServicio servicioAutor;
     private EditorialServicio servicioEditorial;
@@ -92,6 +102,59 @@ public class ListaLibrosControlador implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
+        inicializarColumnaVerificar();
+    }
+
+    private void inicializarColumnaVerificar(){
+        copias.clear();
+        copias.addAll(servicioCopiaLibro.buscarTodos());
+        colVerificarCopias.setCellFactory(new Callback<TableColumn<Libro, Void>, TableCell<Libro, Void>>() {
+            @Override
+            public TableCell<Libro, Void> call(TableColumn<Libro, Void> param) {
+                return new TableCell<Libro, Void>() {
+                    private final Button btnVerificar = new Button("");
+                    {
+                        Image icon = new Image(getClass().getResourceAsStream("/com/tubiblioteca/images/icons/buscar.png"));
+                        ImageView imageView = new ImageView(icon);
+                        imageView.setFitWidth(20);
+                        imageView.setFitHeight(20);
+                        btnVerificar.setGraphic(imageView);
+                        btnVerificar.getStyleClass().add("btn-personalizado");
+                        btnVerificar.setOnAction(event -> {
+                            Libro libro = getTableView().getItems().get(getIndex());
+                            List<CopiaLibro> copiasDelLibro = new ArrayList<>();
+                            for (CopiaLibro copia : copias) {
+                                if(copia.getLibro().equals(libro)) {
+                                    copiasDelLibro.add(copia);
+                                }
+                            }
+                            if (copiasDelLibro.isEmpty()) {
+                                Alerta.mostrarConfirmacion("Info", "El libro seleccionado no tiene ninguna copia");
+                            } else {
+                                Alerta.mostrarConfirmacion("Info", cadenaCopiasDelLibro(copiasDelLibro, libro));
+                            }
+                        });
+                    }
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btnVerificar);
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private String cadenaCopiasDelLibro(List<CopiaLibro> copias, Libro libro) {
+        String texto = "El libro: " + libro.getTitulo() + " tiene las siguientes copias: \n";
+        for (CopiaLibro copia : copias) {
+            texto += "Tipo: " + copia.getTipo() + " | Estado: " + copia.getEstado() + " Precio: " + copia.getPrecio() + "\n";
+        }
+        return texto;
     }
 
     private void inicializarTabla() {
@@ -102,6 +165,7 @@ public class ListaLibrosControlador implements Initializable {
             servicioEditorial = new EditorialServicio(repositorio);
             servicioCategoria = new CategoriaServicio(repositorio);
             servicioIdioma = new IdiomaServicio(repositorio);
+            servicioCopiaLibro = new CopiaLibroServicio(repositorio);
 
             colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
             colTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
@@ -120,6 +184,7 @@ public class ListaLibrosControlador implements Initializable {
             libros.addAll(servicio.buscarTodos());
             filtrados.addAll(libros);
             tblLibros.setItems(filtrados);
+
         } catch (Exception e) {
             log.error("Error al inicializar la lista de libros: ", e);
         }

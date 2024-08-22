@@ -80,6 +80,7 @@
                   <TableColumn fx:id="colCategoria" prefWidth="150.0" text="Categoría" />
                   <TableColumn fx:id="colEditorial" prefWidth="150.0" text="Editorial" />
                   <TableColumn fx:id="colIdioma" prefWidth="150.0" text="Idioma" />
+            <TableColumn fx:id="colVerificarCopias" prefWidth="150.0" text="Verificar Copias" />
               </columns>
               <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
