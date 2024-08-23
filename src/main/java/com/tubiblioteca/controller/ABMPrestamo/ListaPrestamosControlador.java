@@ -16,6 +16,7 @@ import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
+import com.tubiblioteca.security.SesionManager;
 import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.service.Prestamo.PrestamoServicio;
@@ -28,6 +29,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 
 public class ListaPrestamosControlador implements Initializable {
 
@@ -59,6 +62,22 @@ public class ListaPrestamosControlador implements Initializable {
     @FXML
     private TextField txtMulta;
 
+    // Elementos que se le va a ocultar al usuario normal
+    @FXML
+    private Label lblFiltroMiembro;
+    @FXML
+    private Button btnBuscarMiembro;
+    @FXML
+    private Button btnBuscarCopia;
+    @FXML
+    private Button btnAgregar;
+    @FXML 
+    private Button btnModificar;
+    @FXML
+    private Button btnEliminar;
+    @FXML
+    private Button btnConfirmarDevolucion;
+
     // Listas utilizadas
     private final ObservableList<Prestamo> prestamos = FXCollections.observableArrayList();
     private final ObservableList<Prestamo> filtrados = FXCollections.observableArrayList();
@@ -77,6 +96,9 @@ public class ListaPrestamosControlador implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
+        if (SesionManager.esUsuario()) {
+            ControlUI.desactivarControl(btnAgregar, btnModificar, btnEliminar, btnConfirmarDevolucion);
+        }
     }
 
     private void inicializarTabla() {
@@ -88,13 +110,22 @@ public class ListaPrestamosControlador implements Initializable {
 
             colPrestamo.setCellValueFactory(new PropertyValueFactory<>("fechaPrestamo"));
             colDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
-            colMiembro.setCellValueFactory(new PropertyValueFactory<>("miembro"));
+            ControlUI.configurarCeldaFecha(colPrestamo, colDevolucion);
+            if (SesionManager.esUsuario()) {
+                tblPrestamos.getColumns().remove(colMiembro);
+            } else {
+                colMiembro.setCellValueFactory(new PropertyValueFactory<>("miembro"));
+            }
             colCopia.setCellValueFactory(new PropertyValueFactory<>("copiaLibro"));
             colMulta.setCellValueFactory(new PropertyValueFactory<>("multa"));
 
             prestamos.clear();
             filtrados.clear();
-            prestamos.addAll(servicio.buscarTodos());
+            if (SesionManager.esUsuario()) {
+                prestamos.addAll(SesionManager.getMiembro().getPrestamos());
+            } else {
+                prestamos.addAll(servicio.buscarTodos());
+            }
             filtrados.addAll(prestamos);
             tblPrestamos.setItems(filtrados);
         } catch (Exception e) {
@@ -103,19 +134,32 @@ public class ListaPrestamosControlador implements Initializable {
     }
 
     private void inicializarFiltros() {
+        // Limpiamos las listas
         miembros.clear();
-        miembros.addAll(servicioMiembro.buscarTodos());
-        cmbMiembro.setItems(miembros);
-
         copias.clear();
-        copias.addAll(servicioCopia.buscarTodos());
+    
+        if (SesionManager.esUsuario()) {
+            // Desactivar controles para el usuario
+            ControlUI.desactivarControl(cmbMiembro, lblFiltroMiembro, btnBuscarMiembro, btnBuscarCopia);
+            // Cargar las copias asociadas a los préstamos del usuario
+            prestamos.forEach(prestamo -> copias.add(prestamo.getCopiaLibro()));
+            // Ajustar el ancho del combo de copias
+            cmbCopia.setPrefWidth(200);
+        } else {
+            // Cargar todos los miembros y copias para el administrador
+            miembros.addAll(servicioMiembro.buscarTodos());
+            copias.addAll(servicioCopia.buscarTodos());
+    
+            // Establecer los ítems en los combos
+            cmbMiembro.setItems(miembros);
+        }
+    
+        // Establecer los ítems en el combo de copias
         cmbCopia.setItems(copias);
-
-        ControlUI.configurarCeldaFecha(colPrestamo);
-        ControlUI.configurarCeldaFecha(colDevolucion);
-        ControlUI.configurarDatePicker(dtpPrestamo);
-        ControlUI.configurarDatePicker(dtpDevolucion);
-    }
+    
+        // Configurar datepickers
+        ControlUI.configurarDatePicker(dtpPrestamo, dtpDevolucion);
+    }    
 
     @FXML
     private void modificar() {
@@ -222,7 +266,7 @@ public class ListaPrestamosControlador implements Initializable {
                         || (prestamo.getFechaDevolucion() != null
                                 && prestamo.getFechaDevolucion().equals(fechaDevolucion)))
                 && (multa == null || String.valueOf(prestamo.getMulta()).toLowerCase().startsWith(multa))
-                && (miembro == null || miembro.equals(prestamo.getMiembro()))
+                && (SesionManager.esUsuario() || (miembro == null || miembro.equals(prestamo.getMiembro())))
                 && (copia == null || copia.equals(prestamo.getCopiaLibro()));
     }
 
@@ -237,7 +281,7 @@ public class ListaPrestamosControlador implements Initializable {
                         && (prestamo.getFechaDevolucion() == null
                                 || !prestamo.getFechaDevolucion().equals(fechaDevolucion)))
                 || (multa != null && !String.valueOf(prestamo.getMulta()).toLowerCase().startsWith(multa))
-                || (miembro != null && !miembro.equals(prestamo.getMiembro()))
+                || (!SesionManager.esUsuario() && (miembro != null && !miembro.equals(prestamo.getMiembro())))
                 || (copia != null && !copia.equals(prestamo.getCopiaLibro()));
     }
 
@@ -253,6 +297,10 @@ public class ListaPrestamosControlador implements Initializable {
 
     @FXML
     private void buscarCopia() {
+        CopiaLibro copia = Selector.seleccionarCopiaLibro(cmbCopia.getValue());
+        if (copia != null) {
+            cmbCopia.setValue(copia);
+        }
     }
 
     @FXML

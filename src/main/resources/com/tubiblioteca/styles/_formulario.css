@@ -57,38 +57,31 @@
 }
 
 /* Spinner de cantidad personalizado */
-
 .spinCantidad > .increment-arrow-button, .spinCantidad > .decrement-arrow-button {
     -fx-background-color: transparent;
     -fx-transition: background-color 0.3s;
 }
-
 .spinCantidad:focused > .increment-arrow-button, .spinCantidad:focused > .decrement-arrow-button {
     -fx-background-color: white;
 
 }
-
 .spinCantidad:focused > .FakeFocusTextField > .text-field .text-input {
     -fx-background-color: black;
 
 }
-
 .spinCantidad > .increment-arrow-button:hover, .spinCantidad > .decrement-arrow-button:hover  {
     -fx-background-color: -principal-oscuro-1;
 
 }
-
 .spinCantidad > .increment-arrow-button:pressed, .spinCantidad > .decrement-arrow-button:pressed  {
     -fx-background-color: -principal-oscuro-2;
 
 }
-
 .spinCantidad:focused {
     -fx-background-color: transparent;
     -fx-border-color: -principal-oscuro-3;
 
 }
-
 
 /* DatePicker personalizado */
 .datepicker-personalizado{

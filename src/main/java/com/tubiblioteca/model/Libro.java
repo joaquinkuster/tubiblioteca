@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -37,6 +40,8 @@ public class Libro {
     @ManyToMany
     @JoinTable(name = "autoreslibros", joinColumns = @JoinColumn(name = "id_libro"), inverseJoinColumns = @JoinColumn(name = "id_autor"))
     private List<Autor> autores;
+    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CopiaLibro> copias;
 
     public Libro() {
 
@@ -170,6 +175,10 @@ public class Libro {
             throw new IllegalArgumentException("Por favor, seleccione uno o más autores.");
         }
         this.autores = autores;
+    }
+
+    public List<CopiaLibro> getCopias() {
+        return copias;
     }
 
     public String toString() {

@@ -7,6 +7,8 @@ module com.tubiblioteca {
     requires jakarta.persistence;
     requires org.slf4j;
     requires org.controlsfx.controls;
+    requires java.prefs;
+    requires spring.security.crypto;
 
     // Abrir el paquete com.tubiblioteca a javafx.fxml para permitir la carga de FXML
     opens com.tubiblioteca.controller to javafx.fxml;

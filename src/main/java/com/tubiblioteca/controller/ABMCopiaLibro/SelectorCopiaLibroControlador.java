@@ -5,10 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Pair;
 import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +22,13 @@ import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.service.Rack.RackServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Selector;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class ListaCopiasLibrosControlador implements Initializable {
+public class SelectorCopiaLibroControlador implements Initializable {
 
     // Columnas de la tabla
     @FXML
@@ -77,14 +74,19 @@ public class ListaCopiasLibrosControlador implements Initializable {
     private final Logger log = LoggerFactory.getLogger(ListaCopiasLibrosControlador.class);
 
     private CopiaLibroServicio servicio;
-    private Pair<FormularioCopiaLibroControlador, Parent> formulario;
     private LibroServicio servicioLibro;
     private RackServicio servicioRack;
+
+    private CopiaLibro copiaLibro;
+
+    @FXML
+    private Button btnConfirmar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
+        ControlUI.configurarAtajoTecladoEnter(btnConfirmar);
     }
 
     private void inicializarTabla() {
@@ -134,74 +136,28 @@ public class ListaCopiasLibrosControlador implements Initializable {
     }
 
     @FXML
-    private void modificar() {
+    private void confirmar() {
+        // Obtenemos la copia seleccionada
         CopiaLibro copia = tblCopias.getSelectionModel().getSelectedItem();
 
+        // Verificamos que sea diferente de nulo
         if (copia == null) {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una copia de un libro!");
         } else {
-            try {
-                abrirFormulario(copia);
-                if (copia != null && quitarFiltro(copia)) {
-                    filtrados.remove(copia);
-                }
-                tblCopias.refresh();
-            } catch (Exception e) {
-                log.error("Error al modificar la copia: ", e);
-            }
+            copiaLibro = copia;
+            // Salimos del modal
+            StageManager.cerrarModal(Vista.SelectorCopiaLibro);
         }
     }
 
-    @FXML
-    private void agregar() {
-        try {
-            List<CopiaLibro> nuevasCopias = abrirFormulario(null);
-            if (nuevasCopias != null) {
-                for (CopiaLibro copia : nuevasCopias) {
-                    copias.add(copia);
-                    if (aplicarFiltro(copia)) {
-                        filtrados.add(copia);
-                    }
-                }
-                tblCopias.refresh();
-            }
-        } catch (Exception e) {
-            log.error("Error al agregar las copias: ", e);
+    public void setCopiaLibro(CopiaLibro copiaLibro) {
+        if (copiaLibro != null) {
+            tblCopias.getSelectionModel().select(copiaLibro);
         }
     }
 
-    @FXML
-    private void eliminar() {
-        CopiaLibro copia = tblCopias.getSelectionModel().getSelectedItem();
-
-        if (copia == null) {
-            Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una copia de un libro!");
-        } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar la copia del libro?")) {
-            try {
-                servicio.borrar(copia);
-                copias.remove(copia);
-                filtrados.remove(copia);
-                Alerta.mostrarMensaje(false, "Info", "Copia del libro eliminada correctamente!");
-                tblCopias.refresh();
-            } catch (Exception e) {
-                log.error("Error al eliminar la copia: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar la copia del libro. Puede estar vinculado a otros registros.");
-            }
-        }
-    }
-
-    private List<CopiaLibro> abrirFormulario(CopiaLibro copiaInicial) throws IOException {
-        formulario = StageManager.cargarVistaConControlador(Vista.FormularioCopiaLibro.getRutaFxml());
-        FormularioCopiaLibroControlador controladorFormulario = formulario.getKey();
-        Parent vistaFormulario = formulario.getValue();
-
-        if (copiaInicial != null) {
-            controladorFormulario.setCopiaInicial(copiaInicial);
-        }
-
-        StageManager.abrirModal(vistaFormulario, Vista.FormularioCopiaLibro);
-        return controladorFormulario.getCopias();
+    public CopiaLibro getCopiaLibro(){
+        return copiaLibro;
     }
 
     @FXML
@@ -226,21 +182,6 @@ public class ListaCopiasLibrosControlador implements Initializable {
                 && (libro == null || libro.equals(copia.getLibro()))
                 && (rack == null || rack.equals(copia.getRack()))
                 && (!checkReferencia.isSelected() || copia.isReferencia());
-    }
-
-    private boolean quitarFiltro(CopiaLibro copia) {
-        TipoCopiaLibro tipo = cmbTipo.getValue();
-        EstadoCopiaLibro estado = cmbEstado.getValue();
-        String precio = txtPrecio.getText().trim().toLowerCase();
-        Libro libro = cmbLibro.getValue();
-        Rack rack = cmbRack.getValue();
-
-        return (tipo != null && !tipo.equals(copia.getTipo()))
-                || (estado != null && !estado.equals(copia.getEstado()))
-                || (precio != null && !String.valueOf(copia.getPrecio()).toLowerCase().startsWith(precio))
-                || (libro != null && !libro.equals(copia.getLibro()))
-                || (rack != null && !rack.equals(copia.getRack()))
-                || (checkReferencia.isSelected() && !copia.isReferencia());
     }
 
     @FXML

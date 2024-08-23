@@ -36,7 +36,9 @@ public enum Vista {
     SelectorCopiaLibro("Selector de Copia del Libro", "ABMCopiaLibro/SelectorCopiaLibro"),
 
     ListaRacks("Lista de Racks", "ABMRack/ListaRacks"),
-    FormularioRack("Formulario de Rack", "ABMRack/FormularioRack");
+    FormularioRack("Formulario de Rack", "ABMRack/FormularioRack"),
+
+    CambiarContraseña("Cambiar Contraseña", "CambiarContraseña");
 
     // Devolvemos la clave
     private final String titulo;

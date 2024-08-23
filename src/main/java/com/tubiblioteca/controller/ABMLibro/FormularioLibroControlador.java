@@ -146,7 +146,7 @@ public class FormularioLibroControlador implements Initializable {
             }
         } catch (Exception e) {
             log.error("Error al guardar el libro.");
-            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el libro. " + e.getMessage());
+            Alerta.mostrarMensaje(true, "Error", "No se pudo guardar el libro.\n" + e.getMessage());
         }
     }
 

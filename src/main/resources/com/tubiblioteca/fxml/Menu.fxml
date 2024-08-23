@@ -26,7 +26,7 @@
          </children>
       </HBox>
       <Line endX="250.0" />
-      <HBox fx:id="hboxPerfil" alignment="BASELINE_CENTER" focusTraversable="true" onMouseClicked="#modificarPerfil" spacing="10.0" styleClass="menu-perfil">
+      <HBox fx:id="hboxPerfil" alignment="BASELINE_CENTER" focusTraversable="true" onMouseClicked="#cambiarContrasena" spacing="10.0" styleClass="menu-perfil">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -54,20 +54,7 @@
       <Line endX="250.0" />
       <VBox styleClass="menu-elementos">
          <children>
-            <Button fx:id="btnMiembros" mnemonicParsing="false" text="Miembros">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/miembros.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <styleClass>
-                  <String fx:value="menu-btn" />
-                  <String fx:value="actual" />
-               </styleClass>
-            </Button>
-            <Button fx:id="btnPrestamos" mnemonicParsing="false" styleClass="menu-btn" text="Préstamos">
+            <Button fx:id="btnPrestamos" mnemonicParsing="false" text="Préstamos">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -75,6 +62,10 @@
                      </image>
                   </ImageView>
                </graphic>
+               <styleClass>
+                  <String fx:value="menu-btn" />
+                  <String fx:value="actual" />
+               </styleClass>
             </Button>
             <Button fx:id="btnLibros" mnemonicParsing="false" styleClass="menu-btn" text="Libros">
                <graphic>
@@ -90,6 +81,15 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icons/copiaLibros.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnMiembros" mnemonicParsing="false" styleClass="menu-btn" text="Miembros">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.52" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/miembros.png" />
                      </image>
                   </ImageView>
                </graphic>

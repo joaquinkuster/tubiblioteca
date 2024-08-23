@@ -2,6 +2,8 @@ package com.tubiblioteca.service.CopiaLibro;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
@@ -11,6 +13,9 @@ import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.service.Rack.RackServicio;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
@@ -133,7 +138,7 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
     @Override
     protected boolean esInactivo(CopiaLibro copia) {
-        return copia.getEstado() == EstadoCopiaLibro.Perdida;
+        return copia.isBaja();
     }
 
     @Override
@@ -153,6 +158,43 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
             modificar(copia);
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    public String verificarReferencias(List<Libro> libros) {
+        // Si no hay libros entonces salimos de la funcion inmediatamente
+        if (libros.isEmpty() || libros == null) {
+            throw new IllegalArgumentException("No existe ningún libro registrado.");
+        }
+
+        List<String> respuesta = new ArrayList<>();
+
+        for (Libro libro : libros) {
+            // Verificar las referencias
+            if (!libro.getCopias().isEmpty()) {
+                boolean tieneReferencia = false;
+
+                // Verificar si alguna copia del libro es de referencia
+                for (CopiaLibro copia : libro.getCopias()) {
+                    if (copia.isReferencia()) {
+                        tieneReferencia = true;
+                        break;
+                    }
+                }
+                
+                // Si el libro no tiene copias de referencia, lo agregamos a la lista
+                if (!tieneReferencia) {
+                    respuesta.add("El libro: " + libro + " no tiene referencia.");
+                }
+            } else {
+                respuesta.add("El libro " + libro + " no tiene copias registradas.");
+            }
+        }
+
+        if (respuesta.isEmpty()) {
+            return "Todos los libros tienen referencias.";
+        } else {
+            return String.join("\n", respuesta);
         }
     }
 }

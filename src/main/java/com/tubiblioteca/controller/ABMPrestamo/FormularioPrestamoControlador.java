@@ -64,8 +64,7 @@ public class FormularioPrestamoControlador implements Initializable {
         servicioMiembro = new MiembroServicio(repositorio);
         servicioCopia = new CopiaLibroServicio(repositorio);
 
-        ControlUI.configurarDatePicker(dtpPrestamo);
-        ControlUI.configurarDatePicker(dtpDevolucion);
+        ControlUI.configurarDatePicker(dtpPrestamo, dtpDevolucion);
         dtpPrestamo.setValue(LocalDate.now());
 
         inicializarCombosFormulario();
@@ -149,6 +148,10 @@ public class FormularioPrestamoControlador implements Initializable {
 
     @FXML
     private void buscarCopia() {
+        CopiaLibro copia = Selector.seleccionarCopiaLibro(cmbCopia.getValue());
+        if (copia != null) {
+            cmbCopia.setValue(copia);
+        }
     }
 
     @FXML

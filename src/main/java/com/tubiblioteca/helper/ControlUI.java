@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import com.tubiblioteca.model.Miembro;
+import com.tubiblioteca.model.Prestamo;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -47,8 +49,9 @@ public class ControlUI {
         spinner.getEditor().setTextFormatter(new TextFormatter<>(filter));
     }
 
-    public static void configurarDatePicker(DatePicker datePicker) {
-        Pattern pattern = Pattern.compile("^\\d{1,2}/\\d{1,2}/\\d{4}$");
+    public static void configurarDatePicker(DatePicker... datePickers) {
+        for (DatePicker datePicker : datePickers) {
+            Pattern pattern = Pattern.compile("^\\d{1,2}/\\d{1,2}/\\d{4}$");
         // Permitir cualquier entrada, pero agregar un listener para validar al final
         datePicker.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) { // Cuando se pierde el foco
@@ -58,29 +61,33 @@ public class ControlUI {
                 }
             }
         });
+        }
     }
 
-    public static <T> void configurarCeldaFecha(TableColumn<T, LocalDate> columna) {
-        // Establecemos una fábrica de celdas para la columna
-        columna.setCellFactory(column -> {
-            // Devolvemos una nueva celda para la visualizacion de datos
-            return new TableCell<>() {
-                // Sobreescribimos el metodo para personalizar el comportamiento de
-                // actualizacion de celda
-                @Override
-                protected void updateItem(LocalDate fecha, boolean empty) {
-                    // Llamamos a la clase padre para cualquier inicializacion necesaria
-                    super.updateItem(fecha, empty);
-                    // Verificamos si la fecha es nula
-                    if (fecha == null || empty) {
-                        setText(!empty ? "No hay fecha disponible." : null);
-                    } else {
-                        // Si es diferente de nula, formateamos la fecha antes de mostrarla en la celda
-                        setText(Fecha.formatearFecha(fecha));
+    @SafeVarargs
+    public static void configurarCeldaFecha(TableColumn<Prestamo, LocalDate>... columnas) {
+        for (TableColumn<Prestamo, LocalDate> columna : columnas) {
+            // Establecemos una fábrica de celdas para la columna
+            columna.setCellFactory(column -> {
+                // Devolvemos una nueva celda para la visualizacion de datos
+                return new TableCell<>() {
+                    // Sobreescribimos el metodo para personalizar el comportamiento de
+                    // actualizacion de celda
+                    @Override
+                    protected void updateItem(LocalDate fecha, boolean empty) {
+                        // Llamamos a la clase padre para cualquier inicializacion necesaria
+                        super.updateItem(fecha, empty);
+                        // Verificamos si la fecha es nula
+                        if (fecha == null || empty) {
+                            setText(!empty ? "No hay fecha disponible." : null);
+                        } else {
+                            // Si es diferente de nula, formateamos la fecha antes de mostrarla en la celda
+                            setText(Fecha.formatearFecha(fecha));
+                        }
                     }
-                }
-            };
-        });
+                };
+            });
+        }
     }
 
     public static void configurarCeldaNombreApellido(TableColumn<Miembro, String> columna) {
@@ -116,6 +123,14 @@ public class ControlUI {
                         btn.fire();
                     }
                 });
-            }        });
+            }
+        });
+    }
+
+    public static void desactivarControl(Control... controles) {
+        for (Control control : controles) {
+            control.setDisable(true);
+            control.setVisible(false);
+        }
     }
 }

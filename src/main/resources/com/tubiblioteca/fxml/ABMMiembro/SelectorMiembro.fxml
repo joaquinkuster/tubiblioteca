@@ -32,11 +32,11 @@
          </rowConstraints>
          <children>
             <Label text="DNI:" GridPane.halignment="CENTER" />
-            <TextField fx:id="txtDni1" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.rowIndex="1" />
+            <TextField fx:id="txtDni" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.rowIndex="1" />
             <Label text="Nombre completo:" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-            <TextField fx:id="txtNombre1" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtNombre" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Tipo:" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <SearchableComboBox fx:id="cmbTipo1" maxHeight="-Infinity" prefWidth="200.0" styleClass="combo-personalizado" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <SearchableComboBox fx:id="cmbTipo" maxHeight="-Infinity" onAction="#filtrar" prefWidth="200.0" styleClass="combo-personalizado" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Button fx:id="btnLimpiar1" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">

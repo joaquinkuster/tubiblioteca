@@ -9,6 +9,7 @@ import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.TipoMiembro;
+import com.tubiblioteca.security.Contraseña;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import com.tubiblioteca.view.Vista;
 import javafx.collections.FXCollections;
@@ -99,7 +100,6 @@ public class FormularioMiembroControlador implements Initializable {
         txtNombre.setText(miembroInicial.getNombre());
         txtApellido.setText(miembroInicial.getApellido());
         cmbTipo.setValue(miembroInicial.getTipo());
-        txtContrasena.setText(miembroInicial.getClave());
     }
 
     public void setMiembroInicial(Miembro miembro) {

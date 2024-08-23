@@ -70,6 +70,10 @@ public class Autor {
         this.baja = true;
     }
 
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
     @Override
     public String toString() {
         return ControlUI.limitar(nombre, 15);

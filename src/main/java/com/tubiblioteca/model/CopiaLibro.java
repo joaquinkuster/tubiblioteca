@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.tubiblioteca.helper.ControlUI;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,12 +32,16 @@ public class CopiaLibro {
     private EstadoCopiaLibro estado = EstadoCopiaLibro.Disponible;
     @Column(name = "precio", nullable = false)
     private double precio;
+    @Column(name = "baja", nullable = false)
+    private Boolean baja = false;
     @ManyToOne
     @JoinColumn(name = "id_rack", nullable = false)
     private Rack rack;
     @ManyToOne
     @JoinColumn(name = "id_libro", nullable = false)
     private Libro libro;
+    @OneToMany(mappedBy = "copiaLibro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Prestamo> prestamos;
 
     public CopiaLibro() {
 
@@ -133,6 +139,14 @@ public class CopiaLibro {
         }
     }
 
+    public boolean isBaja() {
+        return baja;
+    }
+
+    public void setBaja() {
+        this.baja = true;
+    }
+
     public Rack getRack() {
         return rack;
     }
@@ -155,11 +169,11 @@ public class CopiaLibro {
         this.libro = libro;
     }
 
-    public String toString() {
-        return String.format("%s %s - $%s", ControlUI.limitar(libro.toString(), 10), tipo, precio);
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
     }
 
-    public boolean isDisponible(EstadoCopiaLibro estado) {
-        return estado.toString() == "Disponible" ? true : false;
+    public String toString() {
+        return String.format("%s %s - $%s", ControlUI.limitar(libro.toString(), 10), tipo, precio);
     }
 }

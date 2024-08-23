@@ -52,13 +52,16 @@ public class SelectorMiembroControlador implements Initializable {
     private final Logger log = LoggerFactory.getLogger(ListaMiembrosControlador.class);
 
     private MiembroServicio servicio;
-    Miembro miembro;
+    private Miembro miembro;
+
+    @FXML
+    private Button btnConfirmar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
-
+        ControlUI.configurarAtajoTecladoEnter(btnConfirmar);
     }
 
     private void inicializarTabla() {

@@ -94,6 +94,9 @@ public class ListaMiembrosControlador implements Initializable {
 
         if (miembro == null) {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un miembro de la biblioteca!");
+        } else if (miembro.getTipo() != TipoMiembro.Usuario) {
+            Alerta.mostrarMensaje(true, "Error",
+                    "Sólo se le permite modificar la información de usuarios. Selecciona un miembro que sea un usuario.");
         } else {
             try {
                 abrirFormulario(miembro);
@@ -131,6 +134,9 @@ public class ListaMiembrosControlador implements Initializable {
 
         if (miembro == null) {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un miembro de la biblioteca!");
+        } else if (miembro.getTipo() != TipoMiembro.Usuario) {
+            Alerta.mostrarMensaje(true, "Error",
+                    "Sólo se le permite eliminar usuarios. Selecciona un miembro que sea un usuario.");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el miembro de la biblioteca?")) {
             try {
                 servicio.borrar(miembro);

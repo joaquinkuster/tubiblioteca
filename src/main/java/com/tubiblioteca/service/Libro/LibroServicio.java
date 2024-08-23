@@ -2,8 +2,11 @@ package com.tubiblioteca.service.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.model.Libro;
@@ -196,5 +199,19 @@ public class LibroServicio extends CrudServicio<Libro> {
     public boolean existe(Libro libro) {
         return buscarPorId(libro.getIsbn()) != null
                 && !libro.isBaja();
+    }
+
+    public String verificarCopias(Libro libro) {
+        List<CopiaLibro> copias = new ArrayList<>(libro.getCopias());
+
+        if (copias.isEmpty()) {
+            throw new IllegalArgumentException("El libro seleccionado no tiene ninguna copia disponible.");
+        } else {
+            String respuesta = "El libro: " + libro + " tiene las siguientes copias disponibles: \n";
+            for (CopiaLibro copia : copias) {
+                respuesta += "Tipo: " + copia.getTipo() + " | Precio: " + copia.getPrecio() + "\n";
+            }
+            return respuesta;
+        }
     }
 }

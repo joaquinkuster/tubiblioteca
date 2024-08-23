@@ -17,8 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+
 import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
+import com.tubiblioteca.model.Miembro;
+import com.tubiblioteca.model.TipoMiembro;
+import com.tubiblioteca.security.SesionManager;
 
 public class MenuControlador implements Initializable {
 
@@ -30,7 +36,8 @@ public class MenuControlador implements Initializable {
 
     // Botones del menu lateral
     @FXML
-    private Button btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos;
+    private Button btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks,
+            btnLibros, btnIdiomas, btnPrestamos;
     @FXML
     private HBox hboxPerfil;
 
@@ -45,27 +52,20 @@ public class MenuControlador implements Initializable {
         addListeners();
 
         // Inicializamos la lista de items con los botones correspondientes
-        items = Arrays.asList(btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros, btnRacks, btnLibros, btnIdiomas, btnPrestamos);
+        items = Arrays.asList(btnMiembros, btnAutores, btnAuditoria, btnEditoriales, btnCategorias, btnCopiaLibros,
+                btnRacks, btnLibros, btnIdiomas, btnPrestamos);
 
         // Actualizamos la información del usuario
-        //actualizarMenu();
+        actualizarMenu();
 
-        // Establecemos un handler cuando se presiona Enter en el Vbox del perfil
-        // Establecemos foco en boton de inicio
-        hboxPerfil.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                // Llamar a la función que deseas ejecutar aquí
-                modificarPerfil();
-            }
-        });
-        Platform.runLater(() -> btnMiembros.requestFocus());
+        Platform.runLater(() -> btnPrestamos.requestFocus());
     }
 
-    public void setPanel(BorderPane panel){
+    public void setPanel(BorderPane panel) {
         this.panel = panel;
 
         if (panel.getCenter() == null) {
-            panel.setCenter(StageManager.cargarVista(Vista.ListaMiembros.getRutaFxml()));
+            panel.setCenter(StageManager.cargarVista(Vista.ListaPrestamos.getRutaFxml()));
         }
     }
 
@@ -73,10 +73,10 @@ public class MenuControlador implements Initializable {
 
     private void addListeners() {
         // Establecemos los handlers correspondientes a cada boton
-        btnMiembros.setOnAction(event -> redireccionarMenu(Vista.ListaMiembros, (Button) event.getSource()));
         btnPrestamos.setOnAction(event -> redireccionarMenu(Vista.ListaPrestamos, (Button) event.getSource()));
         btnLibros.setOnAction(event -> redireccionarMenu(Vista.ListaLibros, (Button) event.getSource()));
         btnCopiaLibros.setOnAction(event -> redireccionarMenu(Vista.ListaCopiasLibros, (Button) event.getSource()));
+        btnMiembros.setOnAction(event -> redireccionarMenu(Vista.ListaMiembros, (Button) event.getSource()));
         btnRacks.setOnAction(event -> redireccionarMenu(Vista.ListaRacks, (Button) event.getSource()));
         btnEditoriales.setOnAction(event -> redireccionarMenu(Vista.ListaEditoriales, (Button) event.getSource()));
         btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));
@@ -88,9 +88,11 @@ public class MenuControlador implements Initializable {
     // Meotodo para cambiar el contenido central del main
 
     public void redireccionarMenu(Vista vista, Button btn) {
-        // Verificamos si el boton no tiene la clase actual, lo que significa que no está actualmente seleccionado
+        // Verificamos si el boton no tiene la clase actual, lo que significa que no
+        // está actualmente seleccionado
         if (!btn.getStyleClass().contains("actual")) {
-            // Itera sobre la lista de items y remueve la clase actual de cada boton, si la tienen
+            // Itera sobre la lista de items y remueve la clase actual de cada boton, si la
+            // tienen
             items.forEach(button -> button.getStyleClass().removeIf(style -> style.equals("actual")));
             // Agregamos la clase actual al boton que disparo el evento
             btn.getStyleClass().add("actual");
@@ -106,73 +108,46 @@ public class MenuControlador implements Initializable {
     private void cerrarSesion() {
         if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea cerrar sesión?")) {
             // Cerramos la sesion
-            //sessionManager.cerrarSesion();
+            SesionManager.cerrarSesion();
         }
     }
 
-    // Metodo para modificar el perfil del usuario en sesion
+    // Metodo para modificar la contrasena
 
     @FXML
-    private void modificarPerfil() {
-        //if (sessionManager.validarSesion()) {
-            //miembroManager.cargarFormulario(sessionManager.getUsuario(), this);
-        //}
+    private void cambiarContrasena() {
+        Parent vista = StageManager.cargarVista(Vista.CambiarContraseña.getRutaFxml()); 
+        StageManager.abrirModal(vista, Vista.CambiarContraseña);
     }
 
     // Metodo para establecer la información del usuario en el menu
 
-    /*public void actualizarMenu() {
-        if (sessionManager.validarSesion()) {
+    public void actualizarMenu() {
+        if (SesionManager.haySesion()) {
 
-            Miembro miembro = sessionManager.getUsuario();
+            Miembro miembro = SesionManager.getMiembro();
 
             // Obtenemos la información del usuario en sesion
-            byte[] imagenBytes = miembro.getFoto();
             String nombre = miembro.toString();
-            Cargo cargo = miembro.getCargo() != null ? miembro.getCargo() : null;
-
-            // Verificamos si tiene foto de perfil
-            if (imagenBytes != null) {
-
-                // Convertimos los bytes en un Image
-                Image imagen = ImageHelper.convertirBytesAImage(imagenBytes);
-
-                // Si la conversion fue exitosa, establecemos la foto de perfil
-                if (imagen != null) {
-                    fotoPerfil.setImage(imagen);
-                } else {
-                    // Colocamos la foto de perfil por defecto
-                    ImageHelper.colocarImagenPorDefecto(fotoPerfil);
-                }
-            } else {
-                // Colocamos la foto de perfil por defecto
-                ImageHelper.colocarImagenPorDefecto(fotoPerfil);
-            }
-
-            // Redondeamos la imagen
-            ImageHelper.redondearImagen(fotoPerfil);
+            TipoMiembro tipo = miembro.getTipo() != null ? miembro.getTipo() : null;
 
             // Establecemos el nombre y cargo del miembro
             if (nombre != null) {
                 lblNombre.setText(nombre);
             }
-            if (cargo != null) {
-                lblCargo.setText(cargo.toString());
+            if (tipo != null) {
+                lblTipo.setText(tipo.toString());
+            }
 
-                // Mostramos / ocultamos el boton de miembros basandonos en la proridad
-                habilitarBtnMiembros(cargo.getPrioridad() >= 2);
+            if (SesionManager.esUsuario()) {
+                btnPrestamos.setText("Mis Préstamos");
+                ControlUI.desactivarControl(btnMiembros, btnCopiaLibros, btnRacks, btnEditoriales, btnAutores,
+                        btnCategorias, btnIdiomas, btnAuditoria);
             }
         }
-    }*/
+    }
 
-    // Metodo para ocultar / mostrar btn de miembros segun la prioridad del miembro
-
-    /*public void habilitarBtnMiembros(boolean tieneAcceso) {
-        btnMiembros.setDisable(!tieneAcceso);
-        btnMiembros.setVisible(tieneAcceso);
-    }*/
-
-public void cambiarCentro(Vista vista) {
+    public void cambiarCentro(Vista vista) {
         // Obtenemos el nodo raiz del centro actual del contenedor
         Node centroActual = panel.getCenter();
         // Obtenemos el nodo raiz del nuevo centro a colocar en el contenedor

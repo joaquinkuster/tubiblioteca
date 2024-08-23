@@ -6,21 +6,19 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Pair;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.SearchableComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.config.StageManager;
+import com.tubiblioteca.helper.Alerta;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Libro;
-import com.tubiblioteca.security.SesionManager;
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
-import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.service.Autor.AutorServicio;
@@ -29,16 +27,14 @@ import com.tubiblioteca.service.Editorial.EditorialServicio;
 import com.tubiblioteca.service.Idioma.IdiomaServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.view.Vista;
-import com.tubiblioteca.helper.Alerta;
-import com.tubiblioteca.helper.ControlUI;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ListaLibrosControlador implements Initializable {
+public class SelectorLibroControlador implements Initializable {
 
     // Columnas de la tabla
     @FXML
@@ -74,16 +70,6 @@ public class ListaLibrosControlador implements Initializable {
     @FXML
     private SearchableComboBox<Idioma> cmbIdioma;
 
-    // Elementos que se debe ocultar al usuario normal
-    @FXML
-    private Button btnAgregar;
-    @FXML
-    private Button btnModificar;
-    @FXML
-    private Button btnEliminar;
-    @FXML
-    private Button btnVerificarCopias;
-
     // Listas utilizadas
     private final ObservableList<Libro> libros = FXCollections.observableArrayList();
     private final ObservableList<Libro> filtrados = FXCollections.observableArrayList();
@@ -96,19 +82,22 @@ public class ListaLibrosControlador implements Initializable {
     private final Logger log = LoggerFactory.getLogger(ListaLibrosControlador.class);
 
     private LibroServicio servicio;
-    private Pair<FormularioLibroControlador, Parent> formulario;
     private AutorServicio servicioAutor;
     private EditorialServicio servicioEditorial;
     private CategoriaServicio servicioCategoria;
     private IdiomaServicio servicioIdioma;
 
+    private Libro libro;
+
+    @FXML
+    private Button btnConfirmar;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inicializarTabla();
         inicializarFiltros();
-        if (SesionManager.esUsuario()) {
-            ControlUI.desactivarControl(btnAgregar, btnModificar, btnEliminar, btnVerificarCopias);
-        }
+        ControlUI.configurarAtajoTecladoEnter(btnConfirmar);
+
     }
 
     private void inicializarTabla() {
@@ -178,74 +167,28 @@ public class ListaLibrosControlador implements Initializable {
     }
 
     @FXML
-    private void modificar() {
+    private void confirmar() {
+        // Obtenemos el libro seleccionado
         Libro libro = tblLibros.getSelectionModel().getSelectedItem();
 
+        // Verificamos que sea diferente de nulo
         if (libro == null) {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un libro!");
         } else {
-            try {
-                abrirFormulario(libro);
-                if (libro != null && quitarFiltro(libro)) {
-                    filtrados.remove(libro);
-                }
-                tblLibros.refresh();
-            } catch (Exception e) {
-                log.error("Error al modificar el libro: ", e);
-            }
+            this.libro = libro;
+            // Salimos del modal
+            StageManager.cerrarModal(Vista.SelectorLibro);
         }
     }
 
-    @FXML
-    private void agregar() {
-        try {
-            List<Libro> nuevosLibros = abrirFormulario(null);
-            if (nuevosLibros != null) {
-                for (Libro libro : nuevosLibros) {
-                    libros.add(libro);
-                    if (aplicarFiltro(libro)) {
-                        filtrados.add(libro);
-                    }
-                }
-                tblLibros.refresh();
-            }
-        } catch (Exception e) {
-            log.error("Error al agregar un libro: ", e);
+    public void setLibro(Libro libro) {
+        if (libro != null) {
+            tblLibros.getSelectionModel().select(libro);
         }
     }
 
-    @FXML
-    private void eliminar() {
-        Libro libro = tblLibros.getSelectionModel().getSelectedItem();
-
-        if (libro == null) {
-            Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un libro!");
-        } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el libro?")) {
-            try {
-                servicio.borrar(libro);
-                libros.remove(libro);
-                filtrados.remove(libro);
-                Alerta.mostrarMensaje(false, "Info", "Libro eliminado correctamente!");
-                tblLibros.refresh();
-            } catch (Exception e) {
-                log.error("Error al eliminar el libro: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el libro. Puede estar vinculado a otros registros.");
-            }
-        }
-    }
-
-    private List<Libro> abrirFormulario(Libro libroInicial) throws IOException {
-        formulario = StageManager.cargarVistaConControlador(Vista.FormularioLibro.getRutaFxml());
-        FormularioLibroControlador controladorFormulario = formulario.getKey();
-        Parent vistaFormulario = formulario.getValue();
-
-        if (libroInicial != null) {
-            controladorFormulario.setLibroInicial(libroInicial);
-        }
-
-        StageManager.abrirModal(vistaFormulario, Vista.FormularioLibro);
-        return controladorFormulario.getLibros();
+    public Libro getLibro() {
+        return libro;
     }
 
     @FXML
@@ -283,20 +226,6 @@ public class ListaLibrosControlador implements Initializable {
             }
         }
         return true;
-    }
-
-    private boolean quitarFiltro(Libro libro) {
-        String isbn = txtIsbn.getText().trim().toLowerCase();
-        String titulo = txtTitulo.getText().trim().toLowerCase();
-        Categoria categoria = cmbCategoria.getValue();
-        Editorial editorial = cmbEditorial.getValue();
-        Idioma idioma = cmbIdioma.getValue();
-        return !filtrarPorAutores(libro.getAutores())
-                || (isbn != null && !String.valueOf(libro.getIsbn()).toLowerCase().startsWith(isbn))
-                || (titulo != null && !libro.getTitulo().toLowerCase().contains(titulo))
-                || (categoria != null && !categoria.equals(libro.getCategoria()))
-                || (editorial != null && !editorial.equals(libro.getEditorial()))
-                || (idioma != null && !idioma.equals(libro.getIdioma()));
     }
 
     @FXML

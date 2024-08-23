@@ -1,13 +1,16 @@
 package com.tubiblioteca.model;
 
+import java.util.List;
+
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +25,8 @@ public class Categoria {
     private String nombre;
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Libro> libros;
 
     public Categoria(){
 
@@ -63,6 +68,10 @@ public class Categoria {
 
     public void setBaja() {
         this.baja = true;
+    }
+
+    public List<Libro> getLibros() {
+        return libros;
     }
 
     public String toString() {

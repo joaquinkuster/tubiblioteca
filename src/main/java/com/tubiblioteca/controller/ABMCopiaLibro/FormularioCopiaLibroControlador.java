@@ -8,6 +8,7 @@ import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.controller.ABMLibro.FormularioLibroControlador;
 import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
+import com.tubiblioteca.helper.Selector;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Rack;
@@ -153,5 +154,9 @@ public class FormularioCopiaLibroControlador implements Initializable {
 
     @FXML
     private void buscarLibro() {
+        Libro libro = Selector.seleccionarLibro(cmbLibro.getValue());
+        if (libro != null) {
+            cmbLibro.setValue(libro);
+        }
     }
 }

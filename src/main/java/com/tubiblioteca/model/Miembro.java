@@ -159,18 +159,20 @@ public class Miembro {
         return clave;
     }
 
-    public void setClave(String clave) {
+    public void setClave(String clave, boolean estaCodificada) {
         if (clave.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese un contraseña.");
-        } else if (clave.length() > 50) {
-            throw new IllegalArgumentException("La contraseña no puede tener más de 50 caracteres.");
-        } else if (Validacion.validarContrasena(clave)) {
-            throw new IllegalArgumentException("Por favor, introduce una contraseña válida que cumpla con los siguientes requisitos:\n" +
-            "  • Al menos 6 caracteres de longitud.\n" +
-            "  • Al menos una letra mayúscula.\n" +
-            "  • Al menos una letra minúscula.\n" +
-            "  • Al menos un dígito numérico.\n" +
-            "  • Al menos un carácter especial [@#$%^&+=!].");
+        } else if (!estaCodificada) {
+            if (clave.length() > 50) {
+                throw new IllegalArgumentException("La contraseña no puede tener más de 50 caracteres.");
+            } else if (Validacion.validarContrasena(clave)) {
+                throw new IllegalArgumentException("Por favor, introduce una contraseña válida que cumpla con los siguientes requisitos:\n" +
+                "  • Al menos 6 caracteres de longitud.\n" +
+                "  • Al menos una letra mayúscula.\n" +
+                "  • Al menos una letra minúscula.\n" +
+                "  • Al menos un dígito numérico.\n" +
+                "  • Al menos un carácter especial [@#$%^&+=!].");
+            }
         }
         this.clave = clave;
     }
