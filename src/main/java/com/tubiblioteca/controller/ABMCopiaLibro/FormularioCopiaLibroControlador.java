@@ -10,6 +10,7 @@ import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Selector;
 import com.tubiblioteca.model.CopiaLibro;
+import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.model.TipoCopiaLibro;
@@ -43,6 +44,8 @@ public class FormularioCopiaLibroControlador implements Initializable {
     private Spinner<Integer> spinCantidad;
     @FXML 
     private CheckBox checkReferencia;
+    @FXML
+    private CheckBox checkPerdida;
 
     @FXML
     private Button btnNuevo;
@@ -112,6 +115,7 @@ public class FormularioCopiaLibroControlador implements Initializable {
             Libro libro =cmbLibro.getValue();
             Rack rack = cmbRack.getValue();
             boolean referencia = checkReferencia.isSelected();
+            boolean estaPerdida = checkPerdida.isSelected();
 
             int cantidad = spinCantidad.getValue();
 
@@ -121,7 +125,7 @@ public class FormularioCopiaLibroControlador implements Initializable {
                 }
                 Alerta.mostrarMensaje(false, "Info", "Se han agregados las copias correctamente!");
             } else {
-                servicio.validarYModificar(copiaInicial, tipo, precio, libro, rack, referencia);
+                servicio.validarYModificar(copiaInicial, tipo, precio, libro, rack, referencia, estaPerdida);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado la copia correctamente!");
                 StageManager.cerrarModal(Vista.FormularioCopiaLibro);
             }
@@ -137,6 +141,7 @@ public class FormularioCopiaLibroControlador implements Initializable {
         cmbLibro.setValue(copiaInicial.getLibro());
         cmbRack.setValue(copiaInicial.getRack());
         checkReferencia.setSelected(copiaInicial.isReferencia());
+        checkPerdida.setSelected(copiaInicial.getEstado().equals(EstadoCopiaLibro.Perdida));
     }
 
     public void setCopiaInicial(CopiaLibro copia) {
@@ -144,6 +149,7 @@ public class FormularioCopiaLibroControlador implements Initializable {
             this.copiaInicial = copia;
             autocompletar();
             spinCantidad.setDisable(true);
+            checkPerdida.setDisable(false);
             btnNuevo.setDisable(true);
         }
     }

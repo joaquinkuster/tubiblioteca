@@ -17,10 +17,12 @@ import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
+import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.model.TipoCopiaLibro;
 import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
+import com.tubiblioteca.service.Prestamo.PrestamoServicio;
 import com.tubiblioteca.service.Rack.RackServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
@@ -80,6 +82,7 @@ public class ListaCopiasLibrosControlador implements Initializable {
     private Pair<FormularioCopiaLibroControlador, Parent> formulario;
     private LibroServicio servicioLibro;
     private RackServicio servicioRack;
+    private PrestamoServicio servicioPrestamo;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -178,15 +181,14 @@ public class ListaCopiasLibrosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una copia de un libro!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar la copia del libro?")) {
             try {
-                servicio.borrar(copia);
+                servicio.validarYBorrar(copia);
                 copias.remove(copia);
                 filtrados.remove(copia);
                 Alerta.mostrarMensaje(false, "Info", "Copia del libro eliminada correctamente!");
                 tblCopias.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar la copia: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar la copia del libro. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar la copia.");
+                Alerta.mostrarMensaje(true, "Error", e.getMessage());
             }
         }
     }
@@ -263,7 +265,7 @@ public class ListaCopiasLibrosControlador implements Initializable {
 
     @FXML
     private void verificarReferencias() {
-        try{
+        try {
             String respuesta = servicio.verificarReferencias(libros);
             Alerta.mostrarMensaje(false, "Info", respuesta);
         } catch (Exception e) {

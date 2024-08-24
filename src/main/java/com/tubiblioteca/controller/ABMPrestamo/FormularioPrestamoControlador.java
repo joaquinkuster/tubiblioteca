@@ -45,6 +45,10 @@ public class FormularioPrestamoControlador implements Initializable {
     private Button btnNuevo;
     @FXML
     private Button btnGuardar;
+    @FXML
+    private Button btnBuscarMiembro;
+    @FXML
+    private Button btnBuscarCopia;
 
     private final ObservableList<Miembro> miembros = FXCollections.observableArrayList();
     private final ObservableList<CopiaLibro> copias = FXCollections.observableArrayList();
@@ -106,7 +110,7 @@ public class FormularioPrestamoControlador implements Initializable {
                 nuevosPrestamos.add(servicio.validarEInsertar(fechaPrestamo, miembro, copia));
                 Alerta.mostrarMensaje(false, "Info", "Se ha agregado el préstamo correctamente!");
             } else {
-                servicio.validarYModificar(prestamoInicial, fechaPrestamo, fechaDevolucion, miembro, copia, multa);
+                servicio.validarYModificar(prestamoInicial, fechaDevolucion, copia, multa);
                 Alerta.mostrarMensaje(false, "Info", "Se ha modificado el préstamo correctamente!");
                 StageManager.cerrarModal(Vista.FormularioPrestamo);
             }
@@ -127,7 +131,7 @@ public class FormularioPrestamoControlador implements Initializable {
         if (fechaPrestamo == null || fechaDevolucion == null) {
             return;
         }
-
+    
         // Comprobar si la devolución es después o el mismo día del préstamo
         if (!fechaDevolucion.isBefore(fechaPrestamo)) {
             LocalDate fechaVencimiento = fechaPrestamo.plusDays(10);
@@ -136,7 +140,7 @@ public class FormularioPrestamoControlador implements Initializable {
             // Si hay días de retraso, calcular la multa
             if (diasRetraso > 0) {
                 CopiaLibro copia = cmbCopia.getValue();
-
+    
                 // Verificar si la copia del libro está seleccionada
                 if (copia != null) {
                     double multa = copia.getPrecio() * diasRetraso;
@@ -175,7 +179,11 @@ public class FormularioPrestamoControlador implements Initializable {
             this.prestamoInicial = prestamo;
             autocompletar();
             dtpDevolucion.setDisable(false);
-            txtMulta.setDisable(false);
+            dtpPrestamo.setDisable(true);
+            cmbMiembro.setDisable(true);
+            btnBuscarMiembro.setDisable(true);
+            cmbCopia.setDisable(true);
+            btnBuscarCopia.setDisable(true);
             btnNuevo.setDisable(true);
         }
     }

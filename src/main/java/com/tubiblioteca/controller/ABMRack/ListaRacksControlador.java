@@ -111,15 +111,14 @@ public class ListaRacksControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un rack!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el rack?")) {
             try {
-                servicio.borrar(rack);
+                servicio.validarYBorrar(rack);
                 racks.remove(rack);
                 filtrados.remove(rack);
                 Alerta.mostrarMensaje(false, "Info", "Rack eliminado correctamente!");
                 tblRacks.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el rack: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el rack. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el rack.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el rack.\n" + e.getMessage());
             }
         }
     }

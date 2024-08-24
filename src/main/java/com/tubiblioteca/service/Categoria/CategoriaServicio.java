@@ -1,6 +1,7 @@
 package com.tubiblioteca.service.Categoria;
 
 import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 
@@ -47,6 +48,18 @@ public class CategoriaServicio extends CrudServicio<Categoria> {
     }
 
     @Override
+    public void validarYBorrar(Categoria categoria) {
+
+        for (Libro libro : categoria.getLibros()) {
+            if (!libro.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar la categoría porque tiene libros asociados.");
+            }
+        }
+
+        borrar(categoria);
+    }
+
+    @Override
     protected boolean esInactivo(Categoria categoria) {
         return categoria.isBaja();
     }
@@ -54,11 +67,5 @@ public class CategoriaServicio extends CrudServicio<Categoria> {
     @Override
     protected void marcarComoInactivo(Categoria categoria) {
         categoria.setBaja();
-    }
-
-    @Override
-    public boolean existe(Categoria categoria) {
-        return buscarPorId(categoria.getId()) != null 
-        && !categoria.isBaja();
     }
 }

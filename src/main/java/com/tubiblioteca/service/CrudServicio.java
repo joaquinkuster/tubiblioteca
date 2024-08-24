@@ -56,7 +56,7 @@ public abstract class CrudServicio<T> {
     protected void modificar(T entidad) {
         try {
             this.repositorio.iniciarTransaccion();
-            if (entidad != null && existe(entidad)) {
+            if (entidad != null) {
                 this.repositorio.modificar(entidad);
                 this.repositorio.confirmarTransaccion();
             }
@@ -68,10 +68,10 @@ public abstract class CrudServicio<T> {
         }
     }
 
-    public void borrar(T entidad) {
+    protected void borrar(T entidad) {
         try {
             this.repositorio.iniciarTransaccion();
-            if (entidad != null && existe(entidad)) {
+            if (entidad != null) {
                 marcarComoInactivo(entidad);
                 this.repositorio.modificar(entidad);
                 this.repositorio.confirmarTransaccion();
@@ -86,13 +86,18 @@ public abstract class CrudServicio<T> {
         }
     }
 
+    public boolean existe(T entidad, Object id) {
+        return buscarPorId(id) != null
+                && !esInactivo(entidad);
+    }
+
     public abstract T validarEInsertar(Object... datos);
 
     public abstract void validarYModificar(T entidad, Object... datos);
 
+    public abstract void validarYBorrar(T entidad);
+
     protected abstract boolean esInactivo(T entidad);
 
     protected abstract void marcarComoInactivo(T entidad);
-
-    public abstract boolean existe(T entidad);
 }

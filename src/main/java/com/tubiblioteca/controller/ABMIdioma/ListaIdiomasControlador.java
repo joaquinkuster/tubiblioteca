@@ -111,15 +111,14 @@ public class ListaIdiomasControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un idioma!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el idioma?")) {
             try {
-                servicio.borrar(idioma);
+                servicio.validarYBorrar(idioma);
                 idiomas.remove(idioma);
                 filtrados.remove(idioma);
                 Alerta.mostrarMensaje(false, "Info", "idioma eliminado correctamente!");
                 tblIdiomas.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el idioma: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el idioma. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el idioma.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el idioma.\n" + e.getMessage());
             }
         }
     }

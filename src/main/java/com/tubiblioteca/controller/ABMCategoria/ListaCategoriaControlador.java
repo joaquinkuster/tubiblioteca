@@ -111,15 +111,14 @@ public class ListaCategoriaControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una categoría!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar la categoría?")) {
             try {
-                servicio.borrar(categoria);
+                servicio.validarYBorrar(categoria);
                 categorias.remove(categoria);
                 filtrados.remove(categoria);
                 Alerta.mostrarMensaje(false, "Info", "categoria eliminada correctamente!");
                 tblCategorias.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar la categoria: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar la categoria. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar la categoria.");
+                Alerta.mostrarMensaje(true, "Error", e.getMessage());
             }
         }
     }

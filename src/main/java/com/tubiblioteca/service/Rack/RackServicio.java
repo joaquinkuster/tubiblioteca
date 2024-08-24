@@ -1,5 +1,7 @@
 package com.tubiblioteca.service.Rack;
 
+import com.tubiblioteca.model.CopiaLibro;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
@@ -57,8 +59,14 @@ public class RackServicio extends CrudServicio<Rack> {
     }
 
     @Override
-    public boolean existe(Rack rack) {
-        return buscarPorId(rack.getId()) != null 
-        && !rack.isBaja();
+    public void validarYBorrar(Rack rack) {
+
+        for (CopiaLibro copia : rack.getCopiasLibros()) {
+            if (!copia.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar el rack porque tiene copias de libros asociadas.");
+            }
+        }
+
+        borrar(rack);
     }
 }

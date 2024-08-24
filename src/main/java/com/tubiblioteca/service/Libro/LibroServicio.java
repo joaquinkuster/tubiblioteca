@@ -58,26 +58,26 @@ public class LibroServicio extends CrudServicio<Libro> {
 
         // Validamos si el miembro o la copia seleccionados existen
         if (categoria != null) {
-            if (!servicioCategoria.existe(categoria)) {
+            if (!servicioCategoria.existe(categoria, categoria.getId())) {
                 errores.add("La categoría seleccionada no se encuentra en la base de datos.");
             }
         }
 
         if (editorial != null) {
-            if (!servicioEditorial.existe(editorial)) {
+            if (!servicioEditorial.existe(editorial, editorial.getId())) {
                 errores.add("La editorial seleccionada no se encuentra en la base de datos.");
             }
         }
 
         if (idioma != null) {
-            if (!servicioIdioma.existe(idioma)) {
+            if (!servicioIdioma.existe(idioma, idioma.getId())) {
                 errores.add("El idioma seleccionado no se encuentra en la base de datos.");
             }
         }
 
         for (Autor autor : autores) {
             if (autor != null) {
-                if (!servicioAutor.existe(autor)) {
+                if (!servicioAutor.existe(autor, autor.getId())) {
                     errores.add("El autor " + autor + " no se encuentra en la base de datos.");
                 }
             }
@@ -117,26 +117,26 @@ public class LibroServicio extends CrudServicio<Libro> {
 
         // Validamos si el miembro o la copia seleccionados existen
         if (categoria != null) {
-            if (!servicioCategoria.existe(categoria)) {
+            if (!servicioCategoria.existe(categoria, categoria.getId())) {
                 errores.add("La categoría seleccionada no se encuentra en la base de datos.");
             }
         }
 
         if (editorial != null) {
-            if (!servicioEditorial.existe(editorial)) {
+            if (!servicioEditorial.existe(editorial, editorial.getId())) {
                 errores.add("La editorial seleccionada no se encuentra en la base de datos.");
             }
         }
 
         if (idioma != null) {
-            if (!servicioIdioma.existe(idioma)) {
+            if (!servicioIdioma.existe(idioma, idioma.getId())) {
                 errores.add("El idioma seleccionado no se encuentra en la base de datos.");
             }
         }
 
         for (Autor autor : autores) {
             if (autor != null) {
-                if (!servicioAutor.existe(autor)) {
+                if (!servicioAutor.existe(autor, autor.getId())) {
                     errores.add("El autor " + autor + " no se encuentra en la base de datos.");
                 }
             }
@@ -186,6 +186,18 @@ public class LibroServicio extends CrudServicio<Libro> {
     }
 
     @Override
+    public void validarYBorrar(Libro libro) {
+
+        for (CopiaLibro copia : libro.getCopias()) {
+            if (!copia.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar el libro porque tiene copias asociadas.");
+            }
+        }
+
+        borrar(libro);
+    }
+
+    @Override
     protected boolean esInactivo(Libro libro) {
         return libro.isBaja();
     }
@@ -193,12 +205,6 @@ public class LibroServicio extends CrudServicio<Libro> {
     @Override
     protected void marcarComoInactivo(Libro libro) {
         libro.setBaja();
-    }
-
-    @Override
-    public boolean existe(Libro libro) {
-        return buscarPorId(libro.getIsbn()) != null
-                && !libro.isBaja();
     }
 
     public String verificarCopias(Libro libro) {

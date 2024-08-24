@@ -1,6 +1,8 @@
 package com.tubiblioteca.service.Editorial;
 
+import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Editorial;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 
@@ -47,6 +49,18 @@ public class EditorialServicio extends CrudServicio<Editorial> {
     }
 
     @Override
+    public void validarYBorrar(Editorial editorial) {
+
+        for (Libro libro : editorial.getLibros()) {
+            if (!libro.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar la editorial porque tiene libros asociados.");
+            }
+        }
+
+        borrar(editorial);
+    }
+
+    @Override
     protected boolean esInactivo(Editorial editorial) {
         return editorial.isBaja();
     }
@@ -54,11 +68,5 @@ public class EditorialServicio extends CrudServicio<Editorial> {
     @Override
     protected void marcarComoInactivo(Editorial editorial) {
         editorial.setBaja();
-    }
-
-    @Override
-    public boolean existe(Editorial editorial) {
-        return buscarPorId(editorial.getId()) != null 
-        && !editorial.isBaja();
     }
 }

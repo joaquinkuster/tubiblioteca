@@ -112,15 +112,14 @@ public class ListaEditorialesControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar una editorial!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar la editorial?")) {
             try {
-                servicio.borrar(editorial);
+                servicio.validarYBorrar(editorial);
                 editoriales.remove(editorial);
                 filtrados.remove(editorial);
                 Alerta.mostrarMensaje(false, "Info", "Editorial eliminado correctamente!");
                 tblEditoriales.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar la editorial: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar la editorial. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar la editorial.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar la editorial.\n" + e.getMessage());
             }
         }
     }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.repository.Repositorio;
@@ -38,13 +39,13 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
 
         // Validamos si el miembro o la copia seleccionados existen
         if (miembro != null) {
-            if (!servicioMiembro.existe(miembro)) {
+            if (!servicioMiembro.existe(miembro, miembro.getDni())) {
                 errores.add("El miembro de la biblioteca seleccionado no se encuentra en la base de datos.");
             }
         }
 
         if (copia != null) {
-            if (!servicioCopia.existe(copia)) {
+            if (!servicioCopia.existe(copia, copia.getId())) {
                 errores.add("La copia del libro seleccionada no se encuentra en la base de datos.");
             }
         }
@@ -77,56 +78,25 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
 
     @Override
     public void validarYModificar(Prestamo prestamo, Object... datos) {
-        if (datos.length != 5) {
+        if (datos.length != 3) {
             throw new IllegalArgumentException("Número incorrecto de parámetros.");
         }
 
-        LocalDate fechaPrestamo = (LocalDate) datos[0];
-        LocalDate fechaDevolucion = (LocalDate) datos[1];
-        Miembro miembro = (Miembro) datos[2];
-        CopiaLibro copia = (CopiaLibro) datos[3];
-        String multa = (String) datos[4];
+        LocalDate fechaDevolucion = (LocalDate) datos[0];
+        CopiaLibro copia = (CopiaLibro) datos[1];
+        String multa = (String) datos[2];
         Prestamo aux = new Prestamo();
 
         List<String> errores = new ArrayList<>();
 
-        // Validamos si el miembro o la copia seleccionados existen
-        if (miembro != null) {
-            if (!servicioMiembro.existe(miembro)) {
-                errores.add("El miembro de la biblioteca seleccionado no se encuentra en la base de datos.");
-            }
-        }
+        boolean hayDevolucion = fechaDevolucion != null || prestamo.getFechaDevolucion() != null; 
 
-        if (copia != null) {
-            if (!servicioCopia.existe(copia)) {
-                errores.add("La copia del libro seleccionada no se encuentra en la base de datos.");
-            }
-        }
-
-        if (!prestamo.getFechaPrestamo().isEqual(fechaPrestamo)) {
+        if (hayDevolucion) {
             try {
-                aux.setFechaPrestamo(fechaPrestamo);
+                aux.setFechaDevolucion(fechaDevolucion);
             } catch (IllegalArgumentException e) {
                 errores.add(e.getMessage());
             }
-        }
-
-        try {
-            aux.setFechaDevolucion(fechaDevolucion);
-        } catch (IllegalArgumentException e) {
-            errores.add(e.getMessage());
-        }
-
-        try {
-            aux.setMiembro(miembro);
-        } catch (IllegalArgumentException e) {
-            errores.add(e.getMessage());
-        }
-
-        try {
-            aux.setCopiaLibro(copia);
-        } catch (IllegalArgumentException e) {
-            errores.add(e.getMessage());
         }
 
         try {
@@ -139,19 +109,25 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
 
-        if (!prestamo.getFechaPrestamo().isEqual(fechaPrestamo)) {
-            prestamo.setFechaPrestamo(fechaPrestamo);
+        if (hayDevolucion) {
+            prestamo.setFechaDevolucion(fechaDevolucion);
         }
-
-        prestamo.setFechaDevolucion(fechaDevolucion);
-        prestamo.setMiembro(miembro);
-        prestamo.setCopiaLibro(copia);
         prestamo.setMulta(multa);
         modificar(prestamo);
 
-        if (fechaDevolucion != null) {
+        if (!copia.getEstado().equals(EstadoCopiaLibro.Disponible)) {
             servicioCopia.modificarEstado(copia, EstadoCopiaLibro.Disponible);
         }
+    }
+
+    @Override
+    public void validarYBorrar(Prestamo prestamo) {
+
+        if (prestamo.getFechaDevolucion() == null) {
+            servicioCopia.modificarEstado(prestamo.getCopiaLibro(), EstadoCopiaLibro.Disponible);
+        }
+
+        borrar(prestamo);
     }
 
     @Override
@@ -164,13 +140,7 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
         prestamo.setBaja();
     }
 
-    @Override
-    public boolean existe(Prestamo prestamo) {
-        return buscarPorId(prestamo.getId()) != null
-                && !prestamo.isBaja();
-    }
-
-    public void confirmarDevolucion(Prestamo prestamo) {
+    public void cerrarPrestamo(Prestamo prestamo) {
         if (prestamo.getFechaDevolucion() != null) {
             throw new IllegalStateException("La devolución de este préstamo ya ha sido registrada anteriormente.");
         }
@@ -196,7 +166,7 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
 
         if (prestamos != null) {
             for (Prestamo p : prestamos) {
-                if (existe(p) && p.getFechaDevolucion() == null) {
+                if (existe(p, p.getId()) && p.getFechaDevolucion() == null) {
                     activos++;
                     if (p.getFechaPrestamo().plusDays(10).isBefore(LocalDate.now())) {
                         prestamoVencido = true;
@@ -218,9 +188,11 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
             errores.add("No se puede prestar una copia de libro de referencia.");
         }
 
-        if (copia.getEstado() != EstadoCopiaLibro.Disponible) {
+        if (copia.getEstado() == EstadoCopiaLibro.Prestada) {
             errores.add(
                     "Esta copia de libro ya está prestada y no puede ser prestada nuevamente hasta que la devuelvan.");
+        } else if (copia.getEstado() == EstadoCopiaLibro.Perdida) {
+            errores.add("Esta copia de libro está perdida y no puede ser prestada.");
         }
 
         if (!errores.isEmpty()) {

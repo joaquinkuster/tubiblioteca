@@ -2,6 +2,9 @@ package com.tubiblioteca.service.Miembro;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tubiblioteca.model.CopiaLibro;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.TipoMiembro;
@@ -103,6 +106,18 @@ public class MiembroServicio extends CrudServicio<Miembro> {
     }
 
     @Override
+    public void validarYBorrar(Miembro miembro) {
+
+        for (Prestamo prestamo : miembro.getPrestamos()) {
+            if (!prestamo.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar el miembro de la biblioteca porque tiene préstamos asociados.");
+            }
+        }
+
+        borrar(miembro);
+    }
+
+    @Override
     protected boolean esInactivo(Miembro miembro) {
         return miembro.isBaja();
     }
@@ -110,12 +125,6 @@ public class MiembroServicio extends CrudServicio<Miembro> {
     @Override
     protected void marcarComoInactivo(Miembro miembro) {
         miembro.setBaja();
-    }
-
-    @Override
-    public boolean existe(Miembro miembro) {
-        return buscarPorId(miembro.getDni()) != null
-                && !miembro.isBaja();
     }
 
     public void agregarPrestamo(Miembro miembro, Prestamo prestamo) {

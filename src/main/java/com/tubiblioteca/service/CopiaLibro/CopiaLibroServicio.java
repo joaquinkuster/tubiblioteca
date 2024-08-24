@@ -1,21 +1,19 @@
 package com.tubiblioteca.service.CopiaLibro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
+import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.model.TipoCopiaLibro;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
 import com.tubiblioteca.service.Rack.RackServicio;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
@@ -45,13 +43,13 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
         // Validamos si el libro o el rack seleccionados existen
         if (libro != null) {
-            if (!servicioLibro.existe(libro)) {
+            if (!servicioLibro.existe(libro, libro.getIsbn())) {
                 errores.add("El libro seleccionado no se encuentra en la base de datos.");
             }
         }
 
         if (rack != null) {
-            if (!servicioRack.existe(rack)) {
+            if (!servicioRack.existe(rack, rack.getId())) {
                 errores.add("El rack seleccionada no se encuentra en la base de datos.");
             }
         }
@@ -74,7 +72,7 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
     @Override
     public void validarYModificar(CopiaLibro copia, Object... datos) {
-        if (datos.length != 5) {
+        if (datos.length != 6) {
             throw new IllegalArgumentException("Número incorrecto de parámetros.");
         }
 
@@ -83,19 +81,20 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
         Libro libro = (Libro) datos[2];
         Rack rack = (Rack) datos[3];
         boolean referencia = (boolean) datos[4];
+        boolean estaPerdida = (boolean) datos[5];
         CopiaLibro aux = new CopiaLibro();
 
         List<String> errores = new ArrayList<>();
 
         // Validamos si el libro o el rack seleccionados existen
         if (libro != null) {
-            if (!servicioLibro.existe(libro)) {
+            if (!servicioLibro.existe(libro, libro.getIsbn())) {
                 errores.add("El libro seleccionado no se encuentra en la base de datos.");
             }
         }
 
         if (rack != null) {
-            if (!servicioRack.existe(rack)) {
+            if (!servicioRack.existe(rack, rack.getId())) {
                 errores.add("El rack seleccionada no se encuentra en la base de datos.");
             }
         }
@@ -128,6 +127,22 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
 
+        if (referencia && copia.getEstado().equals(EstadoCopiaLibro.Prestada)) {
+            throw new IllegalArgumentException("No se puede marcar como 'referencia' porque hay un préstamo en curso.");
+        }
+
+        if (estaPerdida) {
+            try {
+                modificarEstado(copia, EstadoCopiaLibro.Perdida);
+            } catch (IllegalArgumentException e) {
+                throw e;
+            }
+        } else {
+            if (copia.getEstado().equals(EstadoCopiaLibro.Perdida)){
+                modificarEstado(copia, EstadoCopiaLibro.Disponible);
+            }
+        }
+
         copia.setTipo(tipo);
         copia.setPrecio(precio);
         copia.setLibro(libro);
@@ -137,28 +152,27 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
     }
 
     @Override
+    public void validarYBorrar(CopiaLibro copia) {
+
+        for (Prestamo prestamo : copia.getPrestamos()) {
+            if (!prestamo.isBaja()) {
+                String mensaje = "No se puede eliminar la copia porque tiene préstamos asociados.\n" +
+                        "Puede marcarla como 'perdida' en su lugar.";
+                throw new IllegalArgumentException(mensaje);
+            }
+        }
+
+        borrar(copia);
+    }
+
+    @Override
     protected boolean esInactivo(CopiaLibro copia) {
         return copia.isBaja();
     }
 
     @Override
     protected void marcarComoInactivo(CopiaLibro copia) {
-        copia.setEstado(EstadoCopiaLibro.Perdida);
-    }
-
-    @Override
-    public boolean existe(CopiaLibro copia) {
-        return buscarPorId(copia.getId()) != null
-                && !esInactivo(copia);
-    }
-
-    public void modificarEstado(CopiaLibro copia, EstadoCopiaLibro estado) {
-        try {
-            copia.setEstado(estado);
-            modificar(copia);
-        } catch (Exception e) {
-            throw e;
-        }
+        copia.setBaja();
     }
 
     public String verificarReferencias(List<Libro> libros) {
@@ -181,10 +195,10 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
                         break;
                     }
                 }
-                
+
                 // Si el libro no tiene copias de referencia, lo agregamos a la lista
                 if (!tieneReferencia) {
-                    respuesta.add("El libro: " + libro + " no tiene referencia.");
+                    respuesta.add("El libro " + libro + " no tiene referencia.");
                 }
             } else {
                 respuesta.add("El libro " + libro + " no tiene copias registradas.");
@@ -195,6 +209,23 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
             return "Todos los libros tienen referencias.";
         } else {
             return String.join("\n", respuesta);
+        }
+    }
+
+    public void modificarEstado(CopiaLibro copia, EstadoCopiaLibro estado) {
+        try {
+
+            if (copia.getEstado().equals(EstadoCopiaLibro.Prestada)) {
+                if (estado.equals(EstadoCopiaLibro.Perdida)) {
+                    throw new IllegalArgumentException("No se puede marcar como 'perdida' porque hay un préstamo en curso.");
+                } 
+            }
+
+            copia.setEstado(estado);
+            modificar(copia);
+
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

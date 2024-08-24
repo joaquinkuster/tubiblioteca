@@ -1,6 +1,7 @@
 package com.tubiblioteca.service.Autor;
 
 import com.tubiblioteca.model.Autor;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 
@@ -47,6 +48,18 @@ public class AutorServicio extends CrudServicio<Autor> {
     }
 
     @Override
+    public void validarYBorrar(Autor autor) {
+
+        for (Libro libro : autor.getLibros()) {
+            if (!libro.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar el autor porque tiene libros asociados.");
+            }
+        }
+
+        borrar(autor);
+    }
+
+    @Override
     protected boolean esInactivo(Autor autor) {
         return autor.isBaja();
     }
@@ -54,11 +67,5 @@ public class AutorServicio extends CrudServicio<Autor> {
     @Override
     protected void marcarComoInactivo(Autor autor) {
         autor.setBaja();
-    }
-
-    @Override
-    public boolean existe(Autor autor) {
-        return buscarPorId(autor.getId()) != null
-                && !autor.isBaja();
     }
 }

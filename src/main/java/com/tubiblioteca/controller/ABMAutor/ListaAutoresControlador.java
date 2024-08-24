@@ -111,15 +111,14 @@ public class ListaAutoresControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un autor!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el autor?")) {
             try {
-                servicio.borrar(autor);
+                servicio.validarYBorrar(autor);
                 autores.remove(autor);
                 filtrados.remove(autor);
                 Alerta.mostrarMensaje(false, "Info", "Autor eliminado correctamente!");
                 tblAutores.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el autor: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el autor. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el autor.");
+                Alerta.mostrarMensaje(true, "Error", e.getMessage());
             }
         }
     }

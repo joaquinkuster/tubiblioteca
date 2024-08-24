@@ -139,15 +139,14 @@ public class ListaMiembrosControlador implements Initializable {
                     "Sólo se le permite eliminar usuarios. Selecciona un miembro que sea un usuario.");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el miembro de la biblioteca?")) {
             try {
-                servicio.borrar(miembro);
+                servicio.validarYBorrar(miembro);
                 miembros.remove(miembro);
                 filtrados.remove(miembro);
                 Alerta.mostrarMensaje(false, "Info", "Miembro de la biblioteca eliminado correctamente!");
                 tblMiembros.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el miembro: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el miembro. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el miembro.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el miembro de la biblioteca.\n" + e.getMessage());
             }
         }
     }

@@ -35,7 +35,7 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
                 <RowConstraints vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
@@ -45,7 +45,7 @@
                 <DatePicker fx:id="dtpDevolucion" disable="true" onAction="#calcularMulta" prefWidth="200.0" styleClass="datepicker-personalizado" GridPane.columnIndex="3" />
                 <Label styleClass="label-formulario" text="Miembro:" GridPane.rowIndex="1" />
                 <SearchableComboBox fx:id="cmbMiembro" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="160.0" styleClass="combo-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button mnemonicParsing="false" onAction="#buscarMiembro" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                <Button fx:id="btnBuscarMiembro" mnemonicParsing="false" onAction="#buscarMiembro" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                     <graphic>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -60,7 +60,7 @@
                 </Button>
                 <Label fx:id="lblCargo" styleClass="label-formulario" text="Copia de Libro:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                 <SearchableComboBox fx:id="cmbCopia" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#calcularMulta" prefWidth="160.0" styleClass="combo-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                <Button mnemonicParsing="false" onAction="#buscarCopia" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                <Button fx:id="btnBuscarCopia" mnemonicParsing="false" onAction="#buscarCopia" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                     <graphic>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -74,7 +74,7 @@
                     </styleClass>
                 </Button>
                 <Label fx:id="lblCargo1" styleClass="label-formulario" text="Multa:" GridPane.rowIndex="2" />
-                <TextField fx:id="txtMulta" disable="true" promptText="0.0" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="txtMulta" disable="true" promptText="0.00" styleClass="text-field-personalizado" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
         <HBox spacing="10.0" styleClass="acciones-contenedor">

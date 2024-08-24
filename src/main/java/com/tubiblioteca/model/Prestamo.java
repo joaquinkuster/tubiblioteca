@@ -75,7 +75,7 @@ public class Prestamo {
         this.copiaLibro = copiaLibro;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -99,15 +99,16 @@ public class Prestamo {
     }
 
     public void setFechaDevolucion(LocalDate fechaDevolucion) {
-        if (fechaDevolucion != null) {
-            if (fechaDevolucion.isAfter(LocalDate.now())) {
+        if (fechaDevolucion == null) {
+            throw new IllegalArgumentException("Por favor, ingrese una fecha de devolución.");
+        } else if (fechaDevolucion.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException(
+                    "Debe seleccionar una fecha de devolución que sea igual o anterior al dia de hoy "
+                            + Fecha.fechaHoy() + ".");
+        } else if (this.fechaPrestamo != null) {
+            if (fechaDevolucion.isBefore(fechaPrestamo)) {
                 throw new IllegalArgumentException(
-                        "Debe seleccionar una fecha de devolución que sea igual o anterior al dia de hoy "
-                                + Fecha.fechaHoy() + ".");
-            } else if (this.fechaPrestamo != null) {
-                if (fechaDevolucion.isBefore(fechaPrestamo)) {
-                    throw new IllegalArgumentException("La fecha de devolución debe ser posterior o igual a la fecha de préstamo.");
-                }
+                        "La fecha de devolución debe ser posterior o igual a la fecha de préstamo.");
             }
         }
         this.fechaDevolucion = fechaDevolucion;

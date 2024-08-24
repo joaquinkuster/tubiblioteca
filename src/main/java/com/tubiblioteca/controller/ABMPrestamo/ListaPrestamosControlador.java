@@ -71,7 +71,7 @@ public class ListaPrestamosControlador implements Initializable {
     private Button btnBuscarCopia;
     @FXML
     private Button btnAgregar;
-    @FXML 
+    @FXML
     private Button btnModificar;
     @FXML
     private Button btnEliminar;
@@ -137,7 +137,7 @@ public class ListaPrestamosControlador implements Initializable {
         // Limpiamos las listas
         miembros.clear();
         copias.clear();
-    
+
         if (SesionManager.esUsuario()) {
             // Desactivar controles para el usuario
             ControlUI.desactivarControl(cmbMiembro, lblFiltroMiembro, btnBuscarMiembro, btnBuscarCopia);
@@ -149,17 +149,17 @@ public class ListaPrestamosControlador implements Initializable {
             // Cargar todos los miembros y copias para el administrador
             miembros.addAll(servicioMiembro.buscarTodos());
             copias.addAll(servicioCopia.buscarTodos());
-    
+
             // Establecer los ítems en los combos
             cmbMiembro.setItems(miembros);
         }
-    
+
         // Establecer los ítems en el combo de copias
         cmbCopia.setItems(copias);
-    
+
         // Configurar datepickers
         ControlUI.configurarDatePicker(dtpPrestamo, dtpDevolucion);
-    }    
+    }
 
     @FXML
     private void modificar() {
@@ -206,15 +206,14 @@ public class ListaPrestamosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un préstamo!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el préstamo?")) {
             try {
-                servicio.borrar(prestamo);
+                servicio.validarYBorrar(prestamo);
                 prestamos.remove(prestamo);
                 filtrados.remove(prestamo);
                 Alerta.mostrarMensaje(false, "Info", "Préstamo eliminado correctamente!");
                 tblPrestamos.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el préstamo: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el préstamo. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el préstamo.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el préstamo.\n" + e.getMessage());
             }
         }
     }
@@ -223,7 +222,7 @@ public class ListaPrestamosControlador implements Initializable {
     private void confirmarDevolucion() {
         Prestamo prestamo = tblPrestamos.getSelectionModel().getSelectedItem();
         try {
-            servicio.confirmarDevolucion(prestamo);
+            servicio.cerrarPrestamo(prestamo);
             Alerta.mostrarMensaje(false, "Info", "La devolución del préstamo se ha registrado correctamente!");
             tblPrestamos.refresh();
         } catch (Exception e) {

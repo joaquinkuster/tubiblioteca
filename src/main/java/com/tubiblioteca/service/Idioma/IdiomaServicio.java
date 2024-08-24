@@ -1,6 +1,8 @@
 package com.tubiblioteca.service.Idioma;
 
+import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Idioma;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;
 
@@ -47,6 +49,18 @@ public class IdiomaServicio extends CrudServicio<Idioma> {
     }
 
     @Override
+    public void validarYBorrar(Idioma idioma) {
+
+        for (Libro libro : idioma.getLibros()) {
+            if (!libro.isBaja()) {
+                throw new IllegalArgumentException("No se puede eliminar el idioma porque tiene libros asociados.");
+            }
+        }
+
+        borrar(idioma);
+    }
+
+    @Override
     protected boolean esInactivo(Idioma idioma) {
         return idioma.isBaja();
     }
@@ -54,11 +68,5 @@ public class IdiomaServicio extends CrudServicio<Idioma> {
     @Override
     protected void marcarComoInactivo(Idioma idioma) {
         idioma.setBaja();
-    }
-
-    @Override
-    public boolean existe(Idioma idioma) {
-        return buscarPorId(idioma.getId()) != null 
-        && !idioma.isBaja();
     }
 }

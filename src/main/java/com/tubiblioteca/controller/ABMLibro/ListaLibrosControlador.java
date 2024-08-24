@@ -222,15 +222,14 @@ public class ListaLibrosControlador implements Initializable {
             Alerta.mostrarMensaje(true, "Error", "Debes seleccionar un libro!");
         } else if (Alerta.mostrarConfirmacion("Info", "¿Está seguro que desea eliminar el libro?")) {
             try {
-                servicio.borrar(libro);
+                servicio.validarYBorrar(libro);
                 libros.remove(libro);
                 filtrados.remove(libro);
                 Alerta.mostrarMensaje(false, "Info", "Libro eliminado correctamente!");
                 tblLibros.refresh();
             } catch (Exception e) {
-                log.error("Error al eliminar el libro: ", e);
-                Alerta.mostrarMensaje(true, "Error",
-                        "No se pudo eliminar el libro. Puede estar vinculado a otros registros.");
+                log.error("Error al eliminar el libro.");
+                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el libro.\n" + e.getMessage());
             }
         }
     }
