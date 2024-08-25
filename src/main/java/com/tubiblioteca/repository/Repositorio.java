@@ -2,8 +2,6 @@ package com.tubiblioteca.repository;
 
 import java.util.List;
 
-import com.tubiblioteca.auditoria.AuditoriaListener;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;

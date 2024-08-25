@@ -10,21 +10,23 @@ public class AuditoriaServicio extends CrudServicio<Auditoria> {
         super(repositorio, Auditoria.class);
     }
 
+    @SuppressWarnings("exports")
     @Override
     public Auditoria validarEInsertar(Object... datos) {
         return null;
     }
 
+    @SuppressWarnings("exports")
     @Override
     public void validarYModificar(Auditoria entidad, Object... datos) {
 
     }
 
+    @SuppressWarnings("exports")
     @Override
     public void validarYBorrar(Auditoria entidad) {
-
+        
     }
-
     @Override
     protected boolean esInactivo(Auditoria entidad) {
         return false;

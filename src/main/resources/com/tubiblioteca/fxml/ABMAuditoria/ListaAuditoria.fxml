@@ -64,7 +64,7 @@
                       </styleClass>
                   </Button>
             <CheckComboBox id="checkComboBox" fx:id="cmbAccion" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <TextField fx:id="txtDescripcion" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="txtDatoAfectado" onAction="#filtrar" onKeyReleased="#filtrar" prefWidth="200.0" styleClass="text-field-personalizado" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             <DatePicker fx:id="dtpAuditoria" onAction="#filtrar" prefWidth="200.0" styleClass="datepicker-personalizado" GridPane.rowIndex="1" />
             <CheckComboBox id="checkComboBox" fx:id="cmbUsuario" layoutX="278.0" layoutY="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
               </children>
@@ -75,7 +75,7 @@
                   <TableColumn fx:id="colUsuario" prefWidth="150.0" text="Usuario" />
                   <TableColumn fx:id="colAccion" prefWidth="150.0" text="Tipo de Incidencia" />
                   <TableColumn fx:id="colTablaAfectada" prefWidth="150.0" text="Tabla Afectada" />
-                  <TableColumn fx:id="colDescripcion" prefWidth="150.0" text="Descripción" />
+                  <TableColumn fx:id="colDatoAfectado" prefWidth="150.0" text="Descripción" />
               </columns>
               <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

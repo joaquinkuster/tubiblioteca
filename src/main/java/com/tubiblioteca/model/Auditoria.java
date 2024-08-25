@@ -15,10 +15,10 @@ import jakarta.persistence.Table;
 public class Auditoria {
     
     
-    public Auditoria(String tablaAfectada, String accion, String dato_afectado, LocalDateTime fechaHora, Miembro miembro) {
+    public Auditoria(String tablaAfectada, String accion, String datoAfectado, LocalDateTime fechaHora, Miembro miembro) {
         this.tablaAfectada = tablaAfectada;
         this.accion = accion;
-        this.dato_afectado = dato_afectado;
+        this.datoAfectado = datoAfectado;
         this.fechaHora = fechaHora;
         this.miembro = miembro;
     }
@@ -36,7 +36,7 @@ public class Auditoria {
     @Column(name = "accion", length = 50, nullable = false)
     private String accion;
     @Column(name = "dato_afectado", length = 50, nullable = false)
-    private String dato_afectado;
+    private String datoAfectado;
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora = LocalDateTime.now();
     @ManyToOne
@@ -47,7 +47,7 @@ public class Auditoria {
         return tablaAfectada;
     }
     public String getDatoAfectado() {
-        return dato_afectado;
+        return datoAfectado;
     }
     public LocalDateTime getFechaHora() {
         return fechaHora;
@@ -65,8 +65,8 @@ public class Auditoria {
     public void setTablaAfectada(String tablaAfectada) {
         this.tablaAfectada = tablaAfectada;
     }
-    public void setDatoAfectado(String dato_afectado) {
-        this.dato_afectado = dato_afectado;
+    public void setDatoAfectado(String datoAfectado) {
+        this.datoAfectado = datoAfectado;
     }
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;

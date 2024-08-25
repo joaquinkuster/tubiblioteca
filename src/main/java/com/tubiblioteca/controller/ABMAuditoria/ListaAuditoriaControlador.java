@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
+import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Auditoria;
 import com.tubiblioteca.auditoria.AuditoriaServicio;
@@ -35,7 +37,7 @@ public class ListaAuditoriaControlador implements Initializable {
     @FXML
     private TableColumn<Auditoria, String> colTablaAfectada;
     @FXML
-    private TableColumn<Auditoria, String> colDescripcion;
+    private TableColumn<Auditoria, String> colDatoAfectado;
 
     // Tabla de libros
     @FXML
@@ -76,13 +78,12 @@ public class ListaAuditoriaControlador implements Initializable {
             miembroServicio = new MiembroServicio(repositorio);
 
             colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
-            colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
+            colUsuario.setCellValueFactory(new PropertyValueFactory<>("miembro"));
             colAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
             colTablaAfectada.setCellValueFactory(new PropertyValueFactory<>("tablaAfectada"));
-            colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+            colDatoAfectado.setCellValueFactory(new PropertyValueFactory<>("datoAfectado"));
 
             // Limpiar y cargar los datos de auditoría
-            ObservableList<Auditoria> auditorias = FXCollections.observableArrayList();
             auditorias.clear();
             filtrados.clear();
             auditorias.addAll(servicio.buscarTodos());
@@ -95,19 +96,19 @@ public class ListaAuditoriaControlador implements Initializable {
         }
     }
 
+
     private void inicializarFiltros() {
 
          List<Miembro> miembros = miembroServicio.buscarTodos(); 
-         System.out.println(miembros);
          cmbUsuario.getItems().addAll(miembros);
-
-         cmbAccion.getItems().setAll("alta", "baja", "modificacion");
- 
-         cmbTablaAfectada.getItems().addAll("Autores", "Categorías", "Copias de libros", "Editoriales", "Idiomas", "Libros", "Miembros", "Racks" );
-
+         cmbTablaAfectada.getItems().addAll("Autor", "Categoria", "Copias de libros", "Editorial", "Idioma", "Libro", "Miembro", "Prestamo", "Rack");
+        cmbAccion.getItems().addAll("alta", "baja", "modificacion");
          configurarListenerCombos(cmbAccion);
          configurarListenerCombos(cmbTablaAfectada);
          configurarListenerCombos(cmbUsuario);
+
+         // Configurar datepickers
+        ControlUI.configurarDatePicker(dtpAuditoria);
     }
 
     private <T>  void configurarListenerCombos(CheckComboBox<T> cmb) {
@@ -133,11 +134,12 @@ public class ListaAuditoriaControlador implements Initializable {
                 .forEach(filtrados::add);
         tblAuditoria.refresh();
     }
-
+    
     private boolean aplicarFiltro(Auditoria auditoria) {
         LocalDate fechaHora = dtpAuditoria.getValue();
+        boolean coincideSoloFecha = fechaHora == null || auditoria.getFechaHora().toLocalDate().equals(fechaHora);
         String datoAfectado = txtDatoAfectado.getText().trim().toLowerCase();
-        return (fechaHora == null || auditoria.getFechaHora().equals(fechaHora))//ver como hacer el mismo tipo abzo
+        return coincideSoloFecha
                 && (filtradoIndividualCheckCombo(auditoria.getMiembro().toString(), cmbUsuario))
                 && (filtradoIndividualCheckCombo(auditoria.getAccion(), cmbAccion))
                 && (filtradoIndividualCheckCombo(auditoria.getTablaAfectada(), cmbTablaAfectada))
@@ -163,7 +165,6 @@ public class ListaAuditoriaControlador implements Initializable {
                         return false;
                     }
                 } else {
-                    // Para otros tipos, puedes definir una lógica específica si es necesario
                     System.out.println("Tipo no soportado: " + seleccionado.getClass().getName());
                     return false;
                 }
