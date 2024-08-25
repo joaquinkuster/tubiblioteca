@@ -197,6 +197,7 @@ public class MiembroServicio extends CrudServicio<Miembro> {
         Miembro miembro = buscarPorId(dni);
 
         if (miembro != null) {
+            System.out.println(clave + miembro.getClave());
             if (Contraseña.validar(clave, miembro.getClave())) {
                 return true;
             } else {

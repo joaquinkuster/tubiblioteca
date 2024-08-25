@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Auditoria {
     
     
-    public Auditoria(String tablaAfectada, String accion, String datoAfectado, LocalDateTime fechaHora, Miembro miembro) {
+    public Auditoria(String tablaAfectada, TipoAccion accion, String datoAfectado, LocalDateTime fechaHora, Miembro miembro) {
         this.tablaAfectada = tablaAfectada;
         this.accion = accion;
         this.datoAfectado = datoAfectado;
@@ -34,7 +34,7 @@ public class Auditoria {
     @Column(name = "tabla_afectada", length = 50, nullable = false)
     private String tablaAfectada;
     @Column(name = "accion", length = 50, nullable = false)
-    private String accion;
+    private TipoAccion accion;
     @Column(name = "dato_afectado", length = 50, nullable = false)
     private String datoAfectado;
     @Column(name = "fecha_hora", nullable = false)
@@ -55,11 +55,11 @@ public class Auditoria {
     public Miembro getMiembro() {
         return miembro;
     }
-    public String getAccion() {
+    public TipoAccion getAccion() {
         return accion;
     }
 
-    public void setAccion(String accion) {
+    public void setAccion(TipoAccion accion) {
         this.accion = accion;
     }
     public void setTablaAfectada(String tablaAfectada) {

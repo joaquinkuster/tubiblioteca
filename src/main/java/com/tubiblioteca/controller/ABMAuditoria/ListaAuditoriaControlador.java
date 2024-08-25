@@ -7,10 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +78,25 @@ public class ListaAuditoriaControlador implements Initializable {
             var repositorio = AppConfig.getRepositorio();
             servicio = new AuditoriaServicio(repositorio);
             miembroServicio = new MiembroServicio(repositorio);
-
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
             colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
+            colFecha.setCellFactory(new Callback<>() {
+                @Override
+                public TableCell<Auditoria, LocalDateTime> call(TableColumn<Auditoria, LocalDateTime> param) {
+                    return new TableCell<>() {
+                        @Override
+                        protected void updateItem(LocalDateTime item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty || item == null) {
+                                setText(null);
+                            } else {
+                                setText(item.format(formatter));
+                            }
+                        }
+                    };
+                }
+            });
+
             colUsuario.setCellValueFactory(new PropertyValueFactory<>("miembro"));
             colAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
             colTablaAfectada.setCellValueFactory(new PropertyValueFactory<>("tablaAfectada"));
@@ -141,7 +160,7 @@ public class ListaAuditoriaControlador implements Initializable {
         String datoAfectado = txtDatoAfectado.getText().trim().toLowerCase();
         return coincideSoloFecha
                 && (filtradoIndividualCheckCombo(auditoria.getMiembro().toString(), cmbUsuario))
-                && (filtradoIndividualCheckCombo(auditoria.getAccion(), cmbAccion))
+                && (filtradoIndividualCheckCombo(auditoria.getAccion().toString(), cmbAccion))
                 && (filtradoIndividualCheckCombo(auditoria.getTablaAfectada(), cmbTablaAfectada))
                 && (datoAfectado == null || String.valueOf(auditoria.getDatoAfectado()).toLowerCase().startsWith(datoAfectado));
     }
@@ -155,14 +174,14 @@ public class ListaAuditoriaControlador implements Initializable {
             for (T seleccionado : seleccionados) {
                 if (seleccionado instanceof String) {
                     // Comparación para String
-                    if (!dato.contains((String) seleccionado)) {
-                        return false;
+                    if (dato.contains((String) seleccionado)) {
+                        return true;
                     }
                 } else if (seleccionado instanceof Miembro) {
                     // Comparación para Miembro
                     Miembro miembro = (Miembro) seleccionado;
-                    if (!dato.contains(miembro.getNombre())) {
-                        return false;
+                    if (dato.contains(miembro.getNombre())) {
+                        return true;
                     }
                 } else {
                     System.out.println("Tipo no soportado: " + seleccionado.getClass().getName());
@@ -171,7 +190,7 @@ public class ListaAuditoriaControlador implements Initializable {
             }
         }
         
-        return true;
+        return false;
     }
     
 

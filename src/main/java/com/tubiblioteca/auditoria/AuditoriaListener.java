@@ -6,7 +6,10 @@ import jakarta.persistence.PostRemove;
 
 import java.time.LocalDateTime;
 
+import java.lang.reflect.Field;
+
 import com.tubiblioteca.model.Auditoria;
+import com.tubiblioteca.model.TipoAccion;
 import com.tubiblioteca.security.SesionManager;
 
 import jakarta.persistence.EntityManager;
@@ -18,20 +21,40 @@ public class AuditoriaListener {
 
     @PreUpdate
     public void preUpdate(Object entidad) {
-        guardarAuditoria(entidad, "modificacion");
+        boolean esBaja = verificarBaja(entidad);
+        if (esBaja) {
+            guardarAuditoria(entidad, TipoAccion.baja);
+        } else {
+            guardarAuditoria(entidad, TipoAccion.modificacion);
+        }
+    }
+
+    public boolean verificarBaja(Object entidad){
+        
+        try {
+            Field bajaField = entidad.getClass().getDeclaredField("baja");
+            bajaField.setAccessible(true);
+            boolean valorActual = (boolean) bajaField.get(entidad);
+            System.out.println(valorActual);
+            
+            return valorActual;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @PrePersist
     public void prePersist(Object entidad) {
-        guardarAuditoria(entidad, "alta");
+        guardarAuditoria(entidad, TipoAccion.alta);
     }
 
     @PostRemove
     public void postRemove(Object entidad) {
-        guardarAuditoria(entidad, "baja");
+        guardarAuditoria(entidad, TipoAccion.baja);
     }
 
-    private void guardarAuditoria(Object entidad, String accion) {
+    private void guardarAuditoria(Object entidad, TipoAccion accion) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
