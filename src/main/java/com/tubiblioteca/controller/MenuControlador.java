@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import java.net.URL;
@@ -82,7 +81,7 @@ public class MenuControlador implements Initializable {
         btnAutores.setOnAction(event -> redireccionarMenu(Vista.ListaAutores, (Button) event.getSource()));
         btnCategorias.setOnAction(event -> redireccionarMenu(Vista.ListaCategorias, (Button) event.getSource()));
         btnIdiomas.setOnAction(event -> redireccionarMenu(Vista.ListaIdiomas, (Button) event.getSource()));
-        btnAuditoria.setOnAction(null);
+        btnAuditoria.setOnAction(event -> redireccionarMenu(Vista.ListaAuditoria, (Button) event.getSource()));
     }
 
     // Meotodo para cambiar el contenido central del main

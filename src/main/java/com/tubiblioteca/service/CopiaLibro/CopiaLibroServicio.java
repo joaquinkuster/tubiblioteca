@@ -1,7 +1,5 @@
 package com.tubiblioteca.service.CopiaLibro;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import java.util.ArrayList;
 import java.util.List;
 import com.tubiblioteca.model.CopiaLibro;

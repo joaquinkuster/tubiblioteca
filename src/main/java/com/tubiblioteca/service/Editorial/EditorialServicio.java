@@ -1,6 +1,5 @@
 package com.tubiblioteca.service.Editorial;
 
-import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;

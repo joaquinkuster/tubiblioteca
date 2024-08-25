@@ -30,8 +30,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
 public class ListaPrestamosControlador implements Initializable {
 
     // Columnas de la tabla

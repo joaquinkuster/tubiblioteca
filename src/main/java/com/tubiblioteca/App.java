@@ -28,7 +28,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(@SuppressWarnings("exports") Stage stage) {
         log.info("Iniciando TuBiblioteca...");
         StageManager.setStagePrincipal(stage);
         StageManager.cambiarEscena(Vista.Login);

@@ -38,6 +38,8 @@ public enum Vista {
     ListaRacks("Lista de Racks", "ABMRack/ListaRacks"),
     FormularioRack("Formulario de Rack", "ABMRack/FormularioRack"),
 
+    ListaAuditoria("Auditoria", "ABMAuditoria/ListaAuditoria"),
+
     CambiarContraseña("Cambiar Contraseña", "CambiarContraseña");
 
     // Devolvemos la clave

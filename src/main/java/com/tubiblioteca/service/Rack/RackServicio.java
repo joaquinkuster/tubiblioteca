@@ -1,7 +1,6 @@
 package com.tubiblioteca.service.Rack;
 
 import com.tubiblioteca.model.CopiaLibro;
-import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.repository.Repositorio;
 import com.tubiblioteca.service.CrudServicio;

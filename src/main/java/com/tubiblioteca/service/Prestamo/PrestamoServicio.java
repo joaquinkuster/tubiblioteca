@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
-import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.repository.Repositorio;

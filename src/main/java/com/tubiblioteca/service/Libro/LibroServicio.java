@@ -2,8 +2,6 @@ package com.tubiblioteca.service.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.CopiaLibro;
@@ -56,25 +54,28 @@ public class LibroServicio extends CrudServicio<Libro> {
             }
         }
 
-        // Validamos si el miembro o la copia seleccionados existen
+        // Validamos si la categoria se encuentra en la base de datos
         if (categoria != null) {
             if (!servicioCategoria.existe(categoria, categoria.getId())) {
                 errores.add("La categoría seleccionada no se encuentra en la base de datos.");
             }
         }
-
+        
+        // Validamos si la editorial se encuentra en la base de datos
         if (editorial != null) {
             if (!servicioEditorial.existe(editorial, editorial.getId())) {
                 errores.add("La editorial seleccionada no se encuentra en la base de datos.");
             }
         }
-
+        
+        // Validamos si el idioma se encuentra en la base de datos
         if (idioma != null) {
             if (!servicioIdioma.existe(idioma, idioma.getId())) {
                 errores.add("El idioma seleccionado no se encuentra en la base de datos.");
             }
         }
-
+        
+        // Validamos si los autores se encuentran en la base de datos
         for (Autor autor : autores) {
             if (autor != null) {
                 if (!servicioAutor.existe(autor, autor.getId())) {
@@ -84,17 +85,18 @@ public class LibroServicio extends CrudServicio<Libro> {
 
         }
 
+        Libro libro = new Libro();
+
         try {
-            new Libro(isbn, titulo, categoria, editorial, idioma, autores);
+            libro = new Libro(isbn, titulo, categoria, editorial, idioma, autores);
         } catch (IllegalArgumentException e) {
             errores.add(e.getMessage());
         }
-
+        
         if (!errores.isEmpty()) {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
-
-        Libro libro = new Libro(isbn, titulo, categoria, editorial, idioma, autores);
+        
         insertar(libro);
         return libro;
     }

@@ -156,4 +156,12 @@ public class Prestamo {
         }
         this.copiaLibro = copiaLibro;
     }
+
+    @Override
+    public String toString() {
+        return "Prestamo [fechaPrestamo=" + fechaPrestamo + ", fechaDevolucion=" + fechaDevolucion + ", multa=" + multa
+                + ", miembro=" + miembro + ", copiaLibro=" + copiaLibro + "]";
+    }
+
+    
 }

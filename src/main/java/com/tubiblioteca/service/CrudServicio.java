@@ -44,6 +44,7 @@ public abstract class CrudServicio<T> {
         try {
             this.repositorio.iniciarTransaccion();
             this.repositorio.insertar(entidad);
+
             this.repositorio.confirmarTransaccion();
         } catch (Exception e) {
             this.repositorio.descartarTransaccion();

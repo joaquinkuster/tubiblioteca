@@ -2,11 +2,13 @@ package com.tubiblioteca.model;
 
 import java.util.List;
 
+import com.tubiblioteca.auditoria.AuditoriaListener;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.helper.Validacion;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +16,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
+@EntityListeners(AuditoriaListener.class)
 @Table(name = "autor")
 public class Autor {
     

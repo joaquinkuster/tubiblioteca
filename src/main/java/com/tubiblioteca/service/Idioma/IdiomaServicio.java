@@ -1,6 +1,5 @@
 package com.tubiblioteca.service.Idioma;
 
-import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;

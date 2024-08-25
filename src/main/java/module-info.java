@@ -2,6 +2,7 @@ module com.tubiblioteca {
     // Declarar las dependencias del módulo
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
     requires javafx.graphics;
     requires eclipselink;
     requires jakarta.persistence;
@@ -21,8 +22,13 @@ module com.tubiblioteca {
     opens com.tubiblioteca.controller.ABMPrestamo to javafx.fxml;
     opens com.tubiblioteca.controller.ABMRack to javafx.fxml;
     opens com.tubiblioteca.controller.ABMCopiaLibro to javafx.fxml;
+    opens com.tubiblioteca.controller.ABMAuditoria to javafx.fxml;
     opens com.tubiblioteca.model to eclipselink, javafx.base;
-
+    
     // Exportar el paquete com.tubiblioteca para que otros módulos puedan acceder a sus clases públicas
     exports com.tubiblioteca;
+
+    exports com.tubiblioteca.auditoria;
+
+    exports com.tubiblioteca.controller.ABMAuditoria to javafx.fxml;
 }

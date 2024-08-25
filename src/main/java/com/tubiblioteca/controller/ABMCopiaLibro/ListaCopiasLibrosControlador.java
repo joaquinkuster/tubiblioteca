@@ -17,12 +17,10 @@ import com.tubiblioteca.config.StageManager;
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
-import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.Rack;
 import com.tubiblioteca.model.TipoCopiaLibro;
 import com.tubiblioteca.service.CopiaLibro.CopiaLibroServicio;
 import com.tubiblioteca.service.Libro.LibroServicio;
-import com.tubiblioteca.service.Prestamo.PrestamoServicio;
 import com.tubiblioteca.service.Rack.RackServicio;
 import com.tubiblioteca.view.Vista;
 import com.tubiblioteca.helper.Alerta;
@@ -82,7 +80,6 @@ public class ListaCopiasLibrosControlador implements Initializable {
     private Pair<FormularioCopiaLibroControlador, Parent> formulario;
     private LibroServicio servicioLibro;
     private RackServicio servicioRack;
-    private PrestamoServicio servicioPrestamo;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

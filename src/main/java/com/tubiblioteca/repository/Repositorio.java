@@ -1,6 +1,9 @@
 package com.tubiblioteca.repository;
 
 import java.util.List;
+
+import com.tubiblioteca.auditoria.AuditoriaListener;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -21,7 +24,7 @@ public class Repositorio {
     private final EntityManager em;
         
     public Repositorio(EntityManagerFactory emf) {
-        this.em = emf.createEntityManager();        
+        this.em = emf.createEntityManager();      
     }
     
     public void iniciarTransaccion() {

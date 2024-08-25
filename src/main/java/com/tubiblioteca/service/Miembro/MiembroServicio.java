@@ -3,8 +3,6 @@ package com.tubiblioteca.service.Miembro;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tubiblioteca.model.CopiaLibro;
-import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Prestamo;
 import com.tubiblioteca.model.TipoMiembro;
@@ -199,6 +197,7 @@ public class MiembroServicio extends CrudServicio<Miembro> {
         Miembro miembro = buscarPorId(dni);
 
         if (miembro != null) {
+            System.out.println(clave + miembro.getClave());
             if (Contraseña.validar(clave, miembro.getClave())) {
                 return true;
             } else {
