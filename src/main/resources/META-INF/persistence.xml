@@ -27,20 +27,20 @@
         <!-- Propiedades de configuración del proveedor JPA -->
         <properties>
             <!-- URL de conexión a la base de datos -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/tubiblioteca"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://ep-jolly-dream-a5j2n1l1.us-east-2.aws.neon.tech/tubiblioteca?"/>
             
             <!-- Controlador JDBC para PostgreSQL -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
             
             <!-- Usuario para la conexión a la base de datos -->
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.user" value="tubiblioteca_owner"/>
             
             <!-- Contraseña para la conexión a la base de datos -->
-            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="rafdw1NIu4eP"/>
             
             <!-- Configuración de generación de esquema para EclipseLink -->
             <!-- 'none' indica que no se debe realizar ninguna operación de generación de esquema -->
-            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+            <property name="eclipselink.ddl-generation" value="none" />
             
             <!-- Propiedad opcional para habilitar el registro detallado en EclipseLink -->
             <!-- Comentada para no activar el nivel de registro más detallado por defecto -->
