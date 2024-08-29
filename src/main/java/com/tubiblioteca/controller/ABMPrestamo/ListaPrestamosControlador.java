@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ListaPrestamosControlador implements Initializable {
@@ -119,10 +120,16 @@ public class ListaPrestamosControlador implements Initializable {
 
             prestamos.clear();
             filtrados.clear();
+            List<Prestamo> todosLosPrestamos = new ArrayList<>(servicio.buscarTodos());
             if (SesionManager.esUsuario()) {
-                prestamos.addAll(SesionManager.getMiembro().getPrestamos());
-            } else {
-                prestamos.addAll(servicio.buscarTodos());
+                for (Prestamo prestamo : todosLosPrestamos) {
+                    if (prestamo.getMiembro().equals(SesionManager.getMiembro())) {
+                        prestamos.add(prestamo);
+                    }
+                }
+            }
+            {
+                prestamos.addAll(todosLosPrestamos);
             }
             filtrados.addAll(prestamos);
             tblPrestamos.setItems(filtrados);
@@ -211,7 +218,7 @@ public class ListaPrestamosControlador implements Initializable {
                 tblPrestamos.refresh();
             } catch (Exception e) {
                 log.error("Error al eliminar el préstamo.");
-                Alerta.mostrarMensaje(true, "Error","No se pudo eliminar el préstamo.\n" + e.getMessage());
+                Alerta.mostrarMensaje(true, "Error", "No se pudo eliminar el préstamo.\n" + e.getMessage());
             }
         }
     }
