@@ -21,8 +21,7 @@ public class AuditoriaListener {
 
     @PreUpdate
     public void preUpdate(Object entidad) {
-        boolean esBaja = verificarBaja(entidad);
-        if (esBaja) {
+        if (verificarBaja(entidad)) {
             guardarAuditoria(entidad, TipoAccion.baja);
         } else {
             guardarAuditoria(entidad, TipoAccion.modificacion);
@@ -46,7 +45,7 @@ public class AuditoriaListener {
 
     @PrePersist
     public void prePersist(Object entidad) {
-        guardarAuditoria(entidad, TipoAccion.alta);
+            guardarAuditoria(entidad, TipoAccion.alta);
     }
 
     @PostRemove

@@ -20,7 +20,7 @@ import com.tubiblioteca.config.AppConfig;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Auditoria;
-import com.tubiblioteca.auditoria.AuditoriaServicio;
+import com.tubiblioteca.service.Auditoria.AuditoriaServicio;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import java.util.ArrayList;
 import java.util.List;

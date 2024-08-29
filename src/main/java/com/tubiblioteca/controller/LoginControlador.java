@@ -48,13 +48,12 @@ public class LoginControlador implements Initializable {
         String dni = txtDni.getText().trim();
         String clave = txtContrasena.getText().trim();
         Miembro miembro = servicio.buscarPorId(dni);
-        SesionManager.abrirSesion(miembro);
-        System.out.println(miembro);
         try{
             if (servicio.validarCredenciales(dni, clave)){
                 if (checkRecordar.isSelected()) {
                     guardarCredenciales(dni, clave);
                 }
+                SesionManager.abrirSesion(miembro);
             }
         } catch (Exception e) {
             Alerta.mostrarMensaje(true, "Error", e.getMessage());

@@ -26,7 +26,6 @@ public class Contraseña {
      * @return true si las contraseñas coinciden, false en caso contrario.
      */
     public static boolean validar(String rawPassword, String encodedPassword) {
-        // return codificador.matches(rawPassword, encodedPassword);
-        return true;
+        return codificador.matches(rawPassword, encodedPassword);
     }
 }

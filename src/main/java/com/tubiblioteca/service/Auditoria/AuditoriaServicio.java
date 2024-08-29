@@ -1,4 +1,4 @@
-package com.tubiblioteca.auditoria;
+package com.tubiblioteca.service.Auditoria;
 
 import com.tubiblioteca.model.Auditoria;
 import com.tubiblioteca.repository.Repositorio;
