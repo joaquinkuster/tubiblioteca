@@ -1,5 +1,6 @@
 package com.tubiblioteca.service.Editorial;
 
+import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
@@ -67,5 +68,19 @@ public class EditorialServicio extends CrudServicio<Editorial> {
     @Override
     protected void marcarComoInactivo(Editorial editorial) {
         editorial.setBaja();
+    }
+
+    public void agregarQuitarLibro(Editorial editorialNueva, Libro libro) {
+        try {
+            Editorial editorialVieja = libro.getEditorial();
+            editorialNueva.agregarLibro(libro);
+            modificar(editorialNueva);
+            if (!editorialNueva.equals(editorialVieja)) {
+                editorialVieja.quitarLibro(libro);
+                modificar(editorialVieja);
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 }

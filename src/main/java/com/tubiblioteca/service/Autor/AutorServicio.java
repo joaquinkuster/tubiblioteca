@@ -1,5 +1,8 @@
 package com.tubiblioteca.service.Autor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
@@ -67,5 +70,23 @@ public class AutorServicio extends CrudServicio<Autor> {
     @Override
     protected void marcarComoInactivo(Autor autor) {
         autor.setBaja();
+    }
+
+    public void agregarLibro(Autor autor, Libro libro) {
+        try {
+            autor.agregarLibro(libro);
+            modificar(autor);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+    }
+
+    public void quitarLibro(Autor autor, Libro libro) {
+        try {
+            autor.quitarLibro(libro);
+            modificar(autor);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 }

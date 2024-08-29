@@ -125,15 +125,6 @@ public class MiembroServicio extends CrudServicio<Miembro> {
         miembro.setBaja();
     }
 
-    public void agregarPrestamo(Miembro miembro, Prestamo prestamo) {
-        try {
-            miembro.getPrestamos().add(prestamo);
-            modificar(miembro);
-        } catch (IllegalArgumentException e) {
-            throw e;
-        }
-    }
-
     public void cambiarClave(String actual, String nueva, String nuevaRepetida) {
 
         List<String> errores = new ArrayList<>();
@@ -204,6 +195,15 @@ public class MiembroServicio extends CrudServicio<Miembro> {
             }
         } else {
             throw new IllegalArgumentException("No se encontró ningún miembro de la biblioteca con el DNI especificado.");
+        }
+    }
+
+    public void agregarPrestamo(Miembro miembro, Prestamo prestamo) {
+        try {
+            miembro.agregarPrestamo(prestamo);
+            modificar(miembro);
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
     }
 }

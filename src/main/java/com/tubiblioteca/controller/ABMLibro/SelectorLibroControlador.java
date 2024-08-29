@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SelectorLibroControlador implements Initializable {
@@ -214,7 +215,7 @@ public class SelectorLibroControlador implements Initializable {
                 && (idioma == null || idioma.equals(libro.getIdioma()));
     }
 
-    private boolean filtrarPorAutores(List<Autor> autores) {
+    private boolean filtrarPorAutores(Set<Autor> autores) {
         List<Autor> seleccionados = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());
         if (seleccionados == null || seleccionados.isEmpty()) {
             return true;

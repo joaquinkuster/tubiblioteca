@@ -36,7 +36,7 @@
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             
             <!-- Contraseña para la conexión a la base de datos -->
-            <property name="jakarta.persistence.jdbc.password" value="1234"/>
+            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
             
             <!-- Configuración de generación de esquema para EclipseLink -->
             <!-- 'none' indica que no se debe realizar ninguna operación de generación de esquema -->

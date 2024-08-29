@@ -49,7 +49,7 @@
             <Label text="Tipo de Incidencia:" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
             <CheckComboBox id="checkComboBox" fx:id="cmbTablaAfectada" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label text="Tabla Afectada:" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-            <Label text="Dato Afectado:" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+            <Label text="Descripción:" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
                   <Button fx:id="btnLimpiar" mnemonicParsing="false" onAction="#limpiarFiltros" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                       <graphic>
                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">

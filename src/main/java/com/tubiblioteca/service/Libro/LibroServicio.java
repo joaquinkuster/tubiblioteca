@@ -2,6 +2,8 @@ package com.tubiblioteca.service.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.CopiaLibro;
@@ -43,7 +45,7 @@ public class LibroServicio extends CrudServicio<Libro> {
         Editorial editorial = (Editorial) datos[3];
         Idioma idioma = (Idioma) datos[4];
         @SuppressWarnings("unchecked")
-        List<Autor> autores = (List<Autor>) datos[5];
+        Set<Autor> autores = (Set<Autor>) datos[5];
 
         List<String> errores = new ArrayList<>();
 
@@ -60,21 +62,21 @@ public class LibroServicio extends CrudServicio<Libro> {
                 errores.add("La categoría seleccionada no se encuentra en la base de datos.");
             }
         }
-        
+
         // Validamos si la editorial se encuentra en la base de datos
         if (editorial != null) {
             if (!servicioEditorial.existe(editorial, editorial.getId())) {
                 errores.add("La editorial seleccionada no se encuentra en la base de datos.");
             }
         }
-        
+
         // Validamos si el idioma se encuentra en la base de datos
         if (idioma != null) {
             if (!servicioIdioma.existe(idioma, idioma.getId())) {
                 errores.add("El idioma seleccionado no se encuentra en la base de datos.");
             }
         }
-        
+
         // Validamos si los autores se encuentran en la base de datos
         for (Autor autor : autores) {
             if (autor != null) {
@@ -92,12 +94,13 @@ public class LibroServicio extends CrudServicio<Libro> {
         } catch (IllegalArgumentException e) {
             errores.add(e.getMessage());
         }
-        
+
         if (!errores.isEmpty()) {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
-        
+
         insertar(libro);
+        agregarLibroAEntidades(libro, autores, categoria, editorial, idioma);
         return libro;
     }
 
@@ -112,7 +115,7 @@ public class LibroServicio extends CrudServicio<Libro> {
         Editorial editorial = (Editorial) datos[2];
         Idioma idioma = (Idioma) datos[3];
         @SuppressWarnings("unchecked")
-        List<Autor> autores = (List<Autor>) datos[4];
+        Set<Autor> autores = (Set<Autor>) datos[4];
         Libro aux = new Libro();
 
         List<String> errores = new ArrayList<>();
@@ -179,6 +182,7 @@ public class LibroServicio extends CrudServicio<Libro> {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
 
+        agregarLibroAEntidades(libro, autores, categoria, editorial, idioma);
         libro.setTitulo(titulo);
         libro.setCategoria(categoria);
         libro.setEditorial(editorial);
@@ -221,5 +225,47 @@ public class LibroServicio extends CrudServicio<Libro> {
             }
             return respuesta;
         }
+    }
+
+    public void agregarQuitarCopia(Libro libroNuevo, CopiaLibro copia) {
+        try {
+            Libro libroViejo = copia.getLibro();
+            libroNuevo.agregarCopia(copia);
+            modificar(libroNuevo);
+            if (!libroNuevo.equals(libroViejo)) {
+                libroViejo.quitarCopia(copia);
+                modificar(libroViejo);
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+    }
+
+    public void agregarAutor(Libro libro, Autor autor) {
+        try {
+            libro.agregarAutor(autor);
+            modificar(libro);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+    }
+
+    private void agregarLibroAEntidades(Libro libro, Set<Autor> autoresNuevos, Categoria categoria,
+            Editorial editorial,
+            Idioma idioma) {
+        Set<Autor> autoresViejos = libro.getAutores();
+        for (Autor autor : autoresNuevos) {
+            servicioAutor.agregarLibro(autor, libro);
+        }
+        if (!autoresNuevos.equals(autoresViejos)) {
+            for (Autor autor : autoresViejos) {
+                if (!autoresNuevos.contains(autor)) {
+                    servicioAutor.quitarLibro(autor, libro);
+                }
+            }
+        }
+        servicioCategoria.agregarQuitarLibro(categoria, libro);
+        servicioEditorial.agregarQuitarLibro(editorial, libro);
+        servicioIdioma.agregarQuitarLibro(idioma, libro);
     }
 }

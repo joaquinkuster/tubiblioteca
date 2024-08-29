@@ -1,6 +1,8 @@
 package com.tubiblioteca.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.tubiblioteca.auditoria.AuditoriaListener;
 import com.tubiblioteca.helper.ControlUI;
@@ -19,32 +21,32 @@ import jakarta.persistence.Table;
 @EntityListeners(AuditoriaListener.class)
 @Table(name = "rack")
 public class Rack {
-    
+
     @Id
-    @Column(name = "id", nullable =  false)
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "descripcion", length = 500, nullable = false)
     private String descripcion;
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
-    @OneToMany(mappedBy = "rack", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CopiaLibro> copiasLibros;
+    @OneToMany(mappedBy = "rack", cascade = CascadeType.ALL)
+    private Set<CopiaLibro> copiasLibros = new HashSet<>();
 
-    public Rack(){
+    public Rack() {
 
     }
 
-    public Rack (String descripcion) {
+    public Rack(String descripcion) {
         if (descripcion.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese una descripción del rack.");
         } else if (descripcion.length() > 500) {
             throw new IllegalArgumentException("La descripción del rack no puede tener más de 500 caracteres.");
-        } 
+        }
         this.descripcion = descripcion;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -57,10 +59,9 @@ public class Rack {
             throw new IllegalArgumentException("Por favor, ingrese una descripción del rack.");
         } else if (descripcion.length() > 500) {
             throw new IllegalArgumentException("La descripción del rack no puede tener más de 500 caracteres.");
-        } 
+        }
         this.descripcion = descripcion;
     }
-
 
     public boolean isBaja() {
         return baja;
@@ -70,8 +71,16 @@ public class Rack {
         this.baja = true;
     }
 
-    public List<CopiaLibro> getCopiasLibros() {
+    public Set<CopiaLibro> getCopiasLibros() {
         return copiasLibros;
+    }
+
+    public void agregarCopiaLibro(CopiaLibro copia) {
+        copiasLibros.add(copia);
+    }
+
+    public void quitarCopiaLibro(CopiaLibro copia) {
+        copiasLibros.remove(copia);
     }
 
     public String toString() {

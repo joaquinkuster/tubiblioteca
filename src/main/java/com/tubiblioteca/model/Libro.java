@@ -1,7 +1,12 @@
 package com.tubiblioteca.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.persistence.oxm.sequenced.Setting;
 
 import com.tubiblioteca.auditoria.AuditoriaListener;
 import com.tubiblioteca.helper.ControlUI;
@@ -42,20 +47,20 @@ public class Libro {
     private Idioma idioma;
     @ManyToMany
     @JoinTable(name = "autoreslibros", joinColumns = @JoinColumn(name = "id_libro"), inverseJoinColumns = @JoinColumn(name = "id_autor"))
-    private List<Autor> autores;
-    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CopiaLibro> copias;
+    private Set<Autor> autores = new HashSet<>();
+    @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL)
+    private Set<CopiaLibro> copias = new HashSet<>();
 
     public Libro() {
 
     }
 
     public Libro(String isbn, String titulo, Categoria categoria, Editorial editorial, Idioma idioma,
-            List<Autor> autores) {
+            Set<Autor> autores) {
 
         ArrayList<String> errores = new ArrayList<>();
 
-        // Verificamos que el ISBN no este vacio, que solo contenga digitos        
+        // Verificamos que el ISBN no este vacio, que solo contenga digitos
         if (isbn.isEmpty()) {
             errores.add("Por favor, ingrese un DNI.");
         } else if (Validacion.validarIsbn(String.valueOf(isbn))) {
@@ -67,13 +72,13 @@ public class Libro {
             errores.add("Por favor, ingrese un título.");
         } else if (titulo.length() > 50) {
             errores.add("El título no puede tener más de 50 caracteres.");
-        } 
+        }
 
         // Verificamos que haya seleccionado una categoria
         if (categoria == null) {
             errores.add("Por favor, seleccione una categoría.");
         }
-        
+
         // Verificamos que haya seleccionado una editorial
         if (editorial == null) {
             errores.add("Por favor, seleccione una editorial.");
@@ -102,6 +107,21 @@ public class Libro {
         this.autores = autores;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Libro libro = (Libro) o;
+        return isbn == libro.getIsbn();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn);
+    }
+
     public long getIsbn() {
         return isbn;
     }
@@ -110,7 +130,8 @@ public class Libro {
         if (isbn.isEmpty()) {
             throw new IllegalArgumentException("Por favor, ingrese un DNI.");
         } else if (Validacion.validarIsbn(String.valueOf(isbn))) {
-            throw new IllegalArgumentException("El ISBN-13 debe contener exactamente 13 dígitos numéricos y comenzar con '978' o '979'.");
+            throw new IllegalArgumentException(
+                    "El ISBN-13 debe contener exactamente 13 dígitos numéricos y comenzar con '978' o '979'.");
         }
         this.isbn = Long.parseLong(isbn);
     }
@@ -124,7 +145,7 @@ public class Libro {
             throw new IllegalArgumentException("Por favor, ingrese un título.");
         } else if (titulo.length() > 50) {
             throw new IllegalArgumentException("El título no puede tener más de 50 caracteres.");
-        } 
+        }
         this.titulo = titulo;
     }
 
@@ -169,19 +190,33 @@ public class Libro {
         this.idioma = idioma;
     }
 
-    public List<Autor> getAutores() {
+    public Set<Autor> getAutores() {
         return autores;
     }
 
-    public void setAutores(List<Autor> autores) {
+    public void setAutores(Set<Autor> autores) {
         if (autores.isEmpty()) {
             throw new IllegalArgumentException("Por favor, seleccione uno o más autores.");
         }
         this.autores = autores;
     }
 
-    public List<CopiaLibro> getCopias() {
+    public void agregarAutor(Autor autor) {
+        if (!autores.contains(autor)) {
+            autores.add(autor);
+        }
+    }
+
+    public Set<CopiaLibro> getCopias() {
         return copias;
+    }
+
+    public void agregarCopia(CopiaLibro copia) {
+        copias.add(copia);
+    }
+
+    public void quitarCopia(CopiaLibro copia) {
+        copias.remove(copia);
     }
 
     public String toString() {

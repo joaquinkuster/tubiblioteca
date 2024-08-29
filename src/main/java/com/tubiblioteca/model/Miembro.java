@@ -192,6 +192,14 @@ public class Miembro {
         return prestamos;
     }
 
+    public void agregarPrestamo(Prestamo prestamo) {
+        System.out.println(prestamos + "              " + prestamo);
+        System.out.println(prestamos.contains(prestamo));
+        if (!prestamos.contains(prestamo)) {
+            prestamos.add(prestamo);
+        }
+    }
+
     public String toString() {
         return ControlUI.limitar(String.format("%s %s", nombre, apellido), 15);
     }

@@ -44,7 +44,8 @@ public class AuditoriaListener {
                 field.setAccessible(true);
                 if (field.isAnnotationPresent(jakarta.persistence.ManyToOne.class) ||
                     field.isAnnotationPresent(jakarta.persistence.OneToMany.class) ||
-                    field.isAnnotationPresent(jakarta.persistence.OneToOne.class)) {
+                    field.isAnnotationPresent(jakarta.persistence.OneToOne.class) ||
+                    field.isAnnotationPresent(jakarta.persistence.ManyToMany.class)) {
                     
                     Object newValue = field.get(entidad);
                     Object originalValue = field.get(originalEntity);

@@ -71,7 +71,7 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
 
         insertar(nuevoPrestamo);
         servicioCopia.modificarEstado(copia, EstadoCopiaLibro.Prestada);
-        servicioMiembro.agregarPrestamo(miembro, nuevoPrestamo);
+        agregarPrestamoAEntidades(nuevoPrestamo, miembro, copia);
         return nuevoPrestamo;
     }
 
@@ -197,5 +197,10 @@ public class PrestamoServicio extends CrudServicio<Prestamo> {
         if (!errores.isEmpty()) {
             throw new IllegalArgumentException(String.join("\n", errores));
         }
+    }
+
+    private void agregarPrestamoAEntidades(Prestamo prestamo, Miembro miembro, CopiaLibro copia){
+        servicioMiembro.agregarPrestamo(miembro, prestamo);
+        servicioCopia.agregarPrestamo(copia, prestamo);
     }
 }

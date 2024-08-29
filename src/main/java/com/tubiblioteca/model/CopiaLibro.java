@@ -2,6 +2,7 @@ package com.tubiblioteca.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.tubiblioteca.auditoria.AuditoriaListener;
 import com.tubiblioteca.helper.ControlUI;
@@ -10,6 +11,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -88,6 +90,19 @@ public class CopiaLibro {
         this.rack = rack;
         this.libro = libro;
         this.referencia = referencia;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CopiaLibro copia = (CopiaLibro) o;
+        return id == copia.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public int getId() {
@@ -174,6 +189,12 @@ public class CopiaLibro {
 
     public List<Prestamo> getPrestamos() {
         return prestamos;
+    }
+
+    public void agregarPrestamo(Prestamo prestamo) {
+        if (!prestamos.contains(prestamo)) {
+            prestamos.add(prestamo);
+        }
     }
 
     public String toString() {

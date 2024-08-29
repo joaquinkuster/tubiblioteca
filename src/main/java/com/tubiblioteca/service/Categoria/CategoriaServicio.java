@@ -1,5 +1,6 @@
 package com.tubiblioteca.service.Categoria;
 
+import com.tubiblioteca.model.Autor;
 import com.tubiblioteca.model.Categoria;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
@@ -67,5 +68,19 @@ public class CategoriaServicio extends CrudServicio<Categoria> {
     @Override
     protected void marcarComoInactivo(Categoria categoria) {
         categoria.setBaja();
+    }
+
+    public void agregarQuitarLibro(Categoria categoriaNueva, Libro libro) {
+        try {
+            Categoria categoriaVieja = libro.getCategoria();
+            categoriaNueva.agregarLibro(libro);
+            modificar(categoriaNueva);
+            if (!categoriaNueva.equals(categoriaVieja)) {
+                categoriaVieja.quitarLibro(libro);
+                modificar(categoriaVieja);
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 }

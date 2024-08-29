@@ -1,5 +1,7 @@
 package com.tubiblioteca.service.Idioma;
 
+import com.tubiblioteca.model.Categoria;
+import com.tubiblioteca.model.Editorial;
 import com.tubiblioteca.model.Idioma;
 import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.repository.Repositorio;
@@ -67,5 +69,19 @@ public class IdiomaServicio extends CrudServicio<Idioma> {
     @Override
     protected void marcarComoInactivo(Idioma idioma) {
         idioma.setBaja();
+    }
+
+    public void agregarQuitarLibro(Idioma idiomaNuevo, Libro libro) {
+        try {
+            Idioma idiomaViejo = libro.getIdioma();
+            idiomaNuevo.agregarLibro(libro);
+            modificar(idiomaNuevo);
+            if (!idiomaNuevo.equals(idiomaViejo)) {
+                idiomaViejo.quitarLibro(libro);
+                modificar(idiomaViejo);
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 }

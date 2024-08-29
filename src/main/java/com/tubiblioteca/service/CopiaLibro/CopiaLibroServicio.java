@@ -2,6 +2,7 @@ package com.tubiblioteca.service.CopiaLibro;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.tubiblioteca.model.CopiaLibro;
 import com.tubiblioteca.model.EstadoCopiaLibro;
 import com.tubiblioteca.model.Libro;
@@ -65,6 +66,7 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
         }
 
         insertar(nuevaCopia);
+        agregarCopiaAEntidades(nuevaCopia, libro, rack);
         return nuevaCopia;
     }
 
@@ -136,11 +138,12 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
                 throw e;
             }
         } else {
-            if (copia.getEstado().equals(EstadoCopiaLibro.Perdida)){
+            if (copia.getEstado().equals(EstadoCopiaLibro.Perdida)) {
                 modificarEstado(copia, EstadoCopiaLibro.Disponible);
             }
         }
 
+        agregarCopiaAEntidades(copia, libro, rack);
         copia.setTipo(tipo);
         copia.setPrecio(precio);
         copia.setLibro(libro);
@@ -215,8 +218,9 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
 
             if (copia.getEstado().equals(EstadoCopiaLibro.Prestada)) {
                 if (estado.equals(EstadoCopiaLibro.Perdida)) {
-                    throw new IllegalArgumentException("No se puede marcar como 'perdida' porque hay un préstamo en curso.");
-                } 
+                    throw new IllegalArgumentException(
+                            "No se puede marcar como 'perdida' porque hay un préstamo en curso.");
+                }
             }
 
             copia.setEstado(estado);
@@ -225,5 +229,19 @@ public class CopiaLibroServicio extends CrudServicio<CopiaLibro> {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public void agregarPrestamo(CopiaLibro copia, Prestamo prestamo) {
+        try {
+            copia.agregarPrestamo(prestamo);
+            modificar(copia);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
+    }
+
+    private void agregarCopiaAEntidades(CopiaLibro copia, Libro libro, Rack rack) {
+        servicioLibro.agregarQuitarCopia(libro, copia);
+        servicioRack.agregarQuitarCopia(rack, copia);
     }
 }

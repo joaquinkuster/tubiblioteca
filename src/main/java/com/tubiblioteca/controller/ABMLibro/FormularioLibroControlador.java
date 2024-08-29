@@ -26,8 +26,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.SearchableComboBox;
 
@@ -134,7 +137,7 @@ public class FormularioLibroControlador implements Initializable {
             Categoria categoria = cmbCategoria.getValue();
             Editorial editorial = cmbEditorial.getValue();
             Idioma idioma = cmbIdioma.getValue();
-            List<Autor> autores = new ArrayList<>(cmbAutores.getCheckModel().getCheckedItems());
+            Set<Autor> autores = new HashSet<>(cmbAutores.getCheckModel().getCheckedItems());
 
             if (libroInicial == null) {
                 nuevosLibros.add(servicio.validarEInsertar(isbn, titulo, categoria, editorial, idioma, autores));
@@ -159,7 +162,7 @@ public class FormularioLibroControlador implements Initializable {
         // Para seleccionar los autores primero limpiamos los autores seleccionados
         cmbAutores.getCheckModel().clearChecks();
         // Creamos una lista de los autores que tiene el libro
-        List<Autor> autoresDelLibro = libroInicial.getAutores();
+        Set<Autor> autoresDelLibro = libroInicial.getAutores();
         // recorremos la lista para ir seleccionando las opciones segun los autores que
         // tenga el libro
         for (Autor autor : autoresDelLibro) {

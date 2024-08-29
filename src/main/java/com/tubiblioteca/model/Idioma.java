@@ -1,6 +1,8 @@
 package com.tubiblioteca.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.tubiblioteca.auditoria.AuditoriaListener;
 import com.tubiblioteca.helper.ControlUI;
@@ -10,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,8 +32,8 @@ public class Idioma {
     private String nombre;
     @Column(name = "baja", nullable = false)
     private Boolean baja = false;
-    @OneToMany(mappedBy = "idioma", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Libro> libros;
+    @OneToMany(mappedBy = "idioma", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Libro> libros = new HashSet<>();
 
     public Idioma(){
 
@@ -74,8 +77,16 @@ public class Idioma {
         this.baja = true;
     }
 
-    public List<Libro> getLibros() {
+    public Set<Libro> getLibros() {
         return libros;
+    }
+
+    public void agregarLibro(Libro libro) {
+            libros.add(libro);
+    }
+
+    public void quitarLibro(Libro libro) {
+        libros.remove(libro);
     }
 
     public String toString() {
