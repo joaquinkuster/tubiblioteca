@@ -68,7 +68,6 @@
                 <CheckBox fx:id="checkReferencia" mnemonicParsing="false" styleClass="check-box-personalizado" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <CheckBox fx:id="checkPerdida" disable="true" mnemonicParsing="false" styleClass="check-box-personalizado" text="Marcar como copia perdida" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="lblCargo11" styleClass="label-formulario" text="Estado:" GridPane.rowIndex="3" />
-            <Spinner GridPane.columnIndex="3" GridPane.rowIndex="3" />
             </children>
         </GridPane>
         <HBox spacing="10.0" styleClass="acciones-contenedor">

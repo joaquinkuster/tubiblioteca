@@ -1,0 +1,2 @@
+INSERT INTO miembro (dni, apellido, baja, clave, nombre, tipo)
+VALUES ('12345678', 'admin', 'false', '$2a$10$e1Dwxo48tQIJSqIvgdtnn.ZIEas07N3WZ6CFTWJh.ItLHPAdl3T3q', 'admin', 1);

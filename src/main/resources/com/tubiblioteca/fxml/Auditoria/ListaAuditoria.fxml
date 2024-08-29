@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.ABMAuditoria.ListaAuditoriaControlador">
+<VBox spacing="30.0" styleClass="contenedor" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tubiblioteca.controller.Auditoria.ListaAuditoriaControlador">
       <children>
           <HBox spacing="20.0" styleClass="titulo-principal">
               <children>
@@ -75,7 +75,7 @@
                   <TableColumn fx:id="colUsuario" prefWidth="150.0" text="Usuario" />
                   <TableColumn fx:id="colAccion" prefWidth="150.0" text="Tipo de Incidencia" />
                   <TableColumn fx:id="colTablaAfectada" prefWidth="150.0" text="Tabla Afectada" />
-                  <TableColumn fx:id="colDatoAfectado" prefWidth="150.0" text="Descripción" />
+                  <TableColumn fx:id="colDescripcion" prefWidth="150.0" text="Descripción" />
               </columns>
               <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

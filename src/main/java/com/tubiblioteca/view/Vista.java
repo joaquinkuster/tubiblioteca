@@ -1,6 +1,6 @@
 package com.tubiblioteca.view;
 
-// Declaramos un enumerado con todas las vistas de la aplicacion
+// Declaramos un enumerado con todas las vistas de la aplicación
 public enum Vista {
 
     // Cada vista tiene asociada una clave de título y una ruta de archivo FXML
@@ -38,27 +38,27 @@ public enum Vista {
     ListaRacks("Lista de Racks", "ABMRack/ListaRacks"),
     FormularioRack("Formulario de Rack", "ABMRack/FormularioRack"),
 
-    ListaAuditoria("Auditoria", "ABMAuditoria/ListaAuditoria"),
+    ListaAuditoria("Auditoría", "Auditoria/ListaAuditoria"),
 
     CambiarContraseña("Cambiar Contraseña", "CambiarContraseña");
 
     // Devolvemos la clave
-    private final String titulo;
+    private final String titulo;  // Título de la vista, se usa para mostrar en la interfaz de usuario
+    private final String rutaFxml;  // Ruta relativa del archivo FXML que define la vista
 
-    private final String rutaFxml;
-
-    Vista(String titulo, String rutaFxml) {
+    // Constructor del enumerado, se utiliza para inicializar las constantes con un título y una ruta FXML
+    private Vista(String titulo, String rutaFxml) {
         this.titulo = titulo;
         this.rutaFxml = rutaFxml;
     }
 
-    // Devolvemos el titulo completo de la vista
+    // Devuelve el título completo de la vista, incluyendo el prefijo "TuBiblioteca | "
     public String getTitulo() {
         return "TuBiblioteca | " + ((!titulo.isEmpty()) ? titulo : "Sin Título");
     }
 
-    // Devolvemos la ruta completa del archivo FXML
+    // Devuelve la ruta completa del archivo FXML correspondiente a la vista
     public String getRutaFxml() {
-        return String.format(("fxml/%s.fxml"), rutaFxml);
+        return String.format(("fxml/%s.fxml"), rutaFxml);  // Se asume que todos los archivos FXML están en la carpeta "fxml"
     }
 }

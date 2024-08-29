@@ -14,40 +14,39 @@ import jakarta.persistence.Table;
 @Table(name = "auditoria")
 public class Auditoria {
     
-    
-    public Auditoria(String tablaAfectada, TipoAccion accion, String datoAfectado, LocalDateTime fechaHora, Miembro miembro) {
-        this.tablaAfectada = tablaAfectada;
-        this.accion = accion;
-        this.datoAfectado = datoAfectado;
-        this.fechaHora = fechaHora;
-        this.miembro = miembro;
-    }
-
-    public Auditoria() {
-
-    }
-
     @Id
     @Column(name = "id", nullable =  false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "tabla_afectada", length = 50, nullable = false)
     private String tablaAfectada;
-    @Column(name = "accion", length = 50, nullable = false)
+    @Column(name = "accion", nullable = false)
     private TipoAccion accion;
-    @Column(name = "dato_afectado", length = 50, nullable = false)
-    private String datoAfectado;
+    @Column(name = "descripcion", length = 500, nullable = false)
+    private String descripcion;
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora = LocalDateTime.now();
     @ManyToOne
     @JoinColumn(name = "dni_miembro", nullable = false)
     private Miembro miembro;
     
+    public Auditoria() {
+
+    }
+
+    public Auditoria(String tablaAfectada, TipoAccion accion, String descripcion, LocalDateTime fechaHora, Miembro miembro) {
+        this.tablaAfectada = tablaAfectada;
+        this.accion = accion;
+        this.descripcion = descripcion;
+        this.fechaHora = fechaHora;
+        this.miembro = miembro;
+    }
+    
     public String getTablaAfectada() {
         return tablaAfectada;
     }
-    public String getDatoAfectado() {
-        return datoAfectado;
+    public String getDescripcion() {
+        return descripcion;
     }
     public LocalDateTime getFechaHora() {
         return fechaHora;
@@ -65,8 +64,8 @@ public class Auditoria {
     public void setTablaAfectada(String tablaAfectada) {
         this.tablaAfectada = tablaAfectada;
     }
-    public void setDatoAfectado(String datoAfectado) {
-        this.datoAfectado = datoAfectado;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
@@ -74,5 +73,4 @@ public class Auditoria {
     public void setMiembro(Miembro miembro) {
         this.miembro = miembro;
     }
-
 }

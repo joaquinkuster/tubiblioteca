@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-
-instance" version="2.2" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.2"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    
+    <!-- Definición de la unidad de persistencia -->
     <persistence-unit name="TuBibliotecaPU" transaction-type="RESOURCE_LOCAL">
+        
+        <!-- Proveedor JPA usado para la implementación -->
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <!-- Clases que forman parte del modelo JPA -->
         <class>com.tubiblioteca.model.Miembro</class>
         <class>com.tubiblioteca.model.Prestamo</class>
         <class>com.tubiblioteca.model.CopiaLibro</class>
@@ -14,13 +20,30 @@ instance" version="2.2" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persiste
         <class>com.tubiblioteca.model.Editorial</class>
         <class>com.tubiblioteca.model.Idioma</class>
         <class>com.tubiblioteca.model.Auditoria</class>
+        
+        <!-- Indica que no se deben incluir las clases no listadas explícitamente aquí -->
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        
+        <!-- Propiedades de configuración del proveedor JPA -->
         <properties>
+            <!-- URL de conexión a la base de datos -->
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/tubiblioteca"/>
+            
+            <!-- Controlador JDBC para PostgreSQL -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            
+            <!-- Usuario para la conexión a la base de datos -->
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="1234"/>
-            <property name="eclipselink.ddl-generation" value="none" />
+            
+            <!-- Contraseña para la conexión a la base de datos -->
+            <property name="jakarta.persistence.jdbc.password" value="postgres"/>
+            
+            <!-- Configuración de generación de esquema para EclipseLink -->
+            <!-- 'none' indica que no se debe realizar ninguna operación de generación de esquema -->
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+            
+            <!-- Propiedad opcional para habilitar el registro detallado en EclipseLink -->
+            <!-- Comentada para no activar el nivel de registro más detallado por defecto -->
             <!-- <property name="eclipselink.logging.level" value="FINEST" /> -->
         </properties>
     </persistence-unit>

@@ -1,4 +1,4 @@
-package com.tubiblioteca.controller.ABMAuditoria;
+package com.tubiblioteca.controller.Auditoria;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -39,9 +39,9 @@ public class ListaAuditoriaControlador implements Initializable {
     @FXML
     private TableColumn<Auditoria, String> colTablaAfectada;
     @FXML
-    private TableColumn<Auditoria, String> colDatoAfectado;
+    private TableColumn<Auditoria, String> colDescripcion;
 
-    // Tabla de libros
+    // Tabla de auditoriaW
     @FXML
     private TableView<Auditoria> tblAuditoria;
 
@@ -60,7 +60,7 @@ public class ListaAuditoriaControlador implements Initializable {
     // Listas utilizadas
     private final ObservableList<Auditoria> auditorias = FXCollections.observableArrayList();
     private final ObservableList<Auditoria> filtrados = FXCollections.observableArrayList();
-    
+
     private AuditoriaServicio servicio;
     private MiembroServicio miembroServicio;
 
@@ -78,6 +78,7 @@ public class ListaAuditoriaControlador implements Initializable {
             var repositorio = AppConfig.getRepositorio();
             servicio = new AuditoriaServicio(repositorio);
             miembroServicio = new MiembroServicio(repositorio);
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
             colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
             colFecha.setCellFactory(new Callback<>() {
@@ -100,7 +101,7 @@ public class ListaAuditoriaControlador implements Initializable {
             colUsuario.setCellValueFactory(new PropertyValueFactory<>("miembro"));
             colAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
             colTablaAfectada.setCellValueFactory(new PropertyValueFactory<>("tablaAfectada"));
-            colDatoAfectado.setCellValueFactory(new PropertyValueFactory<>("datoAfectado"));
+            colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
             // Limpiar y cargar los datos de auditoría
             auditorias.clear();
@@ -115,22 +116,22 @@ public class ListaAuditoriaControlador implements Initializable {
         }
     }
 
-
     private void inicializarFiltros() {
 
-         List<Miembro> miembros = miembroServicio.buscarTodos(); 
-         cmbUsuario.getItems().addAll(miembros);
-         cmbTablaAfectada.getItems().addAll("Autor", "Categoria", "Copias de libros", "Editorial", "Idioma", "Libro", "Miembro", "Prestamo", "Rack");
-        cmbAccion.getItems().addAll("alta", "baja", "modificacion");
-         configurarListenerCombos(cmbAccion);
-         configurarListenerCombos(cmbTablaAfectada);
-         configurarListenerCombos(cmbUsuario);
+        List<Miembro> miembros = miembroServicio.buscarTodos();
+        cmbUsuario.getItems().addAll(miembros);
+        cmbTablaAfectada.getItems().addAll("Autor", "Categoria", "Copias de libros", "Editorial", "Idioma", "Libro",
+                "Miembro", "Prestamo", "Rack");
+        cmbAccion.getItems().addAll("Alta", "Baja", "Modificacion");
+        configurarListenerCombos(cmbAccion);
+        configurarListenerCombos(cmbTablaAfectada);
+        configurarListenerCombos(cmbUsuario);
 
-         // Configurar datepickers
+        // Configurar datepickers
         ControlUI.configurarDatePicker(dtpAuditoria);
     }
 
-    private <T>  void configurarListenerCombos(CheckComboBox<T> cmb) {
+    private <T> void configurarListenerCombos(CheckComboBox<T> cmb) {
         // Listener para detectar cambios en los autores seleccionados
         cmb.getCheckModel().getCheckedItems().addListener(new ListChangeListener<T>() {
             @Override
@@ -153,7 +154,7 @@ public class ListaAuditoriaControlador implements Initializable {
                 .forEach(filtrados::add);
         tblAuditoria.refresh();
     }
-    
+
     private boolean aplicarFiltro(Auditoria auditoria) {
         LocalDate fechaHora = dtpAuditoria.getValue();
         boolean coincideSoloFecha = fechaHora == null || auditoria.getFechaHora().toLocalDate().equals(fechaHora);
@@ -162,12 +163,13 @@ public class ListaAuditoriaControlador implements Initializable {
                 && (filtradoIndividualCheckCombo(auditoria.getMiembro().toString(), cmbUsuario))
                 && (filtradoIndividualCheckCombo(auditoria.getAccion().toString(), cmbAccion))
                 && (filtradoIndividualCheckCombo(auditoria.getTablaAfectada(), cmbTablaAfectada))
-                && (datoAfectado == null || String.valueOf(auditoria.getDatoAfectado()).toLowerCase().startsWith(datoAfectado));
+                && (datoAfectado == null
+                        || String.valueOf(auditoria.getDescripcion()).toLowerCase().startsWith(datoAfectado));
     }
 
     private <T> boolean filtradoIndividualCheckCombo(String dato, CheckComboBox<T> cmb) {
         List<T> seleccionados = new ArrayList<>(cmb.getCheckModel().getCheckedItems());
-        
+
         if (seleccionados == null || seleccionados.isEmpty()) {
             return true;
         } else {
@@ -189,10 +191,9 @@ public class ListaAuditoriaControlador implements Initializable {
                 }
             }
         }
-        
+
         return false;
     }
-    
 
     @FXML
     private void limpiarFiltros() {
