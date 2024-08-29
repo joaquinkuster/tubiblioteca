@@ -127,8 +127,7 @@ public class ListaPrestamosControlador implements Initializable {
                         prestamos.add(prestamo);
                     }
                 }
-            }
-            {
+            } else {
                 prestamos.addAll(todosLosPrestamos);
             }
             filtrados.addAll(prestamos);
