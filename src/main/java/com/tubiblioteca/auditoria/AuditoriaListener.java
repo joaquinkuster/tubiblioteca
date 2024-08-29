@@ -14,6 +14,7 @@ import com.tubiblioteca.security.SesionManager;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Id;
 import jakarta.persistence.Persistence;
 
 public class AuditoriaListener {
@@ -23,11 +24,54 @@ public class AuditoriaListener {
     // Método que se ejecuta antes de una actualización de la entidad
     @PreUpdate
     public void preUpdate(Object entidad) {
-        if (verificarBaja(entidad)) {
-            guardarAuditoria(entidad, TipoAccion.Baja);  // Si el campo "baja" es verdadero, registra como baja
-        } else {
-            guardarAuditoria(entidad, TipoAccion.Modificacion);  // De lo contrario, registra como modificación
+        if (!isForeignKeyUpdate(entidad)) {
+            if (verificarBaja(entidad)) {
+                guardarAuditoria(entidad, TipoAccion.Baja);  // Si el campo "baja" es verdadero, registra como baja
+            } else {
+                guardarAuditoria(entidad, TipoAccion.Modificacion);  // De lo contrario, registra como modificación
+            }
         }
+    }
+
+      // Método para verificar si la actualización es solo de claves foráneas
+      private boolean isForeignKeyUpdate(Object entidad) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Object id = getEntityId(entidad);
+            Object originalEntity = em.find(entidad.getClass(), id);
+
+            for (Field field : entidad.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(jakarta.persistence.ManyToOne.class) ||
+                    field.isAnnotationPresent(jakarta.persistence.OneToMany.class) ||
+                    field.isAnnotationPresent(jakarta.persistence.OneToOne.class)) {
+                    
+                    Object newValue = field.get(entidad);
+                    Object originalValue = field.get(originalEntity);
+
+                    if (newValue != null && !newValue.equals(originalValue)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return true;
+        } finally {
+            em.close();
+        }
+    }
+
+    // Método para obtener el ID de la entidad
+    private Object getEntityId(Object entidad) throws IllegalAccessException {
+        for (Field field : entidad.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(Id.class)) {
+                field.setAccessible(true);
+                return field.get(entidad);
+            }
+        }
+        throw new IllegalArgumentException("Entidad sin campo ID");
     }
 
     // Verifica si el campo "baja" de la entidad es verdadero

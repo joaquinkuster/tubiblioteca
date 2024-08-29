@@ -40,7 +40,7 @@
             
             <!-- Configuración de generación de esquema para EclipseLink -->
             <!-- 'none' indica que no se debe realizar ninguna operación de generación de esquema -->
-            <property name="eclipselink.ddl-generation" value="none" />
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
             
             <!-- Propiedad opcional para habilitar el registro detallado en EclipseLink -->
             <!-- Comentada para no activar el nivel de registro más detallado por defecto -->
