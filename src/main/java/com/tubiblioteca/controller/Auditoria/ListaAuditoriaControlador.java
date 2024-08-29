@@ -17,9 +17,11 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tubiblioteca.config.AppConfig;
+import com.tubiblioteca.helper.Alerta;
 import com.tubiblioteca.helper.ControlUI;
 import com.tubiblioteca.model.Miembro;
 import com.tubiblioteca.model.Auditoria;
+import com.tubiblioteca.model.Libro;
 import com.tubiblioteca.service.Auditoria.AuditoriaServicio;
 import com.tubiblioteca.service.Miembro.MiembroServicio;
 import java.util.ArrayList;
@@ -101,7 +103,7 @@ public class ListaAuditoriaControlador implements Initializable {
             colUsuario.setCellValueFactory(new PropertyValueFactory<>("miembro"));
             colAccion.setCellValueFactory(new PropertyValueFactory<>("accion"));
             colTablaAfectada.setCellValueFactory(new PropertyValueFactory<>("tablaAfectada"));
-            colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+            inicializarColumnaDescripcion();
 
             // Limpiar y cargar los datos de auditoría
             auditorias.clear();
@@ -111,9 +113,35 @@ public class ListaAuditoriaControlador implements Initializable {
 
             // Establecer los datos en la tabla
             tblAuditoria.setItems(filtrados);
+
+
         } catch (Exception e) {
             log.error("Error al inicializar la lista de auditoria: ", e);
         }
+    }
+
+    private void inicializarColumnaDescripcion() {
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        
+        colDescripcion.setCellFactory(new Callback<TableColumn<Auditoria, String>, TableCell<Auditoria, String>>() {
+            @Override
+            public TableCell<Auditoria, String> call(TableColumn<Auditoria, String> param) {
+                return new TableCell<Auditoria, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setTooltip(null);
+                        } else {
+                            setText(ControlUI.limitar(item, 30));
+                            Tooltip tooltip = new Tooltip(item);
+                            setTooltip(tooltip);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     private void inicializarFiltros() {
